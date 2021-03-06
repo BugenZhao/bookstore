@@ -54,7 +54,7 @@
     <main>
         <div class="py-5">
             <div class="container">
-                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3" id="books">
+                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3" id="books">
 
                     <div class="col">
                         <div class="card shadow-sm">
@@ -116,7 +116,7 @@
     <script type="text/javascript">
         let books = document.getElementById("books");
         const list = books.cloneNode(true).children;
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 9; i++) {
             for (const book of list) {
                 books.innerHTML += book.outerHTML;
             }
