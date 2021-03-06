@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Store</title>
+    <title>Book Details</title>
     <link href="static/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <link rel="stylesheet" href="static/style.css">
@@ -54,14 +54,20 @@
     <main>
         <div class="py-5">
             <div class="container">
-                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3" id="books">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb h6">
+                        <li class="breadcrumb-item"><a href="index.html">Books</a></li>
+                        <li class="breadcrumb-item active">Java 核心技术</li>
+                    </ol>
+                </nav>
 
-                    <div class="col">
+                <div class="row">
+                    <div class="col-md-4">
                         <div class="card shadow-sm">
                             <img src="static/java.jpg" alt="" class="card-img-top">
-                            <a href="detail.html" class="stretched-link"></a>
+                            <a href="javascript:alert('Java');" class="stretched-link"></a>
                             <div class="card-body">
-                                <h5 class="card-title text-truncate">Java 核心技术</h5>
+                                <h5 class="card-title">Java 核心技术</h5>
                                 <!-- <p class="card-text">Description</p> -->
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h6 class="card-subtitle text-danger">¥95.2</h6>
@@ -71,17 +77,37 @@
                         </div>
                     </div>
 
-                    <div class="col">
-                        <div class="card shadow-sm">
-                            <img src="static/cpp.jpg" alt="" class="card-img-top">
-                            <a href="javascript:alert('C++');" class="stretched-link"></a>
-                            <div class="card-body">
-                                <h5 class="card-title text-truncate">Effective C++</h5>
-                                <!-- <p class="card-text">Description</p> -->
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h6 class="card-subtitle text-danger">¥51.3</h6>
-                                    <small class="card-subtitle text-muted">2000+</small>
-                                </div>
+                    <div class="col-md-8">
+                        <h1 class="h4 my-3">Java 核心技术</h1>
+                        <hr class="mb-3">
+                        <dl class="row">
+                            <dt class="col-sm-3">Author</dt>
+                            <dd class="col-sm-9">Cay S. Horstmann</dd>
+
+                            <dt class="col-sm-3">Press</dt>
+                            <dd class="col-sm-9">
+                                China Machine Press
+                            </dd>
+
+                            <dt class="col-sm-3">Category</dt>
+                            <dd class="col-sm-9">Programming</dd>
+
+                            <dt class="col-sm-3">Stock</dt>
+                            <dd class="col-sm-9">1000+</dd>
+
+                            <dt class="col-sm-3">Price</dt>
+                            <dd class="col-sm-9 text-danger fw-bold">¥95.2</dd>
+
+                            <dt class="col-sm-3">Introduction</dt>
+                            <dd class="col-sm-9">
+                                本书是Java领域有影响力和价值的著作之一，由拥有20多年教学与研究经验的Java技术专家撰写（获Jolt大奖），与《Java编程思想》齐名，10余年全球畅销不衰，广受好评。第10版根据JavaSE8全面更新，同时修正了第9版中的不足，系统全面讲解了Java语言的核心概念、语法、重要特性和开发方法，包含大量案例，实践性强。
+                            </dd>
+                        </dl>
+                        <hr class="my-3">
+                        <div class="d-flex justify-content-end">
+                            <div class="btn-group btn-group-lg col-12 col-xl-6 col-lg-8" role="group">
+                                <button type="button" class="btn btn-outline-danger w-100">Add to Cart</button>
+                                <a class="btn btn-danger w-100" href="checkout.html">Buy</a>
                             </div>
                         </div>
                     </div>
@@ -91,37 +117,9 @@
         </div>
     </main>
 
-    <footer class="py-4 bg-white">
-        <nav>
-            <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                </li>
-
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item" aria-current="page"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
-        </nav>
-    </footer>
-
     <script src="static/bootstrap.bundle.min.js"
         integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
         crossorigin="anonymous"></script>
-
-    <script type="text/javascript">
-        let books = document.getElementById("books");
-        const list = books.cloneNode(true).children;
-        for (let i = 0; i < 3; i++) {
-            for (const book of list) {
-                books.innerHTML += book.outerHTML;
-            }
-        }
-    </script>
 </body>
 
 </html>
