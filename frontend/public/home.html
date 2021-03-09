@@ -11,9 +11,9 @@
     <link rel="stylesheet" href="static/style.css">
 </head>
 
-<body class="bg-light">
-    <header class="border-bottom shadow-sm">
-        <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+<body class="bg-light home">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
             <div class="container">
                 <a class="navbar-brand fw-bolder" href="home.html">Book Store</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -44,9 +44,8 @@
                         <button class="btn btn-outline-secondary" type="submit">Search</button>
                     </form>
                     <div class="d-flex">
-                        <button class="btn btn-success w-100" onclick="addBook()">Add a Book</button>
+                        <a class="btn btn-success w-100" onclick="addBook();" href="#footer">Add a Book</a>
                     </div>
-
                 </div>
             </div>
         </nav>
@@ -55,7 +54,7 @@
     <main>
         <div class="py-4">
             <div class="container">
-                <div id="carouselExampleControls" class="carousel slide mb-4" data-bs-ride="carousel">
+                <div id="carouselExampleControls" class="carousel slide mb-4 shadow-sm" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
                             <img src="static/book1.jpg" class="d-block w-100" alt="...">
@@ -89,7 +88,7 @@
         </div>
     </main>
 
-    <footer class="py-4 bg-white">
+    <footer class="py-4 bg-white" id="footer">
         <nav>
             <ul class="pagination justify-content-center">
                 <li class="page-item disabled">
@@ -147,7 +146,7 @@
         const addBook = async () => {
             books.then((books) => {
                 booksDom.innerHTML += Mustache.render(template, books[index++ % books.length]);
-            })
+            });
         };
 
     </script>
