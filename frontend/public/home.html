@@ -12,8 +12,8 @@
 </head>
 
 <body class="bg-light">
-    <header class="border-bottom shadow-sm sticky-top">
-        <nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <header class="border-bottom shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
             <div class="container">
                 <a class="navbar-brand fw-bolder" href="home.html">Book Store</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -38,13 +38,13 @@
                                 Bugen</a>
                         </li>
                     </ul>
-                    <div>
-
-                        <form class="d-flex">
-                            <input class="form-control me-2" type="search" placeholder="Search Books..."
-                                aria-label="Search">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form>
+                    <form class="d-flex me-3 mb-2 mb-lg-0">
+                        <input class="form-control me-2" type="search" placeholder="Search Books..."
+                            aria-label="Search">
+                        <button class="btn btn-outline-secondary" type="submit">Search</button>
+                    </form>
+                    <div class="d-flex">
+                        <button class="btn btn-success w-100" onclick="addBook()">Add a Book</button>
                     </div>
 
                 </div>
@@ -83,37 +83,7 @@
                 </div>
 
                 <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3" id="books">
-
-                    <div class="col">
-                        <div class="card shadow-sm">
-                            <img src="static/java.jpg" alt="" class="card-img-top">
-                            <a href="detail.html" class="stretched-link"></a>
-                            <div class="card-body">
-                                <h5 class="card-title text-truncate">Java 核心技术</h5>
-                                <!-- <p class="card-text">Description</p> -->
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h6 class="card-subtitle text-danger">¥95.2</h6>
-                                    <small class="card-subtitle text-muted">1000+</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="card shadow-sm">
-                            <img src="static/cpp.jpg" alt="" class="card-img-top">
-                            <a href="javascript:alert('Check the Java book please :P');" class="stretched-link"></a>
-                            <div class="card-body">
-                                <h5 class="card-title text-truncate">Effective C++</h5>
-                                <!-- <p class="card-text">Description</p> -->
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h6 class="card-subtitle text-danger">¥51.3</h6>
-                                    <small class="card-subtitle text-muted">2000+</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                    <!-- BOOKS HERE -->
                 </div>
             </div>
         </div>
@@ -140,15 +110,46 @@
     <script src="static/bootstrap.bundle.min.js"
         integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
         crossorigin="anonymous"></script>
+    <script src="static/mustache.min.js"></script>
 
     <script type="text/javascript">
-        let books = document.getElementById("books");
-        const list = books.cloneNode(true).children;
-        for (let i = 0; i < 9; i++) {
-            for (const book of list) {
-                books.innerHTML += book.outerHTML;
+        const template = `
+            <div class="col">
+                <div class="card shadow-sm">
+                    <img src="{{{image}}}" alt="" class="card-img-top"/>
+                    <a href="detail.html" class="stretched-link"></a>
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate">{{name}}</h5>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="card-subtitle text-danger">¥{{price}}</h6>
+                            <small class="card-subtitle text-muted">{{inventory}}+</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        Mustache.parse(template);
+
+        const books = fetch("static/books.json")
+            .then((r) => r.text())
+            .then((t) => JSON.parse(t));
+
+        const booksDom = document.getElementById("books");
+        const startIndex = 8;
+        let index = startIndex;
+
+        books.then((books) => {
+            for (const book of books.slice(0, startIndex)) {
+                booksDom.innerHTML += Mustache.render(template, book);
             }
-        }
+        });
+
+        const addBook = async () => {
+            books.then((books) => {
+                booksDom.innerHTML += Mustache.render(template, books[index++ % books.length]);
+            })
+        };
+
     </script>
 </body>
 
