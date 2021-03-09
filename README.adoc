@@ -1,0 +1,9 @@
+= Book Store
+BugenZhao <bugenzhao@sjtu.edu.cn>
+:hide-uri-scheme:
+
+== Preview
+In this repo::
+    `frontend/public/`
+On GitHub Pages::
+    `https://bugenzhao.com/bookstore/frontend/public/`

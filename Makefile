@@ -1,2 +1,6 @@
-serve:
-	miniserve frontend/public --index index.html
+PYTHON = python3
+
+frontend:
+	$(PYTHON) -m http.server --directory frontend/public
+
+.PHONY: frontend
