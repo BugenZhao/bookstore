@@ -3,7 +3,13 @@ BugenZhao <bugenzhao@sjtu.edu.cn>
 :hide-uri-scheme:
 
 == Preview
-In this repo::
-    `frontend/public/`
 On GitHub Pages::
-    `https://bugenzhao.com/bookstore/frontend/public/`
+    `http://bookstore.bugenzhao.com`
+
+== TODO
+.Frontend
+- [ ] Refactor using `react-bootstrap`
+- [ ] Redesign detail page
+
+.Backend
+- [ ] _TBD_
