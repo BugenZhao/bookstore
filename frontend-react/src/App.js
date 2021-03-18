@@ -10,6 +10,7 @@ function App() {
     <BrowserRouter>
       <Switch>
         <Route path="/login" component={Login} />
+        <Route path="/checkout" component={Checkout} />
         <Route path="/detail/:id" component={Detail}></Route>
         <Route path="/" component={Home} />
       </Switch>
@@ -71,7 +72,7 @@ function Header() {
                 <Link className="nav-link" to="/checkout">My Cart</Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">My Orders</a>
+                <Link className="nav-link" to="#">My Orders</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link disabled fw-bold" to="/login" tabIndex="-1"
@@ -135,7 +136,7 @@ function Pagination() {
       <nav>
         <ul className="pagination justify-content-center">
           <li className="page-item disabled">
-            <a className="page-link" href="#" tabIndex="-1" aria-disabled="true">Previous</a>
+            <Link className="page-link" to="#" tabIndex="-1" aria-disabled="true">Previous</Link>
           </li>
 
           <li className="page-item active"><a className="page-link" href="#">1</a></li>
@@ -143,7 +144,7 @@ function Pagination() {
           <li className="page-item"><a className="page-link" href="#">3</a></li>
 
           <li className="page-item">
-            <a className="page-link" href="#">Next</a>
+            <Link className="page-link" href="#">Next</Link>
           </li>
         </ul>
       </nav>
@@ -160,9 +161,10 @@ function Body(props) {
 }
 
 function Main(props) {
-  console.log(props);
+  const py = `py-${props.py || 4}`
+
   return (
-    <main className="py-4 container">
+    <main className={`${py} container`}>
       {props.children}
     </main>
   )
@@ -263,8 +265,154 @@ function Detail(props) {
   return (
     <Body>
       <Header />
-      <Main>
+      <Main py={5}>
         <DetailMain id={id} />
+      </Main>
+    </Body>
+  )
+}
+
+function CheckoutMain() {
+  return (
+    <div>
+      <div className="row">
+        <div className="col-md-5 col-lg-4 order-md-last">
+          <h4 className="d-flex justify-content-between align-items-center mb-3">
+            <span className="text-muted">Your cart</span>
+            <span className="badge bg-secondary rounded-pill">2</span>
+          </h4>
+          <ul className="list-group mb-3">
+            <li className="list-group-item d-flex justify-content-between lh-sm">
+              <div>
+                <h6 className="my-0">Java 核心技术</h6>
+                <small className="text-muted">Cay S. Horstmann</small>
+              </div>
+              <span className="text-muted">¥95.2</span>
+            </li>
+            <li className="list-group-item d-flex justify-content-between lh-sm">
+              <div>
+                <h6 className="my-0">Effective C++</h6>
+                <small className="text-muted">Scott Meyers</small>
+              </div>
+              <span className="text-muted">¥51.3</span>
+            </li>
+            <li className="list-group-item d-flex justify-content-between lh-sm">
+              <span>Discount</span>
+              <span className="text-danger fw-bold"> -¥100.0</span>
+            </li>
+            <li className="list-group-item d-flex justify-content-between">
+              <span>Total</span>
+              <span className="fw-bold">¥46.5</span>
+            </li>
+          </ul>
+        </div>
+        <div className="col-md-7 col-lg-8">
+          <h4 className="mb-3">Shipping Address</h4>
+          <form className="needs-validation" noValidate="">
+
+            <div className="list-group">
+              <a href="#" className="list-group-item list-group-item-action active" aria-current="true">
+                <div className="d-flex w-100 justify-content-between align-items-center">
+                  <h5 className="mb-1">Bugen Zhao</h5>
+                  <span className="badge bg-secondary rounded-pill">Default</span>
+                </div>
+                <p className="mb-0 small">+86 155 2121 2121</p>
+                <p className="mb-0">1234 Main St., Shanghai, China</p>
+              </a>
+              <a href="#" className="list-group-item list-group-item-action">
+                <div className="d-flex w-100 justify-content-between align-items-center">
+                  <h5 className="mb-1">Bugen Zhao</h5>
+                  <span className="badge bg-success rounded-pill">Home</span>
+                </div>
+                <p className="mb-0 small">+86 155 2121 2121</p>
+                <p className="mb-0">4321 Home St., Shanghai, China</p>
+              </a>
+              <a href="#" className="list-group-item list-group-item-action">
+                <span className="text-muted">Add a new address...</span>
+              </a>
+            </div>
+
+          </form>
+
+          <hr className="my-4" />
+
+          <h4 className="mb-3">Payment</h4>
+
+          <div className="row gy-2">
+            <div className="col-lg-5 col-xxl-4">
+              <div className="list-group">
+                <a href="#" className="list-group-item list-group-item-action" aria-current="true">
+                  <div className="d-flex w-100 justify-content-between align-items-center">
+                    <span>PayPal</span>
+                  </div>
+                </a>
+                <a href="#" className="list-group-item list-group-item-action" aria-current="true">
+                  <div className="d-flex w-100 justify-content-between align-items-center">
+                    <span>WeChat Pay</span>
+                    <span className="badge bg-success rounded-pill">Recommended</span>
+                  </div>
+                </a>
+                <a href="#" className="list-group-item list-group-item-action"
+                  aria-current="true">
+                  <div className="d-flex w-100 justify-content-between align-items-center">
+                    <span>Alipay</span>
+                    <span className="badge bg-secondary rounded-pill">Last used</span>
+                  </div>
+                </a>
+                <a href="#" className="list-group-item list-group-item-action active">
+                  <span className="">Credit card</span>
+                </a>
+              </div>
+            </div>
+
+            <div className="col">
+              <div className="row gy-2">
+                <div className="col-md-6">
+                  <label htmlFor="cc-name" className="form-label">Name on card</label>
+                  <input type="text" className="form-control" id="cc-name" placeholder="" required="" />
+                </div>
+
+                <div className="col-md-6">
+                  <label htmlFor="cc-number" className="form-label">Card number</label>
+                  <input type="text" className="form-control" id="cc-number" placeholder=""
+                    required="" />
+                </div>
+
+                <div className="col-md-6">
+                  <label htmlFor="cc-expiration" className="form-label">Expiration</label>
+                  <input type="text" className="form-control" id="cc-expiration" placeholder=""
+                    required="" />
+                </div>
+
+                <div className="col-md-6">
+                  <label htmlFor="cc-cvv" className="form-label">CVV</label>
+                  <input type="text" className="form-control" id="cc-cvv" placeholder="" required="" />
+                </div>
+              </div>
+
+            </div>
+
+
+          </div>
+
+          <hr className="my-4" />
+
+          <div className="d-flex justify-content-end">
+            <button className="btn btn-primary btn-lg col-12 col-lg-3" type="submit">Checkout</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function Checkout() {
+  return (
+    <Body>
+      <Header />
+      <Main py={5}>
+        <CheckoutMain />
       </Main>
     </Body>
   )
