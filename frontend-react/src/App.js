@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
+import { Route, Switch, Link, HashRouter as Router } from 'react-router-dom';
 // import _ from 'lodash';
 import books from './books.json';
 
@@ -7,14 +7,14 @@ import books from './books.json';
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Switch>
         <Route path="/checkout" component={Checkout} />
         <Route path="/detail/:id" component={Detail}></Route>
         <Route path="/home" component={Home} />
         <Route path="/" component={Login} />
       </Switch>
-    </BrowserRouter>
+    </Router>
   )
 }
 
