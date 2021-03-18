@@ -291,7 +291,7 @@ function CartItem(props) {
 
 function AddressItem(props) {
   const address = props.address;
-  const bgClass = address.tag == "Default" ? "bg-secondary" : "bg-success";
+  const bgClass = address.tag === "Default" ? "bg-secondary" : "bg-success";
 
   return (
     <Link to="#" className={`list-group-item list-group-item-action ${props.active ? "active" : ""}`}>
