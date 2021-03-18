@@ -3,7 +3,6 @@ import { Route, Switch, Link, HashRouter as Router } from 'react-router-dom';
 // import _ from 'lodash';
 import books from './books.json';
 
-/* eslint-disable jsx-a11y/anchor-is-valid */
 
 function App() {
   return (
@@ -26,9 +25,10 @@ function BookCard(props) {
     <div className="card shadow-sm">
       <img src={book.image} alt="" className="card-img-top" />
       {
-        props.link ?
-          (<Link to={path} className="stretched-link"><span className="visually-hidden">Details</span></Link>)
-          : null
+        props.link &&
+        <Link to={path} className="stretched-link">
+          <span className="visually-hidden">Details</span>
+        </Link>
       }
       <div className="card-body">
         <h5 className="card-title text-truncate">{book.name}</h5>
@@ -52,21 +52,21 @@ function Books() {
   ));
 }
 
-function Header() {
+function Header(props) {
   return (
     <header>
       <nav className="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
         <div className="container">
           <Link className="navbar-brand fw-bolder" to="/home">Book Store</Link>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-            aria-expanded="false" aria-label="Toggle navigation">
+            data-bs-target="#navbarSupportedContent"
+          >
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link className="nav-link active" aria-current="page" to="/home">Books</Link>
+                <Link className="nav-link active" to="/home">Books</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/checkout">My Cart</Link>
@@ -75,8 +75,7 @@ function Header() {
                 <Link className="nav-link" to="#">My Orders</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link disabled fw-bold" to="/login" tabIndex="-1"
-                  aria-disabled="true">Hi, Bugen</Link>
+                <Link className="nav-link fw-bold" to="/login" tabIndex="-1">Hi, Bugen</Link>
               </li>
             </ul>
             <form className="d-flex me-2 mb-2 mb-lg-0">
@@ -84,7 +83,7 @@ function Header() {
               <button className="btn btn-outline-secondary" type="submit">Search</button>
             </form>
             <div className="d-flex">
-              <a className="btn btn-success w-100" onClick={() => { }} href="#footer">Add a Book</a>
+              <Link className="btn btn-success w-100" onClick={() => { }} to="#footer">Add a Book</Link>
             </div>
           </div>
         </div>
@@ -93,37 +92,37 @@ function Header() {
   )
 }
 
+function Carousel(props) {
+  return (
+    <div className={`carousel-item ${props.active ? "active" : ""}`}>
+      <img src={props.url} className="d-block w-100" alt={`carousel ${props.url}`} />
+    </div>
+  );
+}
+
 function HomeMain() {
   return (
     <div>
       <div id="carouselExampleControls" className="carousel slide mb-4 shadow-sm" data-bs-ride="carousel">
         <div className="carousel-inner">
-          <div className="carousel-item active">
-            <img src="static/book1.jpg" className="d-block w-100" alt="..." />
-          </div>
-          <div className="carousel-item">
-            <img src="static/book2.jpg" className="d-block w-100" alt="..." />
-          </div>
-          <div className="carousel-item">
-            <img src="static/book3.jpg" className="d-block w-100" alt="..." />
-          </div>
-          <div className="carousel-item">
-            <img src="static/book4.jpg" className="d-block w-100" alt="..." />
-          </div>
+          <Carousel url="static/book1.jpg" active={true} />
+          <Carousel url="static/book2.jpg" />
+          <Carousel url="static/book3.jpg" />
+          <Carousel url="static/book4.jpg" />
         </div>
         <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
           data-bs-slide="prev">
-          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span className="carousel-control-prev-icon"></span>
           <span className="visually-hidden">Previous</span>
         </button>
         <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
           data-bs-slide="next">
-          <span className="carousel-control-next-icon" aria-hidden="true"></span>
+          <span className="carousel-control-next-icon"></span>
           <span className="visually-hidden">Next</span>
         </button>
       </div>
 
-      <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3" id="books">
+      <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-3" id="books">
         <Books></Books>
       </div>
     </div>
@@ -136,12 +135,12 @@ function Pagination() {
       <nav>
         <ul className="pagination justify-content-center">
           <li className="page-item disabled">
-            <Link className="page-link" to="#" tabIndex="-1" aria-disabled="true">Previous</Link>
+            <Link className="page-link" to="#" tabIndex="-1">Previous</Link>
           </li>
 
-          <li className="page-item active"><a className="page-link" href="#">1</a></li>
-          <li className="page-item" aria-current="page"><a className="page-link" href="#">2</a></li>
-          <li className="page-item"><a className="page-link" href="#">3</a></li>
+          <li className="page-item active"><Link className="page-link" to="#">1</Link></li>
+          <li className="page-item"><Link className="page-link" to="#">2</Link></li>
+          <li className="page-item"><Link className="page-link" to="#">3</Link></li>
 
           <li className="page-item">
             <Link className="page-link" to="#">Next</Link>
@@ -228,7 +227,7 @@ function DetailMain(props) {
 
   return (
     <div>
-      <nav aria-label="breadcrumb">
+      <nav>
         <ol className="breadcrumb h6">
           <li className="breadcrumb-item"><Link to="/home">Books</Link></li>
           <li className="breadcrumb-item active">{book.name}</li>
@@ -302,25 +301,25 @@ function CheckoutMain() {
           <form className="needs-validation" noValidate="">
 
             <div className="list-group">
-              <a href="#" className="list-group-item list-group-item-action active" aria-current="true">
+              <Link to="#" className="list-group-item list-group-item-action active">
                 <div className="d-flex w-100 justify-content-between align-items-center">
                   <h5 className="mb-1">Bugen Zhao</h5>
                   <span className="badge bg-secondary rounded-pill">Default</span>
                 </div>
                 <p className="mb-0 small">+86 155 2121 2121</p>
                 <p className="mb-0">1234 Main St., Shanghai, China</p>
-              </a>
-              <a href="#" className="list-group-item list-group-item-action">
+              </Link>
+              <Link to="#" className="list-group-item list-group-item-action">
                 <div className="d-flex w-100 justify-content-between align-items-center">
                   <h5 className="mb-1">Bugen Zhao</h5>
                   <span className="badge bg-success rounded-pill">Home</span>
                 </div>
                 <p className="mb-0 small">+86 155 2121 2121</p>
                 <p className="mb-0">4321 Home St., Shanghai, China</p>
-              </a>
-              <a href="#" className="list-group-item list-group-item-action">
+              </Link>
+              <Link to="#" className="list-group-item list-group-item-action">
                 <span className="text-muted">Add a new address...</span>
-              </a>
+              </Link>
             </div>
 
           </form>
@@ -332,27 +331,27 @@ function CheckoutMain() {
           <div className="row gy-2">
             <div className="col-lg-5 col-xxl-4">
               <div className="list-group">
-                <a href="#" className="list-group-item list-group-item-action" aria-current="true">
+                <Link to="#" className="list-group-item list-group-item-action">
                   <div className="d-flex w-100 justify-content-between align-items-center">
                     <span>PayPal</span>
                   </div>
-                </a>
-                <a href="#" className="list-group-item list-group-item-action" aria-current="true">
+                </Link>
+                <Link to="#" className="list-group-item list-group-item-action">
                   <div className="d-flex w-100 justify-content-between align-items-center">
                     <span>WeChat Pay</span>
                     <span className="badge bg-success rounded-pill">Recommended</span>
                   </div>
-                </a>
-                <a href="#" className="list-group-item list-group-item-action"
-                  aria-current="true">
+                </Link>
+                <Link to="#" className="list-group-item list-group-item-action"
+                >
                   <div className="d-flex w-100 justify-content-between align-items-center">
                     <span>Alipay</span>
                     <span className="badge bg-secondary rounded-pill">Last used</span>
                   </div>
-                </a>
-                <a href="#" className="list-group-item list-group-item-action active">
+                </Link>
+                <Link to="#" className="list-group-item list-group-item-action active">
                   <span className="">Credit card</span>
-                </a>
+                </Link>
               </div>
             </div>
 
