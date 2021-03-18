@@ -1,7 +1,9 @@
 import { createContext, useContext, useState } from 'react';
 import { Route, Switch, Link, HashRouter as Router } from 'react-router-dom';
 import _ from 'lodash';
-import BOOKS from './books.json';
+import _BOOKS from './books.json';
+
+const BOOKS = _(_BOOKS).keyBy("id").value();
 
 const BookContext = createContext([]);
 
@@ -236,7 +238,7 @@ function BookDetail(props) {
 }
 
 function DetailMain(props) {
-  const book = BOOKS[props.id - 1];
+  const book = BOOKS[props.id];
 
   return (
     <div>
