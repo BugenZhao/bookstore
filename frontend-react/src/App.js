@@ -9,9 +9,11 @@ const BookContext = createContext([]);
 
 function App() {
   const [bookCount, setBookCount] = useState(8);
+  const [cart, setCart] = useState([]);
+  const addToCart = (id) => { setCart(cart.concat([id])); };
 
   return (
-    <BookContext.Provider value={[bookCount, setBookCount]}>
+    <BookContext.Provider value={[bookCount, setBookCount, cart, addToCart]}>
       <Router>
         <Switch>
           <Route path="/checkout" component={Checkout} />
@@ -63,7 +65,8 @@ function Books() {
 }
 
 function Header(props) {
-  const [bookCount, setBookCount] = useContext(BookContext);
+  const [bookCount, setBookCount, cart, _addToCart] = useContext(BookContext);
+  const cartCount = cart.length;
 
   return (
     <header>
@@ -81,7 +84,10 @@ function Header(props) {
                 <Link className={`nav-link ${props.active === "home" || props.active === "detail" ? "active" : ""}`} to="/home">Books</Link>
               </li>
               <li className="nav-item">
-                <Link className={`nav-link ${props.active === "cart" ? "active" : ""}`} to="/checkout">My Cart</Link>
+                <Link className={`nav-link d-flex align-items-center ${props.active === "cart" ? "active" : ""}`} to="/checkout">
+                  <span className="me-1">My Cart</span>
+                  <span className={`badge bg-${cartCount == 0 ? "secondary" : "danger"} rounded-pill`}>{cartCount}</span>
+                </Link>
               </li>
               <li className="nav-item">
                 <Link className={`nav-link ${props.active === "orders" ? "active" : ""}`} to="#">My Orders</Link>
@@ -198,6 +204,7 @@ function Home() {
 
 function BookDetail(props) {
   const book = props.book;
+  const [_bc, _sbc, _cart, addToCart] = useContext(BookContext);
 
   return (
     <div>
@@ -227,13 +234,13 @@ function BookDetail(props) {
         <div className="my-3">
           <div className="d-flex justify-content-end">
             <div className="btn-group btn-group-lg col-12 col-xl-6 col-lg-8" role="group">
-              <button type="button" className="btn btn-outline-danger w-100">Add to Cart</button>
-              <Link className="btn btn-danger w-100" to="/checkout">Buy</Link>
+              <button type="button" className="btn btn-outline-danger w-100" onClick={() => { addToCart(book.id) }}>Add to Cart</button>
+              <Link className="btn btn-danger w-100" to="/checkout">Checkout</Link>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 
@@ -248,19 +255,15 @@ function DetailMain(props) {
           <li className="breadcrumb-item active">{book.name}</li>
         </ol>
       </nav>
-
       <div className="row">
         <div className="col-md-4">
           <BookCard book={book} link={false} />
         </div>
-
         <div className="col-md-8">
           <BookDetail book={book} />
         </div>
-
       </div>
     </div>
-
   )
 }
 
@@ -307,10 +310,10 @@ function AddressItem(props) {
   );
 }
 
-function CheckoutMain() {
-  const [bookCount, _setBookCount] = useContext(BookContext);
+function Cart() {
+  const [_bc, _sbc, cart, _addToCart] = useContext(BookContext);
 
-  const books = _(BOOKS).take(bookCount).sampleSize(bookCount / 2);
+  const books = _(cart).map((id) => BOOKS[id]);
   const sumPrice = _(books).map((book) => book.price).sum();
   const discount = Math.min(100.0, sumPrice * 0.3);
   const totalPrice = sumPrice - discount;
@@ -318,23 +321,31 @@ function CheckoutMain() {
 
   return (
     <div>
+      <h4 className="d-flex justify-content-between align-items-center mb-3">
+        <span className="text-muted">Your cart</span>
+        <span className="badge bg-secondary rounded-pill">{books.size()}</span>
+      </h4>
+      <ul className="list-group mb-3">
+        {cartItems}
+        <li className="list-group-item d-flex justify-content-between lh-sm">
+          <span>Discount</span>
+          <span className="text-danger fw-bold"> -¥{discount.toFixed(2)}</span>
+        </li>
+        <li className="list-group-item d-flex justify-content-between">
+          <span>Total</span>
+          <span className="fw-bold">¥{totalPrice.toFixed(2)}</span>
+        </li>
+      </ul>
+    </div>
+  )
+}
+
+function CheckoutMain() {
+  return (
+    <div>
       <div className="row">
         <div className="col-md-5 col-lg-4 order-md-last">
-          <h4 className="d-flex justify-content-between align-items-center mb-3">
-            <span className="text-muted">Your cart</span>
-            <span className="badge bg-secondary rounded-pill">{books.size()}</span>
-          </h4>
-          <ul className="list-group mb-3">
-            {cartItems}
-            <li className="list-group-item d-flex justify-content-between lh-sm">
-              <span>Discount</span>
-              <span className="text-danger fw-bold"> -¥{discount.toFixed(2)}</span>
-            </li>
-            <li className="list-group-item d-flex justify-content-between">
-              <span>Total</span>
-              <span className="fw-bold">¥{totalPrice.toFixed(2)}</span>
-            </li>
-          </ul>
+          <Cart />
         </div>
         <div className="col-md-7 col-lg-8">
           <h4 className="mb-3">Shipping Address</h4>
