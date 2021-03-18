@@ -49,7 +49,7 @@ function Header() {
     <header>
       <nav className="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
         <div className="container">
-          <a className="navbar-brand fw-bolder" href="home.html">Book Store</a>
+          <Link className="navbar-brand fw-bolder" to="/">Book Store</Link>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
             aria-expanded="false" aria-label="Toggle navigation">
@@ -58,17 +58,17 @@ function Header() {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="home.html">Books</a>
+                <Link className="nav-link active" aria-current="page" to="/">Books</Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="checkout.html">My Cart</a>
+                <Link className="nav-link" to="/checkout">My Cart</Link>
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="#">My Orders</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link disabled fw-bold" href="login.html" tabIndex="-1"
-                  aria-disabled="true">Hi, Bugen</a>
+                <Link className="nav-link disabled fw-bold" to="/login" tabIndex="-1"
+                  aria-disabled="true">Hi, Bugen</Link>
               </li>
             </ul>
             <form className="d-flex me-3 mb-2 mb-lg-0">
@@ -85,46 +85,44 @@ function Header() {
   )
 }
 
-function Main() {
+function HomeMain() {
   return (
-    <main>
-      <div className="py-4 container">
-        <div id="carouselExampleControls" className="carousel slide mb-4 shadow-sm" data-bs-ride="carousel">
-          <div className="carousel-inner">
-            <div className="carousel-item active">
-              <img src="static/book1.jpg" className="d-block w-100" alt="..." />
-            </div>
-            <div className="carousel-item">
-              <img src="static/book2.jpg" className="d-block w-100" alt="..." />
-            </div>
-            <div className="carousel-item">
-              <img src="static/book3.jpg" className="d-block w-100" alt="..." />
-            </div>
-            <div className="carousel-item">
-              <img src="static/book4.jpg" className="d-block w-100" alt="..." />
-            </div>
+    <div>
+      <div id="carouselExampleControls" className="carousel slide mb-4 shadow-sm" data-bs-ride="carousel">
+        <div className="carousel-inner">
+          <div className="carousel-item active">
+            <img src="static/book1.jpg" className="d-block w-100" alt="..." />
           </div>
-          <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
-            data-bs-slide="prev">
-            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span className="visually-hidden">Previous</span>
-          </button>
-          <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
-            data-bs-slide="next">
-            <span className="carousel-control-next-icon" aria-hidden="true"></span>
-            <span className="visually-hidden">Next</span>
-          </button>
+          <div className="carousel-item">
+            <img src="static/book2.jpg" className="d-block w-100" alt="..." />
+          </div>
+          <div className="carousel-item">
+            <img src="static/book3.jpg" className="d-block w-100" alt="..." />
+          </div>
+          <div className="carousel-item">
+            <img src="static/book4.jpg" className="d-block w-100" alt="..." />
+          </div>
         </div>
-
-        <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3" id="books">
-          <Books></Books>
-        </div>
+        <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+          data-bs-slide="prev">
+          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span className="visually-hidden">Previous</span>
+        </button>
+        <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+          data-bs-slide="next">
+          <span className="carousel-control-next-icon" aria-hidden="true"></span>
+          <span className="visually-hidden">Next</span>
+        </button>
       </div>
-    </main>
+
+      <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3" id="books">
+        <Books></Books>
+      </div>
+    </div>
   );
 }
 
-function Footer() {
+function Pagination() {
   return (
     <footer className="py-4 bg-white" id="footer">
       <nav>
@@ -146,13 +144,32 @@ function Footer() {
   );
 }
 
+function Body(props) {
+  return (
+    <div className="store-home">
+      {props.children}
+    </div>
+  )
+}
+
+function Main(props) {
+  console.log(props);
+  return (
+    <main className="py-4 container">
+      {props.children}
+    </main>
+  )
+}
+
 function Home() {
   return (
-    <div>
+    <Body>
       <Header />
-      <Main />
-      <Footer />
-    </div>
+      <Main>
+        <HomeMain />
+      </Main>
+      <Pagination />
+    </Body>
   )
 }
 
@@ -169,14 +186,16 @@ function Detail(props) {
   const id = props.match.params.id;
 
   return (
-    <div>
+    <Body>
       <Header />
-      <div className="py-4 container">
-        <h1>Detail of Book {id}</h1>
-        <p>This is an example.</p>
-        <Link to="/">Back</Link>
-      </div>
-    </div>
+      <Main>
+        <div className="py-4 container">
+          <h1>Detail of Book {id}</h1>
+          <p>This is an example.</p>
+          <Link to="/">Back</Link>
+        </div>
+      </Main>
+    </Body>
   )
 }
 
