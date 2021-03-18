@@ -1,7 +1,7 @@
 import './App.css';
 import { Route, Switch, Link, HashRouter as Router } from 'react-router-dom';
-// import _ from 'lodash';
-import books from './books.json';
+import _ from 'lodash';
+import BOOKS from './books.json';
 
 
 function App() {
@@ -42,7 +42,7 @@ function BookCard(props) {
 }
 
 function Books() {
-  return books.map((book) => (
+  return BOOKS.map((book) => (
     <div key={`book${book.id}`} className="col">
       <BookCard
         book={book}
@@ -66,13 +66,13 @@ function Header(props) {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link className="nav-link active" to="/home">Books</Link>
+                <Link className={`nav-link ${props.active == "books" ? "active" : ""}`} to="/home">Books</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/checkout">My Cart</Link>
+                <Link className={`nav-link ${props.active == "cart" ? "active" : ""}`} to="/checkout">My Cart</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="#">My Orders</Link>
+                <Link className={`nav-link ${props.active == "orders" ? "active" : ""}`} to="#">My Orders</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link fw-bold" to="/login" tabIndex="-1">Hi, Bugen</Link>
@@ -172,7 +172,7 @@ function Main(props) {
 function Home() {
   return (
     <Body>
-      <Header />
+      <Header active="books" />
       <Main>
         <HomeMain />
       </Main>
@@ -223,7 +223,7 @@ function BookDetail(props) {
 }
 
 function DetailMain(props) {
-  const book = books[props.id - 1];
+  const book = BOOKS[props.id - 1];
 
   return (
     <div>
@@ -254,7 +254,7 @@ function Detail(props) {
 
   return (
     <Body>
-      <Header />
+      <Header active="books" />
       <Main py={5}>
         <DetailMain id={id} />
       </Main>
@@ -262,37 +262,61 @@ function Detail(props) {
   )
 }
 
+function CartItem(props) {
+  const book = props.book;
+
+  return (
+    <li className="list-group-item d-flex justify-content-between lh-sm">
+      <div>
+        <h6 className="my-0">{book.name}</h6>
+        <small className="text-muted">{book.author}</small>
+      </div>
+      <span className="text-muted">¥{book.price}</span>
+    </li>
+  );
+}
+
+function AddressItem(props) {
+  const address = props.address;
+  const bgClass = address.tag == "Default" ? "bg-secondary" : "bg-success";
+
+  return (
+    <Link to="#" className={`list-group-item list-group-item-action ${props.active ? "active" : ""}`}>
+      <div className="d-flex w-100 justify-content-between align-items-center">
+        <h5 className="mb-1">{address.name}</h5>
+        <span className={`badge ${bgClass} rounded-pill`}>{address.tag}</span>
+      </div>
+      <p className="mb-0 small">{address.phone}</p>
+      <p className="mb-0">{address.address}</p>
+    </Link>
+  );
+}
+
 function CheckoutMain() {
+  const bookIds = [0, 1, 3,];
+  const books = _(bookIds).map((id) => BOOKS[id]);
+  const sumPrice = _(books).map((book) => book.price).sum();
+  const discount = Math.min(100.0, sumPrice * 0.8);
+  const totalPrice = sumPrice - discount;
+  const cartItems = books.map((b) => <CartItem book={b} />).value();
+
   return (
     <div>
       <div className="row">
         <div className="col-md-5 col-lg-4 order-md-last">
           <h4 className="d-flex justify-content-between align-items-center mb-3">
             <span className="text-muted">Your cart</span>
-            <span className="badge bg-secondary rounded-pill">2</span>
+            <span className="badge bg-secondary rounded-pill">{books.size()}</span>
           </h4>
           <ul className="list-group mb-3">
-            <li className="list-group-item d-flex justify-content-between lh-sm">
-              <div>
-                <h6 className="my-0">Java 核心技术</h6>
-                <small className="text-muted">Cay S. Horstmann</small>
-              </div>
-              <span className="text-muted">¥95.2</span>
-            </li>
-            <li className="list-group-item d-flex justify-content-between lh-sm">
-              <div>
-                <h6 className="my-0">Effective C++</h6>
-                <small className="text-muted">Scott Meyers</small>
-              </div>
-              <span className="text-muted">¥51.3</span>
-            </li>
+            {cartItems}
             <li className="list-group-item d-flex justify-content-between lh-sm">
               <span>Discount</span>
-              <span className="text-danger fw-bold"> -¥100.0</span>
+              <span className="text-danger fw-bold"> -¥{discount.toFixed(2)}</span>
             </li>
             <li className="list-group-item d-flex justify-content-between">
               <span>Total</span>
-              <span className="fw-bold">¥46.5</span>
+              <span className="fw-bold">¥{totalPrice.toFixed(2)}</span>
             </li>
           </ul>
         </div>
@@ -301,22 +325,24 @@ function CheckoutMain() {
           <form className="needs-validation" noValidate="">
 
             <div className="list-group">
-              <Link to="#" className="list-group-item list-group-item-action active">
-                <div className="d-flex w-100 justify-content-between align-items-center">
-                  <h5 className="mb-1">Bugen Zhao</h5>
-                  <span className="badge bg-secondary rounded-pill">Default</span>
-                </div>
-                <p className="mb-0 small">+86 155 2121 2121</p>
-                <p className="mb-0">1234 Main St., Shanghai, China</p>
-              </Link>
-              <Link to="#" className="list-group-item list-group-item-action">
-                <div className="d-flex w-100 justify-content-between align-items-center">
-                  <h5 className="mb-1">Bugen Zhao</h5>
-                  <span className="badge bg-success rounded-pill">Home</span>
-                </div>
-                <p className="mb-0 small">+86 155 2121 2121</p>
-                <p className="mb-0">4321 Home St., Shanghai, China</p>
-              </Link>
+              <AddressItem active={true} address={{
+                name: "Bugen Zhao",
+                tag: "Default",
+                phone: "+86 155 2121 2121",
+                address: "1234 Main St., Shanghai, China"
+              }} />
+              <AddressItem address={{
+                name: "Bugen Zhao",
+                tag: "Home",
+                phone: "+86 155 2121 2121",
+                address: "4321 Home St., Shanghai, China"
+              }} />
+              <AddressItem address={{
+                name: "Fuken Chao",
+                tag: "School",
+                phone: "+86 188 1234 5678",
+                address: "9876 School St., Shanghai, China"
+              }} />
               <Link to="#" className="list-group-item list-group-item-action">
                 <span className="text-muted">Add a new address...</span>
               </Link>
@@ -400,7 +426,7 @@ function CheckoutMain() {
 function Checkout() {
   return (
     <Body>
-      <Header />
+      <Header active="cart" />
       <Main py={5}>
         <CheckoutMain />
       </Main>
