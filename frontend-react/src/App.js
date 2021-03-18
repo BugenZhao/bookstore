@@ -2,18 +2,24 @@ import './App.css';
 import { Route, Switch, Link, HashRouter as Router } from 'react-router-dom';
 import _ from 'lodash';
 import BOOKS from './books.json';
+import { createContext, useContext, useState } from 'react';
 
+const BookContext = createContext([]);
 
 function App() {
+  const [bookCount, setBookCount] = useState(8);
+
   return (
-    <Router>
-      <Switch>
-        <Route path="/checkout" component={Checkout} />
-        <Route path="/detail/:id" component={Detail}></Route>
-        <Route path="/home" component={Home} />
-        <Route path="/" component={Login} />
-      </Switch>
-    </Router>
+    <BookContext.Provider value={[bookCount, setBookCount]}>
+      <Router>
+        <Switch>
+          <Route path="/checkout" component={Checkout} />
+          <Route path="/detail/:id" component={Detail}></Route>
+          <Route path="/home" component={Home} />
+          <Route path="/" component={Login} />
+        </Switch>
+      </Router>
+    </BookContext.Provider>
   )
 }
 
@@ -25,10 +31,11 @@ function BookCard(props) {
     <div className="card shadow-sm">
       <img src={book.image} alt="" className="card-img-top" />
       {
-        props.link &&
-        <Link to={path} className="stretched-link">
-          <span className="visually-hidden">Details</span>
-        </Link>
+        props.link ?
+          <Link to={path} className="stretched-link">
+            <span className="visually-hidden">Details</span>
+          </Link>
+          : null
       }
       <div className="card-body">
         <h5 className="card-title text-truncate">{book.name}</h5>
@@ -42,17 +49,21 @@ function BookCard(props) {
 }
 
 function Books() {
-  return BOOKS.map((book) => (
+  const [bookCount, _setBookCount] = useContext(BookContext);
+
+  return _(BOOKS).map((book) =>
     <div key={`book${book.id}`} className="col">
       <BookCard
         book={book}
         link={true}
       />
     </div>
-  ));
+  ).take(bookCount).value();
 }
 
 function Header(props) {
+  const [bookCount, setBookCount] = useContext(BookContext);
+
   return (
     <header>
       <nav className="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
@@ -66,25 +77,28 @@ function Header(props) {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link className={`nav-link ${props.active == "books" ? "active" : ""}`} to="/home">Books</Link>
+                <Link className={`nav-link ${props.active === "home" || props.active === "detail" ? "active" : ""}`} to="/home">Books</Link>
               </li>
               <li className="nav-item">
-                <Link className={`nav-link ${props.active == "cart" ? "active" : ""}`} to="/checkout">My Cart</Link>
+                <Link className={`nav-link ${props.active === "cart" ? "active" : ""}`} to="/checkout">My Cart</Link>
               </li>
               <li className="nav-item">
-                <Link className={`nav-link ${props.active == "orders" ? "active" : ""}`} to="#">My Orders</Link>
+                <Link className={`nav-link ${props.active === "orders" ? "active" : ""}`} to="#">My Orders</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link fw-bold" to="/login" tabIndex="-1">Hi, Bugen</Link>
               </li>
             </ul>
-            <form className="d-flex me-2 mb-2 mb-lg-0">
+            <form className="d-flex mb-2 mb-lg-0">
               <input className="form-control me-2" type="search" placeholder="Search Books..." />
               <button className="btn btn-outline-secondary" type="submit">Search</button>
             </form>
-            <div className="d-flex">
-              <Link className="btn btn-success w-100" onClick={() => { }} to="#footer">Add a Book</Link>
-            </div>
+            {
+              props.active === "home" ?
+                (<div className="ms-2 d-flex">
+                  <Link className="btn btn-success w-100" onClick={() => { setBookCount(bookCount + 1); }} to="#footer">Add a Book</Link>
+                </div>) : null
+            }
           </div>
         </div>
       </nav>
@@ -172,7 +186,7 @@ function Main(props) {
 function Home() {
   return (
     <Body>
-      <Header active="books" />
+      <Header active="home" />
       <Main>
         <HomeMain />
       </Main>
@@ -254,7 +268,7 @@ function Detail(props) {
 
   return (
     <Body>
-      <Header active="books" />
+      <Header active="detail" />
       <Main py={5}>
         <DetailMain id={id} />
       </Main>
@@ -293,10 +307,11 @@ function AddressItem(props) {
 }
 
 function CheckoutMain() {
-  const bookIds = [0, 1, 3,];
-  const books = _(bookIds).map((id) => BOOKS[id]);
+  const [bookCount, _setBookCount] = useContext(BookContext);
+
+  const books = _(BOOKS).take(bookCount).sampleSize(bookCount / 2);
   const sumPrice = _(books).map((book) => book.price).sum();
-  const discount = Math.min(100.0, sumPrice * 0.8);
+  const discount = Math.min(100.0, sumPrice * 0.3);
   const totalPrice = sumPrice - discount;
   const cartItems = books.map((b) => <CartItem book={b} />).value();
 
