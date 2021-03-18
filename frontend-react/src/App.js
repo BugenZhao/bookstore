@@ -1,8 +1,7 @@
-import './App.css';
+import { createContext, useContext, useState } from 'react';
 import { Route, Switch, Link, HashRouter as Router } from 'react-router-dom';
 import _ from 'lodash';
 import BOOKS from './books.json';
-import { createContext, useContext, useState } from 'react';
 
 const BookContext = createContext([]);
 
