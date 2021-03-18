@@ -86,7 +86,7 @@ function Header(props) {
               <li className="nav-item">
                 <Link className={`nav-link d-flex align-items-center ${props.active === "cart" ? "active" : ""}`} to="/checkout">
                   <span className="me-1">My Cart</span>
-                  <span className={`badge bg-${cartCount == 0 ? "secondary" : "danger"} rounded-pill`}>{cartCount}</span>
+                  <span className={`badge bg-${cartCount === 0 ? "secondary" : "danger"} rounded-pill`}>{cartCount}</span>
                 </Link>
               </li>
               <li className="nav-item">
