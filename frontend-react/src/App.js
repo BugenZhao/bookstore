@@ -9,10 +9,10 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/login" component={Login} />
         <Route path="/checkout" component={Checkout} />
         <Route path="/detail/:id" component={Detail}></Route>
-        <Route path="/" component={Home} />
+        <Route path="/home" component={Home} />
+        <Route path="/" component={Login} />
       </Switch>
     </BrowserRouter>
   )
@@ -57,7 +57,7 @@ function Header() {
     <header>
       <nav className="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
         <div className="container">
-          <Link className="navbar-brand fw-bolder" to="/">Book Store</Link>
+          <Link className="navbar-brand fw-bolder" to="/home">Book Store</Link>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
             aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +66,7 @@ function Header() {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link className="nav-link active" aria-current="page" to="/">Books</Link>
+                <Link className="nav-link active" aria-current="page" to="/home">Books</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/checkout">My Cart</Link>
@@ -79,7 +79,7 @@ function Header() {
                   aria-disabled="true">Hi, Bugen</Link>
               </li>
             </ul>
-            <form className="d-flex me-3 mb-2 mb-lg-0">
+            <form className="d-flex me-2 mb-2 mb-lg-0">
               <input className="form-control me-2" type="search" placeholder="Search Books..." />
               <button className="btn btn-outline-secondary" type="submit">Search</button>
             </form>
@@ -144,7 +144,7 @@ function Pagination() {
           <li className="page-item"><a className="page-link" href="#">3</a></li>
 
           <li className="page-item">
-            <Link className="page-link" href="#">Next</Link>
+            <Link className="page-link" to="#">Next</Link>
           </li>
         </ul>
       </nav>
@@ -179,15 +179,6 @@ function Home() {
       </Main>
       <Pagination />
     </Body>
-  )
-}
-
-function Login() {
-  return (
-    <div>
-      <h1>Login</h1>
-      <Link to="/">Back</Link>
-    </div>
   )
 }
 
@@ -239,7 +230,7 @@ function DetailMain(props) {
     <div>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb h6">
-          <li className="breadcrumb-item"><Link to="/">Books</Link></li>
+          <li className="breadcrumb-item"><Link to="/home">Books</Link></li>
           <li className="breadcrumb-item active">{book.name}</li>
         </ol>
       </nav>
@@ -415,6 +406,27 @@ function Checkout() {
         <CheckoutMain />
       </Main>
     </Body>
+  )
+}
+
+function Login() {
+  return (
+    <main className="form-signin">
+      <form>
+        <h1 className="h1 mb-3 fw-bold">Sign in</h1>
+        <input type="email" id="inputEmail" className="form-control" placeholder="Email address" required=""
+          autoFocus="" defaultValue="Bugen" />
+        <input type="password" id="inputPassword" className="form-control" placeholder="Password" required=""
+          defaultValue="password" />
+        <div className="mb-3 form-check form-switch">
+          <label>
+            <input type="checkbox" id="rememberMeCheck" className="form-check-input" defaultChecked={true} />
+            <label htmlFor="rememberMeCheck" className="form-check-label">Remember me</label>
+          </label>
+        </div>
+        <Link className="btn btn-dark w-100 btn-lg" to="/home">Sign in</Link>
+      </form>
+    </main>
   )
 }
 
