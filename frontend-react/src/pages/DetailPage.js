@@ -23,7 +23,8 @@ export function DetailPage(props) {
 function DetailMain({
   id,
 }) {
-  const book = useContext(BooksContext)[id];
+  const [BOOKS] = useContext(BooksContext);
+  const book = BOOKS[id];
   const history = useHistory();
 
   return (
