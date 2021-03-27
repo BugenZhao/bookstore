@@ -7,7 +7,7 @@ import { StoreContext } from './services';
 
 
 function App() {
-  const [bookCount, setBookCount] = useState(18);
+  const [bookCount, setBookCount] = useState(100);
   const [cart, setCart] = useState([]);
   const addToCart = (id) => { setCart(cart.concat([id])); };
 

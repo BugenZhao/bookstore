@@ -1,5 +1,4 @@
 import { createContext, useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 const PaymentContext = createContext(null);
 
@@ -10,15 +9,15 @@ function PaymentMethod({
   const [selected, setSelected] = useContext(PaymentContext);
 
   return (
-    <Link to="#"
+    <button
       onClick={() => setSelected(name)}
       className={`list-group-item list-group-item-action ${selected === name ? "active" : ""}`}>
       <div className="d-flex w-100 justify-content-between align-items-center">
         <span>{name}</span>
         {children}
       </div>
-    </Link>
-  )
+    </button>
+  );
 }
 
 
@@ -48,7 +47,6 @@ function CreditCardForm() {
           <input type="text" className="form-control" id="cc-cvv" placeholder="" required="" />
         </div>
       </div>
-
     </div>
   );
 }

@@ -1,32 +1,31 @@
 import { Header } from '../components/Header';
-import { Pagination } from '../components/Pagination';
 import { BooksView } from '../views/BooksView';
 import { Main } from "./common/Main";
 import { Body } from "./common/Body";
+import { useRouteMatch } from 'react-router';
 
-export function SearchPage(props) {
-  const keyword = props.match.params.keyword ?? "";
-
+export function SearchPage() {
   return (
     <Body>
-      <Header active="search" keyword={keyword} />
+      <Header active="search" />
       <Main>
-        <SearchMain keyword={keyword} />
+        <SearchMain />
       </Main>
-      <Pagination />
     </Body>
   );
 }
 
-function SearchMain({
-  keyword,
-}) {
+function SearchMain() {
+  const keyword = useRouteMatch().params.keyword ?? "";
+
   return (
     <div>
-      <div className="py-5"><span className="h1">
-        Search Results for "{keyword}"
-      </span></div>
-      <BooksView keyword={keyword} />
+      <div className="py-5">
+        <span className="h1">
+          Search Results for "{keyword}"
+        </span>
+      </div>
+      <BooksView />
     </div>
   );
 }

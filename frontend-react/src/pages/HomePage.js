@@ -1,5 +1,4 @@
 import { Header } from '../components/Header';
-import { Pagination } from '../components/Pagination';
 import { CarouselView } from '../views/CarouselView';
 import { BooksView } from '../views/BooksView';
 import { Main } from "./common/Main";
@@ -12,10 +11,10 @@ export function HomePage() {
       <Main>
         <HomeMain />
       </Main>
-      <Pagination />
     </Body>
   );
 }
+
 function HomeMain() {
   return (
     <div>

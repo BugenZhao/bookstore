@@ -10,7 +10,7 @@ function AddressItem({
   const [selected, setSelected] = useContext(AddressContext);
 
   return (
-    <Link to="#"
+    <button
       onClick={() => setSelected(address.id)}
       className={`list-group-item list-group-item-action ${selected === address.id ? "active" : ""}`}>
       <div className="d-flex w-100 justify-content-between align-items-center">
@@ -19,7 +19,7 @@ function AddressItem({
       </div>
       <p className="mb-0 small">{address.phone}</p>
       <p className="mb-0">{address.address}</p>
-    </Link>
+    </button>
   );
 }
 

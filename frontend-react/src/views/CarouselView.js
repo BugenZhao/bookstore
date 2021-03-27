@@ -12,8 +12,8 @@ export function CarouselView() {
   return (
     <div id="carouselExampleControls" className="carousel slide mb-4 shadow-sm" data-bs-ride="carousel">
       <div className="carousel-inner">
-        <CarouselItem url="static/book1.jpg" active={true} />
-        <CarouselItem url="static/book2.jpg" />
+        <CarouselItem url="static/book1.jpg" />
+        <CarouselItem url="static/book2.jpg" active={true} />
         <CarouselItem url="static/book3.jpg" />
         <CarouselItem url="static/book4.jpg" />
       </div>

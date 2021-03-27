@@ -7,7 +7,7 @@ function CartItem({
   count,
 }) {
   return (
-    <li className="list-group-item d-flex justify-content-between lh-sm">
+    <li className="list-group-item d-flex justify-content-between lh-sm" >
       <div>
         <h6 className="my-0">{book.name}</h6>
         <small className="text-muted">{book.author}</small>
@@ -25,12 +25,12 @@ export function CartView() {
   const BOOKS = useContext(BooksContext);
 
   const booksMap = _(cart).countBy((i) => i).toPairs().map(([i, c]) => [BOOKS[i], c]);
-  
+
   const sumPrice = booksMap.map(([b, c]) => b.price * c).sum();
   const discount = Math.min(100.0, sumPrice * 0.3);
   const totalPrice = sumPrice - discount;
 
-  const cartItems = booksMap.map(([b, c]) => <CartItem book={b} count={c} />).value();
+  const cartItems = booksMap.map(([b, c]) => <CartItem book={b} count={c} key={b.id} />).value();
 
   return (
     <div>

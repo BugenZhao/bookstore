@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import { StoreContext } from "../services";
 
 function SearchBox({
@@ -21,10 +21,10 @@ function SearchBox({
 
 export function Header({
   active,
-  keyword = "",
 }) {
   const [bookCount, setBookCount, cart, _addToCart] = useContext(StoreContext);
   const cartCount = cart.length;
+  const keyword = useRouteMatch().params.keyword ?? "";
 
   return (
     <header>
