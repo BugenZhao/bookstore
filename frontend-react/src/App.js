@@ -17,8 +17,9 @@ function App() {
       <Router>
         <Switch>
           <Route path="/checkout" component={Checkout} />
-          <Route path="/detail/:id" component={Detail}></Route>
+          <Route path="/detail/:id" component={Detail} />
           <Route path="/home" component={Home} />
+          <Route path="/search/:keyword?" component={Search} />
           <Route path="/" component={Login} />
         </Switch>
       </Router>
@@ -26,15 +27,17 @@ function App() {
   )
 }
 
-function BookCard(props) {
-  const book = props.book
+function BookCard({
+  book,
+  withLink,
+}) {
   const path = `/detail/${book.id}`;
 
   return (
     <div className="card shadow-sm">
       <img src={book.image} alt="" className="card-img-top" />
       {
-        props.link ?
+        withLink ?
           <Link to={path} className="stretched-link">
             <span className="visually-hidden">Details</span>
           </Link>
@@ -51,20 +54,37 @@ function BookCard(props) {
   );
 }
 
-function Books() {
+function Books({
+  keyword = "",
+}) {
   const [bookCount, _setBookCount] = useContext(BookContext);
 
-  return _(BOOKS).map((book) =>
-    <div key={`book${book.id}`} className="col">
-      <BookCard
-        book={book}
-        link={true}
-      />
-    </div>
-  ).take(bookCount).value();
+  return _(BOOKS)
+    .filter((book) => book.name.includes(keyword))
+    .map((book) =>
+      <div key={`book${book.id}`} className="col">
+        <BookCard book={book} withLink={true} />
+      </div>
+    ).take(bookCount).value();
 }
 
-function Header(props) {
+function SearchBox({
+  initial = "",
+}) {
+  const [input, setInput] = useState(initial);
+
+  return (
+    <form className="d-flex mb-2 mb-lg-0">
+      <input className="form-control me-2" type="search" placeholder="Search Books..." value={input} onChange={e => setInput(e.target.value)} />
+      <Link className="btn btn-outline-secondary" to={`/search/${input}`}>Search</Link>
+    </form>
+  );
+}
+
+function Header({
+  active,
+  keyword = "",
+}) {
   const [bookCount, setBookCount, cart, _addToCart] = useContext(BookContext);
   const cartCount = cart.length;
 
@@ -81,27 +101,24 @@ function Header(props) {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link className={`nav-link ${props.active === "home" || props.active === "detail" ? "active" : ""}`} to="/home">Books</Link>
+                <Link className={`nav-link ${active === "home" || active === "detail" ? "active" : ""}`} to="/home">Books</Link>
               </li>
               <li className="nav-item">
-                <Link className={`nav-link d-flex align-items-center ${props.active === "cart" ? "active" : ""}`} to="/checkout">
+                <Link className={`nav-link d-flex align-items-center ${active === "cart" ? "active" : ""}`} to="/checkout">
                   <span className="me-1">My Cart</span>
                   <span className={`badge bg-${cartCount === 0 ? "secondary" : "danger"} rounded-pill`}>{cartCount}</span>
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className={`nav-link ${props.active === "orders" ? "active" : ""}`} to="#">My Orders</Link>
+                <Link className={`nav-link ${active === "orders" ? "active" : ""}`} to="#">My Orders</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link fw-bold" to="/login" tabIndex="-1">Hi, Bugen</Link>
               </li>
             </ul>
-            <form className="d-flex mb-2 mb-lg-0">
-              <input className="form-control me-2" type="search" placeholder="Search Books..." />
-              <button className="btn btn-outline-secondary" type="submit">Search</button>
-            </form>
+            <SearchBox initial={keyword}></SearchBox>
             {
-              props.active === "home" ?
+              active === "home" ?
                 (<div className="ms-2 d-flex">
                   <Link className="btn btn-success w-100" onClick={() => { setBookCount(bookCount + 1); }} to="#footer">Add a Book</Link>
                 </div>) : null
@@ -113,10 +130,46 @@ function Header(props) {
   )
 }
 
-function Carousel(props) {
+function CarouselItem({
+  active = false,
+  url,
+}) {
   return (
-    <div className={`carousel-item ${props.active ? "active" : ""}`}>
-      <img src={props.url} className="d-block w-100" alt={`carousel ${props.url}`} />
+    <div className={`carousel-item ${active ? "active" : ""}`}>
+      <img src={url} className="d-block w-100" alt={`carousel ${url}`} />
+    </div>
+  );
+}
+
+function CarouselView() {
+  return (
+    <div id="carouselExampleControls" className="carousel slide mb-4 shadow-sm" data-bs-ride="carousel">
+      <div className="carousel-inner">
+        <CarouselItem url="static/book1.jpg" active={true} />
+        <CarouselItem url="static/book2.jpg" />
+        <CarouselItem url="static/book3.jpg" />
+        <CarouselItem url="static/book4.jpg" />
+      </div>
+      <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+        data-bs-slide="prev">
+        <span className="carousel-control-prev-icon"></span>
+        <span className="visually-hidden">Previous</span>
+      </button>
+      <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+        data-bs-slide="next">
+        <span className="carousel-control-next-icon"></span>
+        <span className="visually-hidden">Next</span>
+      </button>
+    </div>
+  );
+}
+
+function BooksView({
+  keyword = "",
+}) {
+  return (
+    <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-3" id="books">
+      <Books keyword={keyword}></Books>
     </div>
   );
 }
@@ -124,28 +177,18 @@ function Carousel(props) {
 function HomeMain() {
   return (
     <div>
-      <div id="carouselExampleControls" className="carousel slide mb-4 shadow-sm" data-bs-ride="carousel">
-        <div className="carousel-inner">
-          <Carousel url="static/book1.jpg" active={true} />
-          <Carousel url="static/book2.jpg" />
-          <Carousel url="static/book3.jpg" />
-          <Carousel url="static/book4.jpg" />
-        </div>
-        <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
-          data-bs-slide="prev">
-          <span className="carousel-control-prev-icon"></span>
-          <span className="visually-hidden">Previous</span>
-        </button>
-        <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
-          data-bs-slide="next">
-          <span className="carousel-control-next-icon"></span>
-          <span className="visually-hidden">Next</span>
-        </button>
-      </div>
+      <CarouselView />
+      <BooksView />
+    </div>
+  );
+}
 
-      <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-3" id="books">
-        <Books></Books>
-      </div>
+function SearchMain({
+  keyword,
+}) {
+  return (
+    <div>
+      <BooksView keyword={keyword} />
     </div>
   );
 }
@@ -180,12 +223,15 @@ function Body(props) {
   )
 }
 
-function Main(props) {
-  const py = `py-${props.py || 4}`
+function Main({
+  py: py_ = 4,
+  children,
+}) {
+  const py = `py-${py_}`
 
   return (
     <main className={`${py} container`}>
-      {props.children}
+      {children}
     </main>
   )
 }
@@ -202,8 +248,23 @@ function Home() {
   )
 }
 
-function BookDetail(props) {
-  const book = props.book;
+function Search(props) {
+  const keyword = props.match.params.keyword ?? "";
+
+  return (
+    <Body>
+      <Header active="home" keyword={keyword} />
+      <Main>
+        <SearchMain keyword={keyword} />
+      </Main>
+      <Pagination />
+    </Body>
+  )
+}
+
+function BookDetail({
+  book,
+}) {
   const [_bc, _sbc, _cart, addToCart] = useContext(BookContext);
 
   return (
@@ -244,8 +305,10 @@ function BookDetail(props) {
   )
 }
 
-function DetailMain(props) {
-  const book = BOOKS[props.id];
+function DetailMain({
+  id,
+}) {
+  const book = BOOKS[id];
 
   return (
     <div>
@@ -257,7 +320,7 @@ function DetailMain(props) {
       </nav>
       <div className="row">
         <div className="col-md-4">
-          <BookCard book={book} link={false} />
+          <BookCard book={book} withLink={false} />
         </div>
         <div className="col-md-8">
           <BookDetail book={book} />
@@ -280,9 +343,9 @@ function Detail(props) {
   )
 }
 
-function CartItem(props) {
-  const book = props.book;
-
+function CartItem({
+  book,
+}) {
   return (
     <li className="list-group-item d-flex justify-content-between lh-sm">
       <div>
@@ -294,12 +357,14 @@ function CartItem(props) {
   );
 }
 
-function AddressItem(props) {
-  const address = props.address;
+function AddressItem({
+  active,
+  address,
+}) {
   const bgClass = address.tag === "Default" ? "bg-secondary" : "bg-success";
 
   return (
-    <Link to="#" className={`list-group-item list-group-item-action ${props.active ? "active" : ""}`}>
+    <Link to="#" className={`list-group-item list-group-item-action ${active ? "active" : ""}`}>
       <div className="d-flex w-100 justify-content-between align-items-center">
         <h5 className="mb-1">{address.name}</h5>
         <span className={`badge ${bgClass} rounded-pill`}>{address.tag}</span>
