@@ -2,9 +2,10 @@ import { Link } from 'react-router-dom';
 import { BookCard } from '../components/BookCard';
 import { Header } from '../components/Header';
 import { BookDetailView } from '../views/BookDetailView';
-import { BOOKS } from '../App';
 import { Main } from "./common/Main";
 import { Body } from "./common/Body";
+import { useContext } from 'react';
+import { BooksContext } from '../services';
 
 export function DetailPage(props) {
   const id = props.match.params.id;
@@ -22,7 +23,7 @@ export function DetailPage(props) {
 function DetailMain({
   id,
 }) {
-  const book = BOOKS[id];
+  const book = useContext(BooksContext)[id];
 
   return (
     <div>

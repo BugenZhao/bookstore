@@ -2,12 +2,9 @@ import { useState } from 'react';
 import { Route, Switch, HashRouter as Router } from 'react-router-dom';
 import _ from 'lodash';
 
-import _BOOKS from './resources/books.json';
-
 import { CheckoutPage, DetailPage, HomePage, SearchPage, LoginPage } from "./pages";
-import { StoreContext as StoreContext } from './services';
+import { StoreContext } from './services';
 
-export const BOOKS = _(_BOOKS).keyBy("id").value();
 
 function App() {
   const [bookCount, setBookCount] = useState(8);
