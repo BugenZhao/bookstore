@@ -1,7 +1,8 @@
 import { Header } from '../components/Header';
 import { Pagination } from '../components/Pagination';
 import { BooksView } from '../views/BooksView';
-import { Body, Main } from '../App';
+import { Main } from "./common/Main";
+import { Body } from "./common/Body";
 
 export function SearchPage(props) {
   const keyword = props.match.params.keyword ?? "";

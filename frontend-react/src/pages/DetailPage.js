@@ -2,7 +2,9 @@ import { Link } from 'react-router-dom';
 import { BookCard } from '../components/BookCard';
 import { Header } from '../components/Header';
 import { BookDetailView } from '../views/BookDetailView';
-import { Body, Main, BOOKS } from '../App';
+import { BOOKS } from '../App';
+import { Main } from "./common/Main";
+import { Body } from "./common/Body";
 
 export function DetailPage(props) {
   const id = props.match.params.id;

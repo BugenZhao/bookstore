@@ -2,7 +2,8 @@ import { Header } from '../components/Header';
 import { Pagination } from '../components/Pagination';
 import { CarouselView } from '../views/CarouselView';
 import { BooksView } from '../views/BooksView';
-import { Body, Main } from '../App';
+import { Main } from "./common/Main";
+import { Body } from "./common/Body";
 
 export function HomePage() {
   return (

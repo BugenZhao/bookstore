@@ -1,5 +1,6 @@
 import { Header } from '../components/Header';
-import { Body, Main } from '../App';
+import { Main } from "./common/Main";
+import { Body } from "./common/Body";
 import { CartView } from '../views/CartView';
 import { PaymentView } from '../views/PaymentView';
 import { AddressView } from '../views/AddressView';
