@@ -1,12 +1,18 @@
+import { createContext, useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
+
+const PaymentContext = createContext(null);
 
 function PaymentMethod({
   name,
   children,
-  active = false,
 }) {
+  const [selected, setSelected] = useContext(PaymentContext);
+
   return (
-    <Link to="#" className={`list-group-item list-group-item-action ${active ? "active" : ""}`}>
+    <Link to="#"
+      onClick={() => setSelected(name)}
+      className={`list-group-item list-group-item-action ${selected == name ? "active" : ""}`}>
       <div className="d-flex w-100 justify-content-between align-items-center">
         <span>{name}</span>
         {children}
@@ -48,26 +54,32 @@ function CreditCardForm() {
 }
 
 export function PaymentView() {
+  const [selected, setSelected] = useState("Credit card");
+
   return (
-    <div>
-      <h4 className="mb-3">Payment</h4>
-
-      <div className="row gy-2">
-        <div className="col-lg-5 col-xxl-4">
-          <div className="list-group">
-            <PaymentMethod name="PayPal" />
-            <PaymentMethod name="WeChat Pay" >
-              <span className="badge bg-success rounded-pill">Recommended</span>
-            </PaymentMethod>
-            <PaymentMethod name="Alipay" >
-              <span className="badge bg-secondary rounded-pill">Last used</span>
-            </PaymentMethod>
-            <PaymentMethod name="Credit card" active={true} />
+    <PaymentContext.Provider value={[selected, setSelected]}>
+      <div>
+        <h4 className="mb-3">Payment</h4>
+        <div className="row gy-2">
+          <div className="col-lg-5 col-xxl-4">
+            <div className="list-group">
+              <PaymentMethod name="PayPal" />
+              <PaymentMethod name="WeChat Pay" >
+                <span className="badge bg-success rounded-pill">Recommended</span>
+              </PaymentMethod>
+              <PaymentMethod name="Alipay" />
+              <PaymentMethod name="Credit card" >
+                <span className="badge bg-secondary rounded-pill">Last used</span>
+              </PaymentMethod>
+            </div>
           </div>
-        </div>
 
-        <CreditCardForm />
+          {selected == "Credit card" ? <CreditCardForm /> : (
+            <div className="col">You'll be redirected to {selected} after clicking "Checkout".</div>
+          )}
+
+        </div>
       </div>
-    </div>
+    </PaymentContext.Provider>
   );
 }
