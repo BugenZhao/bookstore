@@ -1,0 +1,38 @@
+import { Header } from '../components/Header';
+import { Body, Main } from '../App';
+import { CartView } from '../views/CartView';
+import { PaymentView } from '../views/PaymentView';
+import { AddressView } from '../views/AddressView';
+
+function CheckoutMain() {
+  return (
+    <div>
+      <div className="row">
+        <div className="col-md-5 col-lg-4 order-md-last">
+          <CartView />
+        </div>
+        <div className="col-md-7 col-lg-8">
+          <AddressView />
+          <hr className="my-4" />
+          <PaymentView />
+          <hr className="my-4" />
+          <div className="d-flex justify-content-end">
+            <button className="btn btn-primary btn-lg col-12 col-lg-3" type="submit">Checkout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+export function CheckoutPage() {
+  return (
+    <Body>
+      <Header active="cart" />
+      <Main py={5}>
+        <CheckoutMain />
+      </Main>
+    </Body>
+  );
+}
