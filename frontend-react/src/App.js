@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Route, Switch, HashRouter as Router } from 'react-router-dom';
+import { Route, Switch, HashRouter as Router, Redirect } from 'react-router-dom';
 import _ from 'lodash';
 
 import { CheckoutPage, DetailPage, HomePage, SearchPage, LoginPage } from "./pages";
@@ -19,7 +19,8 @@ function App() {
           <Route path="/detail/:id" component={DetailPage} />
           <Route path="/home" component={HomePage} />
           <Route path="/search/:keyword?" component={SearchPage} />
-          <Route path="/" component={LoginPage} />
+          <Route path="/login" component={LoginPage} />
+          <Route exact path="/"><Redirect to="/login" /></Route>
         </Switch>
       </Router>
     </StoreContext.Provider>

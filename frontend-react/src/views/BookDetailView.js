@@ -28,9 +28,7 @@ export function BookDetailView({
           <dd className="col-sm-9 text-danger fw-bold">¥{book.price}</dd>
 
           <dt className="col-sm-3">Introduction</dt>
-          <dd className="col-sm-9">
-            {book.description}
-          </dd>
+          <dd className="col-sm-9">{book.description}</dd>
         </dl>
         <div className="my-3">
           <div className="d-flex justify-content-end">

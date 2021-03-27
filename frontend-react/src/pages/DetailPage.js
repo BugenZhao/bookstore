@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { BookCard } from '../components/BookCard';
 import { Header } from '../components/Header';
 import { BookDetailView } from '../views/BookDetailView';
@@ -24,12 +24,15 @@ function DetailMain({
   id,
 }) {
   const book = useContext(BooksContext)[id];
+  const history = useHistory();
 
   return (
     <div>
       <nav>
         <ol className="breadcrumb h6">
-          <li className="breadcrumb-item"><Link to="/home">Books</Link></li>
+          <li className="breadcrumb-item">
+            <Link to="#" className="" onClick={() => history.goBack()}>Books</Link>
+          </li>
           <li className="breadcrumb-item active">{book.name}</li>
         </ol>
       </nav>
