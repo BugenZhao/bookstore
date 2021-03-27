@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { BookContext } from '../App';
+import { StoreContext } from "../services";
 
 export function BookDetailView({
   book,
 }) {
-  const [_bc, _sbc, _cart, addToCart] = useContext(BookContext);
+  const [_bc, _sbc, _cart, addToCart] = useContext(StoreContext);
 
   return (
     <div>

@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import _ from 'lodash';
-import { BookContext, BOOKS } from '../App';
+import { BOOKS } from '../App';
+import { StoreContext } from "../services";
 
 function CartItem({
   book,
@@ -17,7 +18,7 @@ function CartItem({
 }
 
 export function CartView() {
-  const [_bc, _sbc, cart, _addToCart] = useContext(BookContext);
+  const [_bc, _sbc, cart, _addToCart] = useContext(StoreContext);
 
   const books = _(cart).map((id) => BOOKS[id]);
   const sumPrice = _(books).map((book) => book.price).sum();

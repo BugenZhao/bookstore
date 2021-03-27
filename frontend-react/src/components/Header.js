@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BookContext } from '../App';
+import { StoreContext } from "../services";
 
 function SearchBox({
   initial = "",
@@ -19,7 +19,7 @@ export function Header({
   active,
   keyword = "",
 }) {
-  const [bookCount, setBookCount, cart, _addToCart] = useContext(BookContext);
+  const [bookCount, setBookCount, cart, _addToCart] = useContext(StoreContext);
   const cartCount = cart.length;
 
   return (

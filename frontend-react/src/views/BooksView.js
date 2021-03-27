@@ -1,12 +1,13 @@
 import { useContext } from 'react';
 import _ from 'lodash';
 import { BookCard } from '../components/BookCard';
-import { BookContext, BOOKS } from '../App';
+import { BOOKS } from '../App';
+import { StoreContext } from "../services";
 
 function Books({
   keyword = "",
 }) {
-  const [bookCount, _setBookCount] = useContext(BookContext);
+  const [bookCount, _setBookCount] = useContext(StoreContext);
 
   return _(BOOKS)
     .filter((book) => book.name.includes(keyword))

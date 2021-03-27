@@ -1,15 +1,13 @@
-import { createContext, useState } from 'react';
+import { useState } from 'react';
 import { Route, Switch, HashRouter as Router } from 'react-router-dom';
 import _ from 'lodash';
+
 import _BOOKS from './resources/books.json';
-import { HomePage } from './pages/HomePage';
-import { SearchPage } from './pages/SearchPage';
-import { DetailPage } from './pages/DetailPage';
-import { CheckoutPage } from './pages/CheckoutPage';
-import { LoginPage } from './pages/LoginPage';
+
+import { CheckoutPage, DetailPage, HomePage, SearchPage, LoginPage } from "./pages";
+import { StoreContext as StoreContext } from './services';
 
 export const BOOKS = _(_BOOKS).keyBy("id").value();
-export const BookContext = createContext([]);
 
 function App() {
   const [bookCount, setBookCount] = useState(8);
@@ -17,7 +15,7 @@ function App() {
   const addToCart = (id) => { setCart(cart.concat([id])); };
 
   return (
-    <BookContext.Provider value={[bookCount, setBookCount, cart, addToCart]}>
+    <StoreContext.Provider value={[bookCount, setBookCount, cart, addToCart]}>
       <Router>
         <Switch>
           <Route path="/checkout" component={CheckoutPage} />
@@ -27,7 +25,7 @@ function App() {
           <Route path="/" component={LoginPage} />
         </Switch>
       </Router>
-    </BookContext.Provider>
+    </StoreContext.Provider>
   )
 }
 
