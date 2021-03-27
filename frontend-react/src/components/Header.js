@@ -55,10 +55,13 @@ export function Header({
               </li>
             </ul>
             <SearchBox initial={keyword}></SearchBox>
-            {active === "home" ?
-              (<div className="ms-2 d-flex">
-                <Link className="btn btn-success w-100" onClick={() => { setBookCount(bookCount + 1); }} to="#footer">Add a Book</Link>
-              </div>) : null}
+            <div className="ms-2 d-flex">
+              {
+                active === "dashboard" ?
+                  <Link className="btn btn-success w-100" to="/home" >Book Store</Link> :
+                  <Link className="btn btn-primary w-100" to="/dashboard" >Dashboard</Link>
+              }
+            </div>
           </div>
         </div>
       </nav>

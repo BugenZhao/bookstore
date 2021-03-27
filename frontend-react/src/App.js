@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Route, Switch, HashRouter as Router, Redirect } from 'react-router-dom';
 import _ from 'lodash';
 
-import { CheckoutPage, DetailPage, HomePage, SearchPage, LoginPage } from "./pages";
+import { CheckoutPage, DetailPage, HomePage, SearchPage, LoginPage, DashboardPage } from "./pages";
 import { StoreContext } from './services';
 
 
@@ -20,6 +20,7 @@ function App() {
           <Route path="/home" component={HomePage} />
           <Route path="/search/:keyword?" component={SearchPage} />
           <Route path="/login" component={LoginPage} />
+          <Route path="/dashboard" component={DashboardPage} />
           <Route exact path="/"><Redirect to="/login" /></Route>
         </Switch>
       </Router>
