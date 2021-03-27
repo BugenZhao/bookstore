@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { BookCard } from '../components/BookCard';
 import { StoreContext, BooksContext } from "../services";
 
+
 function Books({
   keyword = "",
 }) {
@@ -10,12 +11,14 @@ function Books({
   const BOOKS = useContext(BooksContext);
 
   return _(BOOKS)
-    .filter((book) => book.name.includes(keyword))
-    .map((book) => <div key={`book${book.id}`} className="col">
-      <BookCard book={book} withLink={true} />
-    </div>
-    ).take(bookCount).value();
+    .filter((book) => _(book).values().join().includes(keyword))
+    .map((book) => (
+      <div key={`book${book.id}`} className="col">
+        <BookCard book={book} withLink={true} />
+      </div>))
+    .take(bookCount).value();
 }
+
 export function BooksView({
   keyword = "",
 }) {

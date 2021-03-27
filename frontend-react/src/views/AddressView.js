@@ -12,7 +12,7 @@ function AddressItem({
   return (
     <Link to="#"
       onClick={() => setSelected(address.id)}
-      className={`list-group-item list-group-item-action ${selected == address.id ? "active" : ""}`}>
+      className={`list-group-item list-group-item-action ${selected === address.id ? "active" : ""}`}>
       <div className="d-flex w-100 justify-content-between align-items-center">
         <h5 className="mb-1">{address.name}</h5>
         <span className={`badge ${bgClass} rounded-pill`}>{address.tag}</span>
@@ -24,7 +24,7 @@ function AddressItem({
 }
 
 export function AddressView() {
-  const [selected, setSelected] = useState("0");
+  const [selected, setSelected] = useState(0);
 
   return (
     <AddressContext.Provider value={[selected, setSelected]}>
@@ -54,7 +54,7 @@ export function AddressView() {
               phone: "+86 188 1234 5678",
               address: "9876 School St., Shanghai, China"
             }} />
-            
+
             <Link to="#" className="list-group-item list-group-item-action">
               <span className="text-muted">Add a new address...</span>
             </Link>

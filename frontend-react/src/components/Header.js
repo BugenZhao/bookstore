@@ -1,16 +1,20 @@
 import { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { StoreContext } from "../services";
 
 function SearchBox({
   initial = "",
 }) {
   const [input, setInput] = useState(initial);
+  const history = useHistory();
 
   return (
-    <form className="d-flex mb-2 mb-lg-0">
-      <input className="form-control me-2" type="search" placeholder="Search Books..." value={input} onChange={e => setInput(e.target.value)} />
-      <Link className="btn btn-outline-secondary" to={`/search/${input}`}>Search</Link>
+    <form className="d-flex mb-2 mb-lg-0" onSubmit={() => {
+      if (input.length > 0) { history.push(`/search/${input}`); }
+    }}>
+      <input className="form-control me-2" type="search" placeholder="Search Books..."
+        value={input} onChange={e => setInput(e.target.value)} />
+      <button className="btn btn-outline-secondary" type="submit">Search</button>
     </form>
   );
 }

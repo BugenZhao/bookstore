@@ -23,6 +23,9 @@ function SearchMain({
 }) {
   return (
     <div>
+      <div className="py-5"><span className="h1">
+        Search Results for "{keyword}"
+      </span></div>
       <BooksView keyword={keyword} />
     </div>
   );

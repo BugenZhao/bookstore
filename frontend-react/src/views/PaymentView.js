@@ -12,7 +12,7 @@ function PaymentMethod({
   return (
     <Link to="#"
       onClick={() => setSelected(name)}
-      className={`list-group-item list-group-item-action ${selected == name ? "active" : ""}`}>
+      className={`list-group-item list-group-item-action ${selected === name ? "active" : ""}`}>
       <div className="d-flex w-100 justify-content-between align-items-center">
         <span>{name}</span>
         {children}
@@ -74,7 +74,7 @@ export function PaymentView() {
             </div>
           </div>
 
-          {selected == "Credit card" ? <CreditCardForm /> : (
+          {selected === "Credit card" ? <CreditCardForm /> : (
             <div className="col">You'll be redirected to {selected} after clicking "Checkout".</div>
           )}
 
