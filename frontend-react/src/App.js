@@ -8,7 +8,6 @@ import { BOOKS, BooksContext, StoreContext } from './services';
 
 
 function App() {
-  const [bookCount, setBookCount] = useState(100);
   const [cart, setCart] = useState([]);
   const addToCart = (id) => { setCart(cart.concat([id])); };
 
@@ -16,7 +15,7 @@ function App() {
 
   return (
     <BooksContext.Provider value={[books, updateBooks]}>
-      <StoreContext.Provider value={[bookCount, setBookCount, cart, addToCart]}>
+      <StoreContext.Provider value={[cart, addToCart, setCart]}>
         <Router>
           <Switch>
             <Route path="/checkout" component={CheckoutPage} />

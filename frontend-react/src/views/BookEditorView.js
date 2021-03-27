@@ -1,20 +1,26 @@
 import _ from "lodash";
-import { EditingState } from '@devexpress/dx-react-grid';
+import {
+  EditingState,
+  PagingState,
+  IntegratedPaging,
+} from '@devexpress/dx-react-grid';
 import {
   Grid,
   Table,
   TableHeaderRow,
   TableEditRow,
-  TableEditColumn
+  TableEditColumn,
+  PagingPanel,
 } from '@devexpress/dx-react-grid-bootstrap4';
 import '@devexpress/dx-react-grid-bootstrap4/dist/dx-react-grid-bootstrap4.css';
 
 import { useContext } from 'react';
-import { BooksContext } from '../services';
+import { BooksContext, StoreContext } from '../services';
 
 
 export function BookEditorView() {
   const [BOOKS, updateBOOKS] = useContext(BooksContext);
+  const [cart, , setCart] = useContext(StoreContext);
 
   const rows = _.values(BOOKS);
   const cols = _(_.first(rows))
@@ -49,6 +55,9 @@ export function BookEditorView() {
         _(deleted)
           .forEach((id) => { delete bs[id]; });
       });
+
+      // cleanup the cart
+      setCart(_(cart).filter((id) => !deleted.includes(id)).value());
     }
   }
 
@@ -59,6 +68,11 @@ export function BookEditorView() {
         columns={cols}
         getRowId={(row) => row.id}
       >
+        <PagingState
+          defaultCurrentPage={0}
+          pageSize={20}
+        />
+        <IntegratedPaging />
         <EditingState
           onCommitChanges={onCommitChanges} />
         <Table />
@@ -68,6 +82,7 @@ export function BookEditorView() {
           showAddCommand
           showEditCommand
           showDeleteCommand />
+        <PagingPanel />
       </Grid>
     </div>
   );
