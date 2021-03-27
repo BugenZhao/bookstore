@@ -35,7 +35,7 @@ export function Header({
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link className={`nav-link ${active === "home" || active === "detail" ? "active" : ""}`} to="/home">Books</Link>
+                <Link className={`nav-link ${active === "home" || active === "detail" || active === "search" ? "active" : ""}`} to="/home">Books</Link>
               </li>
               <li className="nav-item">
                 <Link className={`nav-link d-flex align-items-center ${active === "cart" ? "active" : ""}`} to="/checkout">

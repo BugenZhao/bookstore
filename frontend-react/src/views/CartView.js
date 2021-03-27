@@ -4,6 +4,7 @@ import { BooksContext, StoreContext } from "../services";
 
 function CartItem({
   book,
+  count,
 }) {
   return (
     <li className="list-group-item d-flex justify-content-between lh-sm">
@@ -11,7 +12,10 @@ function CartItem({
         <h6 className="my-0">{book.name}</h6>
         <small className="text-muted">{book.author}</small>
       </div>
-      <span className="text-muted">¥{book.price}</span>
+      <div>
+        <span className="text-muted">¥{book.price}</span>
+        {count > 1 ? (<span> x{count}</span>) : null}
+      </div>
     </li>
   );
 }
@@ -20,17 +24,19 @@ export function CartView() {
   const [_bc, _sbc, cart, _addToCart] = useContext(StoreContext);
   const BOOKS = useContext(BooksContext);
 
-  const books = _(cart).map((id) => BOOKS[id]);
-  const sumPrice = _(books).map((book) => book.price).sum();
+  const booksMap = _(cart).countBy((i) => i).toPairs().map(([i, c]) => [BOOKS[i], c]);
+  
+  const sumPrice = booksMap.map(([b, c]) => b.price * c).sum();
   const discount = Math.min(100.0, sumPrice * 0.3);
   const totalPrice = sumPrice - discount;
-  const cartItems = books.map((b) => <CartItem book={b} />).value();
+
+  const cartItems = booksMap.map(([b, c]) => <CartItem book={b} count={c} />).value();
 
   return (
     <div>
       <h4 className="d-flex justify-content-between align-items-center mb-3">
         <span className="text-muted">Your cart</span>
-        <span className="badge bg-secondary rounded-pill">{books.size()}</span>
+        <span className="badge bg-secondary rounded-pill">{cart.length}</span>
       </h4>
       <ul className="list-group mb-3">
         {cartItems}

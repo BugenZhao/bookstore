@@ -9,7 +9,7 @@ export function SearchPage(props) {
 
   return (
     <Body>
-      <Header active="home" keyword={keyword} />
+      <Header active="search" keyword={keyword} />
       <Main>
         <SearchMain keyword={keyword} />
       </Main>
