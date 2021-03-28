@@ -10,9 +10,11 @@
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.3",
     "@types/jest": "^26.0.22",
+    "@types/lodash": "^4.14.168",
     "@types/node": "^14.14.37",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
+    "@types/react-router-dom": "^5.1.7",
     "bootstrap": "^5.0.0-beta2",
     "jquery": "^3.6.0",
     "popper.js": "^1.16.1",
@@ -57,9 +59,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@types/lodash": "^4.14.168",
-    "@types/react-router-dom": "^5.1.7"
   }
 }
