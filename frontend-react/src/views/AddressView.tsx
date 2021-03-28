@@ -1,5 +1,4 @@
 import { createContext, useContext, useState } from "react";
-import { Link } from "react-router-dom";
 import { SelectContextType } from "../services";
 
 const AddressContext = createContext<SelectContextType<number>>(null!);
@@ -70,9 +69,9 @@ export function AddressView() {
               }}
             />
 
-            <Link to="#" className="list-group-item list-group-item-action">
+            <button className="list-group-item list-group-item-action">
               <span className="text-muted">Add a new address...</span>
-            </Link>
+            </button>
           </div>
         </form>
       </div>

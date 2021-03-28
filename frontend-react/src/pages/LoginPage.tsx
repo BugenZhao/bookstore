@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useStore } from "../services";
 
 export function LoginPage() {
-  const { user, setUser } = useStore();
+  const { user, setUser, setCart } = useStore();
   const userInputRef = useRef<HTMLInputElement>(null!);
   const history = useHistory();
 
@@ -11,7 +11,11 @@ export function LoginPage() {
     <main className="form-signin">
       <form
         onSubmit={() => {
-          setUser(userInputRef.current.value);
+          const newUser = userInputRef.current.value;
+          if (user !== newUser) {
+            setCart([]);
+          }
+          setUser(newUser);
           history.push("/home");
         }}
       >

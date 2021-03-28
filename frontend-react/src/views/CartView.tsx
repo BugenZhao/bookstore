@@ -1,12 +1,17 @@
 import { useContext } from "react";
 import _ from "lodash";
 import { Book, BooksContext, useStore } from "../services";
+import { Link } from "react-router-dom";
 
 function CartItem({ book, count }: { book: Book; count: number }) {
   return (
     <li className="list-group-item d-flex justify-content-between lh-sm">
       <div>
-        <h6 className="my-0">{book.name}</h6>
+        <h6 className="my-0">
+          <Link to={`/detail/${book.id}`} className="text-decoration-none">
+            {book.name}
+          </Link>
+        </h6>
         <small className="text-muted">{book.author}</small>
       </div>
       <div>
