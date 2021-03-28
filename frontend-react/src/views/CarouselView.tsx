@@ -1,6 +1,6 @@
-function CarouselItem({
-  active = false,
-  url,
+function CarouselItem({ active = false, url }: {
+  active?: boolean,
+  url: string,
 }) {
   return (
     <div className={`carousel-item ${active ? "active" : ""}`}>

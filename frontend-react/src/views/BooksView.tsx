@@ -3,11 +3,12 @@ import { useRouteMatch } from 'react-router-dom';
 import _ from 'lodash';
 import { BookCard } from '../components/BookCard';
 import { BooksContext } from "../services";
+import { SearchPageParams } from '../routes';
 
 const PER_PAGE = 12;
 
 function Pagination() {
-  const [total, _setTotal, page, setPage] = useContext(GalleryContext);
+  const { total, page, setPage } = useContext(GalleryContext);
   const totalPage = Math.ceil(total / PER_PAGE);
 
   const pages = _(_.range(1, totalPage + 1))
@@ -37,8 +38,8 @@ function Pagination() {
 
 function Books() {
   const { BOOKS } = useContext(BooksContext);
-  const [_total, setTotal, page] = useContext(GalleryContext);
-  const keyword = useRouteMatch().params.keyword ?? "";
+  const { setTotal, page } = useContext(GalleryContext);
+  const keyword = useRouteMatch<SearchPageParams>().params.keyword ?? "";
 
   const allBooksIter =
     _(BOOKS)
@@ -63,14 +64,22 @@ function Books() {
   );
 }
 
-const GalleryContext = createContext(null);
+
+type GalleryContextType = {
+  total: number,
+  setTotal: (n: number) => void,
+  page: number,
+  setPage: (n: number) => void,
+};
+
+const GalleryContext = createContext<GalleryContextType>(null!);
 
 export function BooksView() {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
 
   return (
-    <GalleryContext.Provider value={[total, setTotal, page, setPage]}>
+    <GalleryContext.Provider value={{ total, setTotal, page, setPage }}>
       <div>
         <Books></Books>
         <Pagination />

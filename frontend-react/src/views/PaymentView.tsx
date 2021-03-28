@@ -1,12 +1,12 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, PropsWithChildren, useContext, useState } from 'react';
+import { SelectContextType } from '../services';
 
-const PaymentContext = createContext(null);
+const PaymentContext = createContext<SelectContextType<string>>(null!);
 
-function PaymentMethod({
-  name,
-  children,
-}) {
-  const [selected, setSelected] = useContext(PaymentContext);
+function PaymentMethod({name, children}: PropsWithChildren<{
+  name: string,
+}>) {
+  const {selected, setSelected} = useContext(PaymentContext);
 
   return (
     <button
@@ -27,24 +27,24 @@ function CreditCardForm() {
       <div className="row gy-2">
         <div className="col-md-6">
           <label htmlFor="cc-name" className="form-label">Name on card</label>
-          <input type="text" className="form-control" id="cc-name" placeholder="" required="" />
+          <input type="text" className="form-control" id="cc-name" placeholder="" required={true} />
         </div>
 
         <div className="col-md-6">
           <label htmlFor="cc-number" className="form-label">Card number</label>
           <input type="text" className="form-control" id="cc-number" placeholder=""
-            required="" />
+            required={true} />
         </div>
 
         <div className="col-md-6">
           <label htmlFor="cc-expiration" className="form-label">Expiration</label>
           <input type="text" className="form-control" id="cc-expiration" placeholder=""
-            required="" />
+            required={true} />
         </div>
 
         <div className="col-md-6">
           <label htmlFor="cc-cvv" className="form-label">CVV</label>
-          <input type="text" className="form-control" id="cc-cvv" placeholder="" required="" />
+          <input type="text" className="form-control" id="cc-cvv" placeholder="" required={true} />
         </div>
       </div>
     </div>
@@ -55,7 +55,7 @@ export function PaymentView() {
   const [selected, setSelected] = useState("Credit card");
 
   return (
-    <PaymentContext.Provider value={[selected, setSelected]}>
+    <PaymentContext.Provider value={{selected, setSelected}}>
       <div>
         <h4 className="mb-3">Payment</h4>
         <div className="row gy-2">

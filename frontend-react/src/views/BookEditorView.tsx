@@ -3,6 +3,7 @@ import {
   EditingState,
   PagingState,
   IntegratedPaging,
+  ChangeSet,
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
@@ -29,12 +30,12 @@ export function BookEditorView() {
     .map((k) => { return { name: k, title: k }; })
     .value();
 
-  function onCommitChanges({ added, changed, deleted }) {
+  function onCommitChanges({ added, changed, deleted }: ChangeSet) {
     if (added) { // [row]
       updateBOOKS((bs) => {
         _(added)
           .forEach((rowAdded) => {
-            const newId = _(BOOKS).keys().max() + 1;
+            const newId = _(BOOKS).keys().max() ?? 0 + 1;
             bs[newId] = { ...rowAdded, id: newId };
           });
       });
