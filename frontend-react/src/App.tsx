@@ -1,21 +1,20 @@
 import { useState } from 'react';
 import { Route, Switch, HashRouter as Router, Redirect } from 'react-router-dom';
-import _ from 'lodash';
 import { useImmer } from "use-immer";
 
 import { CheckoutPage, DetailPage, HomePage, SearchPage, LoginPage, DashboardPage } from "./pages";
-import { BOOKS, BooksContext, StoreContext } from './services';
+import { ALL_BOOKS, BooksContext, StoreContext } from './services';
 
 
 function App() {
-  const [cart, setCart] = useState([]);
-  const addToCart = (id) => { setCart(cart.concat([id])); };
+  const [cart, setCart] = useState([] as number[]);
+  const addToCart = (id: number) => { setCart(cart.concat([id])); };
 
-  const [books, updateBooks] = useImmer(BOOKS);
+  const [BOOKS, updateBOOKS] = useImmer(ALL_BOOKS);
 
   return (
-    <BooksContext.Provider value={[books, updateBooks]}>
-      <StoreContext.Provider value={[cart, addToCart, setCart]}>
+    <BooksContext.Provider value={{ BOOKS, updateBOOKS }}>
+      <StoreContext.Provider value={{ cart, addToCart, setCart }}>
         <Router>
           <Switch>
             <Route path="/checkout" component={CheckoutPage} />

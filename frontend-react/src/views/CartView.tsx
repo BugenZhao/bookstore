@@ -21,8 +21,8 @@ function CartItem({
 }
 
 export function CartView() {
-  const [cart, _addToCart] = useContext(StoreContext);
-  const [BOOKS] = useContext(BooksContext);
+  const { cart } = useContext(StoreContext);
+  const { BOOKS } = useContext(BooksContext);
 
   const booksMap = _(cart).countBy((i) => i).toPairs().map(([i, c]) => [BOOKS[i], c]);
 

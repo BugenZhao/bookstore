@@ -22,7 +22,7 @@ function SearchBox({
 export function Header({
   active,
 }) {
-  const [cart, _addToCart] = useContext(StoreContext);
+  const {cart} = useContext(StoreContext);
   const cartCount = cart.length;
   const keyword = useRouteMatch().params.keyword ?? "";
 

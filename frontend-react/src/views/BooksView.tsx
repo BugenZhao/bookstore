@@ -36,7 +36,7 @@ function Pagination() {
 }
 
 function Books() {
-  const [BOOKS] = useContext(BooksContext);
+  const { BOOKS } = useContext(BooksContext);
   const [_total, setTotal, page] = useContext(GalleryContext);
   const keyword = useRouteMatch().params.keyword ?? "";
 

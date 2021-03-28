@@ -5,7 +5,7 @@ import { StoreContext } from "../services";
 export function BookDetailView({
   book,
 }) {
-  const [_cart, addToCart] = useContext(StoreContext);
+  const { addToCart } = useContext(StoreContext);
 
   return (
     <div>

@@ -19,8 +19,8 @@ import { BooksContext, StoreContext } from '../services';
 
 
 export function BookEditorView() {
-  const [BOOKS, updateBOOKS] = useContext(BooksContext);
-  const [cart, , setCart] = useContext(StoreContext);
+  const { BOOKS, updateBOOKS } = useContext(BooksContext);
+  const { cart, setCart } = useContext(StoreContext);
 
   const rows = _.values(BOOKS);
   const cols = _(_.first(rows))
