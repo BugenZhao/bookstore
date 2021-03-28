@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { StoreContext } from "../services";
+import { Book, StoreContext } from "../services";
 
-export function BookDetailView({
-  book,
+export function BookDetailView({ book }: {
+  book: Book,
 }) {
-  const [_cart, addToCart] = useContext(StoreContext);
+  const { addToCart } = useContext(StoreContext);
 
   return (
     <div>

@@ -3,6 +3,7 @@ import { BooksView } from '../views/BooksView';
 import { Main } from "./common/Main";
 import { Body } from "./common/Body";
 import { useRouteMatch } from 'react-router';
+import { SearchPageParams } from '../routes';
 
 export function SearchPage() {
   return (
@@ -16,7 +17,7 @@ export function SearchPage() {
 }
 
 function SearchMain() {
-  const keyword = useRouteMatch().params.keyword ?? "";
+  const keyword = useRouteMatch<SearchPageParams>().params.keyword ?? "";
 
   return (
     <div>

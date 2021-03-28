@@ -1,4 +1,4 @@
-import { Link, useHistory } from 'react-router-dom';
+import { Link, RouteComponentProps, useHistory } from 'react-router-dom';
 import { BookCard } from '../components/BookCard';
 import { Header } from '../components/Header';
 import { BookDetailView } from '../views/BookDetailView';
@@ -7,7 +7,9 @@ import { Body } from "./common/Body";
 import { useContext } from 'react';
 import { BooksContext } from '../services';
 
-export function DetailPage(props) {
+export function DetailPage(props: RouteComponentProps<{
+  id: string
+}>) {
   const id = props.match.params.id;
 
   return (
@@ -20,10 +22,10 @@ export function DetailPage(props) {
   );
 }
 
-function DetailMain({
-  id,
+function DetailMain({ id }: {
+  id: string
 }) {
-  const [BOOKS] = useContext(BooksContext);
+  const { BOOKS } = useContext(BooksContext);
   const book = BOOKS[id];
   const history = useHistory();
 

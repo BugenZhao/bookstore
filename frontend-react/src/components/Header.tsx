@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import { Link, useHistory, useRouteMatch } from 'react-router-dom';
+import { SearchPageParams } from '../routes';
 import { StoreContext } from "../services";
 
 function SearchBox({
@@ -19,12 +20,12 @@ function SearchBox({
   );
 }
 
-export function Header({
-  active,
+export function Header({ active }: {
+  active: string,
 }) {
-  const [cart, _addToCart] = useContext(StoreContext);
+  const { cart } = useContext(StoreContext);
   const cartCount = cart.length;
-  const keyword = useRouteMatch().params.keyword ?? "";
+  const keyword = useRouteMatch<SearchPageParams>().params.keyword ?? "";
 
   return (
     <header>
@@ -51,7 +52,7 @@ export function Header({
                 <Link className={`nav-link ${active === "orders" ? "active" : ""}`} to="#">My Orders</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link fw-bold" to="/login" tabIndex="-1">Hi, Bugen</Link>
+                <Link className="nav-link fw-bold" to="/login" tabIndex={-1}>Hi, Bugen</Link>
               </li>
             </ul>
             <SearchBox initial={keyword}></SearchBox>

@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
+import { Book } from '../services';
 
-export function BookCard({
-  book,
-  withLink,
+export function BookCard({ book, withLink }: {
+  book: Book,
+  withLink: boolean,
 }) {
   const path = `/detail/${book.id}`;
 

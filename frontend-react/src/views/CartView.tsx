@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 import _ from 'lodash';
-import { BooksContext, StoreContext } from "../services";
+import { Book, BooksContext, StoreContext } from "../services";
 
-function CartItem({
-  book,
-  count,
+function CartItem({ book, count }: {
+  book: Book,
+  count: number,
 }) {
   return (
     <li className="list-group-item d-flex justify-content-between lh-sm" >
@@ -21,10 +21,11 @@ function CartItem({
 }
 
 export function CartView() {
-  const [cart, _addToCart] = useContext(StoreContext);
-  const [BOOKS] = useContext(BooksContext);
+  const { cart } = useContext(StoreContext);
+  const { BOOKS } = useContext(BooksContext);
 
-  const booksMap = _(cart).countBy((i) => i).toPairs().map(([i, c]) => [BOOKS[i], c]);
+  const booksMap: _.Collection<[Book, number]> =
+    _(cart).countBy((i) => i).toPairs().map(([i, c]) => [BOOKS[i], c]);
 
   const sumPrice = booksMap.map(([b, c]) => b.price * c).sum();
   const discount = Math.min(100.0, sumPrice * 0.3);

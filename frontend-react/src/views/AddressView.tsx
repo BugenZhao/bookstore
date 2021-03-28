@@ -1,13 +1,22 @@
 import { createContext, useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { SelectContextType } from '../services';
 
-const AddressContext = createContext(null);
+const AddressContext = createContext<SelectContextType<number>>(null!);
 
-function AddressItem({
-  address,
+type Address = {
+  id: number,
+  name: string,
+  tag: string,
+  phone: string,
+  address: string,
+};
+
+function AddressItem({ address }: {
+  address: Address,
 }) {
   const bgClass = address.tag === "Default" ? "bg-secondary" : "bg-success";
-  const [selected, setSelected] = useContext(AddressContext);
+  const { selected, setSelected } = useContext(AddressContext);
 
   return (
     <button
@@ -27,10 +36,10 @@ export function AddressView() {
   const [selected, setSelected] = useState(0);
 
   return (
-    <AddressContext.Provider value={[selected, setSelected]}>
+    <AddressContext.Provider value={{ selected, setSelected }}>
       <div>
         <h4 className="mb-3">Shipping Address</h4>
-        <form className="needs-validation" noValidate="">
+        <form className="needs-validation" noValidate={true}>
 
           <div className="list-group">
             <AddressItem address={{

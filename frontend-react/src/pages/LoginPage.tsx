@@ -5,9 +5,9 @@ export function LoginPage() {
     <main className="form-signin">
       <form>
         <h1 className="h1 mb-3 fw-bold">Sign in</h1>
-        <input type="email" id="inputEmail" className="form-control" placeholder="Email address" required=""
-          autoFocus="" defaultValue="Bugen" />
-        <input type="password" id="inputPassword" className="form-control" placeholder="Password" required=""
+        <input type="email" id="inputEmail" className="form-control" placeholder="Email address" required={true}
+          autoFocus={true} defaultValue="Bugen" />
+        <input type="password" id="inputPassword" className="form-control" placeholder="Password" required={true}
           defaultValue="password" />
         <div className="mb-3 form-check form-switch">
           <label>
