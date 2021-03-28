@@ -6,8 +6,8 @@ import { ALL_BOOKS, BooksContext, StoreContext } from './services';
 
 
 function App() {
-  const [cart, setCart] = useState([] as number[]);
-  const addToCart = (id: number) => { setCart(cart.concat([id])); };
+  const [cart, setCart] = useState([] as string[]);
+  const addToCart = (id: string) => { setCart(cart.concat([id])); };
 
   const [BOOKS, updateBOOKS] = useImmer(ALL_BOOKS);
 

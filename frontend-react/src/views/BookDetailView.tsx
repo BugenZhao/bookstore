@@ -1,11 +1,10 @@
-import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { Book, StoreContext } from "../services";
+import { Book, useStore } from "../services";
 
 export function BookDetailView({ book }: {
   book: Book,
 }) {
-  const { addToCart } = useContext(StoreContext);
+  const { addToCart } = useStore();
 
   return (
     <div>
@@ -33,7 +32,7 @@ export function BookDetailView({ book }: {
         <div className="my-3">
           <div className="d-flex justify-content-end">
             <div className="btn-group btn-group-lg col-12 col-xl-6 col-lg-8" role="group">
-              <button type="button" className="btn btn-outline-danger w-100" onClick={() => { addToCart(book.id); }}>Add to Cart</button>
+              <button type="button" className="btn btn-outline-danger w-100" onClick={() => { addToCart(book.id.toString()); }}>Add to Cart</button>
               <Link className="btn btn-danger w-100" to="/checkout">Checkout</Link>
             </div>
           </div>

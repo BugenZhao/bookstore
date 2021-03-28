@@ -16,12 +16,12 @@ import {
 import '@devexpress/dx-react-grid-bootstrap4/dist/dx-react-grid-bootstrap4.css';
 
 import { useContext } from 'react';
-import { BooksContext, StoreContext } from '../services';
+import { BooksContext, useStore } from '../services';
 
 
 export function BookEditorView() {
   const { BOOKS, updateBOOKS } = useContext(BooksContext);
-  const { cart, setCart } = useContext(StoreContext);
+  const { cart, setCart } = useStore();
 
   const rows = _.values(BOOKS);
   const cols = _(_.first(rows))

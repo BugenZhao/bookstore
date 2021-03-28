@@ -1,13 +1,17 @@
-import { createContext } from 'react';
+import { createContext, useContext } from 'react';
 import _ from 'lodash';
 import _BOOKS from '../resources/books.json';
 
 type StoreContextType = {
-  cart: number[],
-  addToCart: (id: number) => void,
-  setCart: (newCart: number[]) => void,
+  cart: string[],
+  addToCart: (id: string) => void,
+  setCart: (newCart: string[]) => void,
 }
 export const StoreContext = createContext<StoreContextType>(null!);
+export function useStore() {
+  return useContext(StoreContext);
+}
+
 
 export const ALL_BOOKS = _(_BOOKS).keyBy("id").value();
 type BooksContextType = {
@@ -23,3 +27,4 @@ export type SelectContextType<T> = {
   selected: T,
   setSelected: (n: T) => void,
 };
+

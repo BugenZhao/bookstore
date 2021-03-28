@@ -1,7 +1,7 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import { SearchPageParams } from '../routes';
-import { StoreContext } from "../services";
+import { useStore } from "../services";
 
 function SearchBox({
   initial = "",
@@ -23,7 +23,7 @@ function SearchBox({
 export function Header({ active }: {
   active: string,
 }) {
-  const { cart } = useContext(StoreContext);
+  const { cart } = useStore();
   const cartCount = cart.length;
   const keyword = useRouteMatch<SearchPageParams>().params.keyword ?? "";
 
@@ -69,3 +69,4 @@ export function Header({ active }: {
     </header>
   );
 }
+

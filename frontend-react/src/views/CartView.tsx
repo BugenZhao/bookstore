@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import _ from 'lodash';
-import { Book, BooksContext, StoreContext } from "../services";
+import { Book, BooksContext, useStore } from "../services";
 
 function CartItem({ book, count }: {
   book: Book,
@@ -21,7 +21,7 @@ function CartItem({ book, count }: {
 }
 
 export function CartView() {
-  const { cart } = useContext(StoreContext);
+  const { cart } = useStore();
   const { BOOKS } = useContext(BooksContext);
 
   const booksMap: _.Collection<[Book, number]> =
