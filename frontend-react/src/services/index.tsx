@@ -6,6 +6,8 @@ type StoreContextType = {
   cart: string[];
   addToCart: (id: string) => void;
   setCart: (newCart: string[]) => void;
+  user: string;
+  setUser: (user: string) => void;
 };
 export const StoreContext = createContext<StoreContextType>(null!);
 export function useStore() {
@@ -25,3 +27,5 @@ export type SelectContextType<T> = {
   selected: T;
   setSelected: (n: T) => void;
 };
+
+export const ADMINS = ["Bugen"];

@@ -1,22 +1,31 @@
-import { Link } from "react-router-dom";
+import { useRef } from "react";
+import { useHistory } from "react-router-dom";
+import { useStore } from "../services";
 
 export function LoginPage() {
+  const { user, setUser } = useStore();
+  const userInputRef = useRef<HTMLInputElement>(null!);
+  const history = useHistory();
+
   return (
     <main className="form-signin">
-      <form>
+      <form
+        onSubmit={() => {
+          setUser(userInputRef.current.value);
+          history.push("/home");
+        }}
+      >
         <h1 className="h1 mb-3 fw-bold">Sign in</h1>
         <input
-          type="email"
-          id="inputEmail"
           className="form-control"
-          placeholder="Email address"
+          placeholder="Username"
           required={true}
           autoFocus={true}
-          defaultValue="Bugen"
+          defaultValue={user === "" ? "Guest" : user}
+          ref={userInputRef}
         />
         <input
           type="password"
-          id="inputPassword"
           className="form-control"
           placeholder="Password"
           required={true}
@@ -35,9 +44,9 @@ export function LoginPage() {
             </label>
           </label>
         </div>
-        <Link className="btn btn-dark w-100 btn-lg" to="/home">
+        <button className="btn btn-dark w-100 btn-lg" type="submit">
           Sign in
-        </Link>
+        </button>
       </form>
     </main>
   );

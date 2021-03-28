@@ -9,12 +9,15 @@ function App() {
   const addToCart = (id: string) => {
     setCart(cart.concat([id]));
   };
+  const [user, setUser] = useState("");
 
   const [BOOKS, updateBOOKS] = useImmer(ALL_BOOKS);
 
   return (
     <BooksContext.Provider value={{ BOOKS, updateBOOKS }}>
-      <StoreContext.Provider value={{ cart, addToCart, setCart }}>
+      <StoreContext.Provider
+        value={{ cart, addToCart, setCart, user, setUser }}
+      >
         <BSRoutes />
       </StoreContext.Provider>
     </BooksContext.Provider>

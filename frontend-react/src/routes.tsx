@@ -12,20 +12,32 @@ import {
   LoginPage,
   DashboardPage,
 } from "./pages";
+import { ADMINS, useStore } from "./services";
 
 export function BSRoutes() {
+  const { user } = useStore();
+  const isSignedIn = user !== "";
+  const isAdmin = ADMINS.includes(user);
+
   return (
     <Router>
       <Switch>
-        <Route path="/checkout" component={CheckoutPage} />
-        <Route path="/detail/:id" component={DetailPage} />
-        <Route path="/home" component={HomePage} />
-        <Route path="/search/:keyword?" component={SearchPage} />
         <Route path="/login" component={LoginPage} />
-        <Route path="/dashboard" component={DashboardPage} />
-        <Route exact path="/">
-          <Redirect to="/login" />
-        </Route>
+        {isSignedIn ? (
+          <>
+            <Route path="/checkout" component={CheckoutPage} />
+            <Route path="/detail/:id" component={DetailPage} />
+            <Route path="/home" component={HomePage} />
+            <Route path="/search/:keyword?" component={SearchPage} />
+            {isAdmin ? (
+              <Route path="/dashboard" component={DashboardPage} />
+            ) : null}
+          </>
+        ) : (
+          <Route>
+            <Redirect to="/login" />
+          </Route>
+        )}
       </Switch>
     </Router>
   );

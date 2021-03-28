@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import { SearchPageParams } from "../routes";
-import { useStore } from "../services";
+import { ADMINS, useStore } from "../services";
 
 function SearchBox({ initial = "" }) {
   const [input, setInput] = useState(initial);
@@ -31,7 +31,7 @@ function SearchBox({ initial = "" }) {
 }
 
 export function Header({ active }: { active: string }) {
-  const { cart } = useStore();
+  const { cart, user } = useStore();
   const cartCount = cart.length;
   const keyword = useRouteMatch<SearchPageParams>().params.keyword ?? "";
 
@@ -92,26 +92,34 @@ export function Header({ active }: { active: string }) {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link fw-bold" to="/login" tabIndex={-1}>
-                  Hi, Bugen
+                <Link className="nav-link" to="/login" tabIndex={-1}>
+                  <span>Hi, </span>
+                  <span className="fw-bold">{user}</span>
                 </Link>
               </li>
             </ul>
             <SearchBox initial={keyword}></SearchBox>
-            <div className="ms-2 d-flex">
-              {active === "dashboard" ? (
-                <Link className="btn btn-success w-100" to="/home">
-                  Book Store
-                </Link>
-              ) : (
-                <Link className="btn btn-primary w-100" to="/dashboard">
-                  Dashboard
-                </Link>
-              )}
-            </div>
+
+            {ADMINS.includes(user) ? <DashboardButton active={active} /> : null}
           </div>
         </div>
       </nav>
     </header>
+  );
+}
+
+function DashboardButton({ active }: { active: string }) {
+  return (
+    <div className="ms-2 d-flex">
+      {active === "dashboard" ? (
+        <Link className="btn btn-success w-100" to="/home">
+          Book Store
+        </Link>
+      ) : (
+        <Link className="btn btn-primary w-100" to="/dashboard">
+          Dashboard
+        </Link>
+      )}
+    </div>
   );
 }

@@ -52,7 +52,7 @@ export function BookEditorView() {
           });
       });
     }
-
+    
     if (deleted) {
       // [rowIdx]
       updateBOOKS((bs) => {
