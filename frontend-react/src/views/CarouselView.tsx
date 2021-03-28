@@ -2,7 +2,7 @@ import { Carousel } from "react-bootstrap";
 
 function CarouselItem(url: string) {
   return (
-    <Carousel.Item>
+    <Carousel.Item key={url}>
       <img className="d-block w-100" src={url} alt={url} />
     </Carousel.Item>
   );

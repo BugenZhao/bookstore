@@ -1,9 +1,10 @@
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { ButtonGroup, Button, Toast } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 import { Book, useStore } from "../services";
 
 export function BookDetailView({ book }: { book: Book }) {
   const { addToCart } = useStore();
+  const history = useHistory();
 
   return (
     <div>
@@ -30,34 +31,26 @@ export function BookDetailView({ book }: { book: Book }) {
         </dl>
         <div className="my-3">
           <div className="d-flex justify-content-end">
-            <div
-              className="btn-group btn-group-lg col-12 col-xl-6 col-lg-8"
-              role="group"
-            >
-              <OverlayTrigger
-                placement="left"
-                trigger="click"
-                overlay={
-                  <Tooltip id="add-tooltip">
-                    Added!
-                  </Tooltip>
-                }
+            <ButtonGroup className="col-12 col-xl-6 col-lg-8" size="lg">
+              <Button
+                variant="outline-danger"
+                className="w-100"
+                onClick={() => {
+                  addToCart(book.id.toString());
+                }}
               >
-                <button
-                  type="button"
-                  className="btn btn-outline-danger w-100"
-                  onClick={() => {
-                    addToCart(book.id.toString());
-                  }}
-                >
-                  Add to Cart
-                </button>
-              </OverlayTrigger>
-
-              <Link className="btn btn-danger w-100" to="/checkout">
+                Add to Cart
+              </Button>
+              <Button
+                variant="outline-danger"
+                className="w-100"
+                onClick={() => {
+                  history.push("/checkout");
+                }}
+              >
                 Checkout
-              </Link>
-            </div>
+              </Button>
+            </ButtonGroup>
           </div>
         </div>
       </div>
