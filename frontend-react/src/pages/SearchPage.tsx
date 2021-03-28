@@ -1,9 +1,9 @@
-import { Header } from '../components/Header';
-import { BooksView } from '../views/BooksView';
+import { Header } from "../components/Header";
+import { BooksView } from "../views/BooksView";
 import { Main } from "./common/Main";
 import { Body } from "./common/Body";
-import { useRouteMatch } from 'react-router';
-import { SearchPageParams } from '../routes';
+import { useRouteMatch } from "react-router";
+import { SearchPageParams } from "../routes";
 
 export function SearchPage() {
   return (
@@ -22,9 +22,7 @@ function SearchMain() {
   return (
     <div>
       <div className="py-5">
-        <span className="h1">
-          Search Results for "{keyword}"
-        </span>
+        <span className="h1">Search Results for "{keyword}"</span>
       </div>
       <BooksView />
     </div>

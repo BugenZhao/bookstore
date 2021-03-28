@@ -1,15 +1,17 @@
-import { Link, RouteComponentProps, useHistory } from 'react-router-dom';
-import { BookCard } from '../components/BookCard';
-import { Header } from '../components/Header';
-import { BookDetailView } from '../views/BookDetailView';
+import { Link, RouteComponentProps, useHistory } from "react-router-dom";
+import { BookCard } from "../components/BookCard";
+import { Header } from "../components/Header";
+import { BookDetailView } from "../views/BookDetailView";
 import { Main } from "./common/Main";
 import { Body } from "./common/Body";
-import { useContext } from 'react';
-import { BooksContext } from '../services';
+import { useContext } from "react";
+import { BooksContext } from "../services";
 
-export function DetailPage(props: RouteComponentProps<{
-  id: string
-}>) {
+export function DetailPage(
+  props: RouteComponentProps<{
+    id: string;
+  }>
+) {
   const id = props.match.params.id;
 
   return (
@@ -22,9 +24,7 @@ export function DetailPage(props: RouteComponentProps<{
   );
 }
 
-function DetailMain({ id }: {
-  id: string
-}) {
+function DetailMain({ id }: { id: string }) {
   const { BOOKS } = useContext(BooksContext);
   const book = BOOKS[id];
   const history = useHistory();
@@ -34,7 +34,9 @@ function DetailMain({ id }: {
       <nav>
         <ol className="breadcrumb h6">
           <li className="breadcrumb-item">
-            <Link to="#" className="" onClick={() => history.goBack()}>Books</Link>
+            <Link to="#" className="" onClick={() => history.goBack()}>
+              Books
+            </Link>
           </li>
           <li className="breadcrumb-item active">{book.name}</li>
         </ol>

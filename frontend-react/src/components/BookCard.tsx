@@ -1,20 +1,23 @@
-import { Link } from 'react-router-dom';
-import { Book } from '../services';
+import { Link } from "react-router-dom";
+import { Book } from "../services";
 
-export function BookCard({ book, withLink }: {
-  book: Book,
-  withLink: boolean,
+export function BookCard({
+  book,
+  withLink,
+}: {
+  book: Book;
+  withLink: boolean;
 }) {
   const path = `/detail/${book.id}`;
 
   return (
     <div className="card shadow-sm">
       <img src={book.image} alt="" className="card-img-top" />
-      {withLink ?
+      {withLink ? (
         <Link to={path} className="stretched-link">
           <span className="visually-hidden">Details</span>
         </Link>
-        : null}
+      ) : null}
       <div className="card-body">
         <h5 className="card-title text-truncate">{book.name}</h5>
         <div className="d-flex justify-content-between align-items-center">

@@ -1,9 +1,7 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { Book, useStore } from "../services";
 
-export function BookDetailView({ book }: {
-  book: Book,
-}) {
+export function BookDetailView({ book }: { book: Book }) {
   const { addToCart } = useStore();
 
   return (
@@ -31,9 +29,22 @@ export function BookDetailView({ book }: {
         </dl>
         <div className="my-3">
           <div className="d-flex justify-content-end">
-            <div className="btn-group btn-group-lg col-12 col-xl-6 col-lg-8" role="group">
-              <button type="button" className="btn btn-outline-danger w-100" onClick={() => { addToCart(book.id.toString()); }}>Add to Cart</button>
-              <Link className="btn btn-danger w-100" to="/checkout">Checkout</Link>
+            <div
+              className="btn-group btn-group-lg col-12 col-xl-6 col-lg-8"
+              role="group"
+            >
+              <button
+                type="button"
+                className="btn btn-outline-danger w-100"
+                onClick={() => {
+                  addToCart(book.id.toString());
+                }}
+              >
+                Add to Cart
+              </button>
+              <Link className="btn btn-danger w-100" to="/checkout">
+                Checkout
+              </Link>
             </div>
           </div>
         </div>

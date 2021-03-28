@@ -1,20 +1,17 @@
-import { useContext } from 'react';
-import _ from 'lodash';
+import { useContext } from "react";
+import _ from "lodash";
 import { Book, BooksContext, useStore } from "../services";
 
-function CartItem({ book, count }: {
-  book: Book,
-  count: number,
-}) {
+function CartItem({ book, count }: { book: Book; count: number }) {
   return (
-    <li className="list-group-item d-flex justify-content-between lh-sm" >
+    <li className="list-group-item d-flex justify-content-between lh-sm">
       <div>
         <h6 className="my-0">{book.name}</h6>
         <small className="text-muted">{book.author}</small>
       </div>
       <div>
         <span className="text-muted">¥{book.price}</span>
-        {count > 1 ? (<span> x{count}</span>) : null}
+        {count > 1 ? <span> x{count}</span> : null}
       </div>
     </li>
   );
@@ -24,14 +21,18 @@ export function CartView() {
   const { cart } = useStore();
   const { BOOKS } = useContext(BooksContext);
 
-  const booksMap: _.Collection<[Book, number]> =
-    _(cart).countBy((i) => i).toPairs().map(([i, c]) => [BOOKS[i], c]);
+  const booksMap = _(cart)
+    .countBy((i) => i)
+    .toPairs()
+    .map(([i, c]) => [BOOKS[i], c] as const);
 
   const sumPrice = booksMap.map(([b, c]) => b.price * c).sum();
   const discount = Math.min(100.0, sumPrice * 0.3);
   const totalPrice = sumPrice - discount;
 
-  const cartItems = booksMap.map(([b, c]) => <CartItem book={b} count={c} key={b.id} />).value();
+  const cartItems = booksMap
+    .map(([b, c]) => <CartItem book={b} count={c} key={b.id} />)
+    .value();
 
   return (
     <div>

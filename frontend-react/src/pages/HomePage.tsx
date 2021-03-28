@@ -1,6 +1,6 @@
-import { Header } from '../components/Header';
-import { CarouselView } from '../views/CarouselView';
-import { BooksView } from '../views/BooksView';
+import { Header } from "../components/Header";
+import { CarouselView } from "../views/CarouselView";
+import { BooksView } from "../views/BooksView";
 import { Main } from "./common/Main";
 import { Body } from "./common/Body";
 

@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { useImmer } from "use-immer";
-import { BSRoutes } from './routes';
+import { BSRoutes } from "./routes";
 
-import { ALL_BOOKS, BooksContext, StoreContext } from './services';
-
+import { ALL_BOOKS, BooksContext, StoreContext } from "./services";
 
 function App() {
   const [cart, setCart] = useState([] as string[]);
-  const addToCart = (id: string) => { setCart(cart.concat([id])); };
+  const addToCart = (id: string) => {
+    setCart(cart.concat([id]));
+  };
 
   const [BOOKS, updateBOOKS] = useImmer(ALL_BOOKS);
 
@@ -17,7 +18,7 @@ function App() {
         <BSRoutes />
       </StoreContext.Provider>
     </BooksContext.Provider>
-  )
+  );
 }
 
 export default App;
