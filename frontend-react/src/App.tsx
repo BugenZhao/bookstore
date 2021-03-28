@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useLocalStorage from "react-use-localstorage";
+import useLocalStorage from "use-local-storage";
 import { useImmer } from "use-immer";
 import { BSRoutes } from "./routes";
 
