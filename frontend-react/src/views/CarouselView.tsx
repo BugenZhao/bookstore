@@ -1,47 +1,24 @@
-function CarouselItem({
-  active = false,
-  url,
-}: {
-  active?: boolean;
-  url: string;
-}) {
+import { Carousel } from "react-bootstrap";
+
+function CarouselItem(url: string) {
   return (
-    <div className={`carousel-item ${active ? "active" : ""}`}>
-      <img src={url} className="d-block w-100" alt={`carousel ${url}`} />
-    </div>
+    <Carousel.Item>
+      <img className="d-block w-100" src={url} alt={url} />
+    </Carousel.Item>
   );
 }
+
 export function CarouselView() {
+  const items = [
+    "static/book1.jpg",
+    "static/book2.jpg",
+    "static/book3.jpg",
+    "static/book4.jpg",
+  ].map((url) => CarouselItem(url));
+
   return (
-    <div
-      id="carouselExampleControls"
-      className="carousel slide mb-4 shadow-sm"
-      data-bs-ride="carousel"
-    >
-      <div className="carousel-inner">
-        <CarouselItem url="static/book1.jpg" />
-        <CarouselItem url="static/book2.jpg" active={true} />
-        <CarouselItem url="static/book3.jpg" />
-        <CarouselItem url="static/book4.jpg" />
-      </div>
-      <button
-        className="carousel-control-prev"
-        type="button"
-        data-bs-target="#carouselExampleControls"
-        data-bs-slide="prev"
-      >
-        <span className="carousel-control-prev-icon"></span>
-        <span className="visually-hidden">Previous</span>
-      </button>
-      <button
-        className="carousel-control-next"
-        type="button"
-        data-bs-target="#carouselExampleControls"
-        data-bs-slide="next"
-      >
-        <span className="carousel-control-next-icon"></span>
-        <span className="visually-hidden">Next</span>
-      </button>
-    </div>
+    <Carousel className="mb-4" fade={true}>
+      {items}
+    </Carousel>
   );
 }
