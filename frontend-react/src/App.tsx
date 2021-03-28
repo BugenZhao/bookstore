@@ -1,4 +1,5 @@
 import { useState } from "react";
+import useLocalStorage from "react-use-localstorage";
 import { useImmer } from "use-immer";
 import { BSRoutes } from "./routes";
 
@@ -9,7 +10,7 @@ function App() {
   const addToCart = (id: string) => {
     setCart(cart.concat([id]));
   };
-  const [user, setUser] = useState("");
+  const [user, setUser] = useLocalStorage("bz-user", "");
 
   const [BOOKS, updateBOOKS] = useImmer(ALL_BOOKS);
 

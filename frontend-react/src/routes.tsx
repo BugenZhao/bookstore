@@ -19,6 +19,8 @@ export function BSRoutes() {
   const isSignedIn = user !== "";
   const isAdmin = ADMINS.includes(user);
 
+  console.log({ isSignedIn, isAdmin, user });
+
   return (
     <Router>
       <Switch>
@@ -32,6 +34,9 @@ export function BSRoutes() {
             {isAdmin ? (
               <Route path="/dashboard" component={DashboardPage} />
             ) : null}
+            <Route>
+              <Redirect to="/home" />
+            </Route>
           </>
         ) : (
           <Route>

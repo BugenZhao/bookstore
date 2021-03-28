@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import { SearchPageParams } from "../routes";
 import { ADMINS, useStore } from "../services";
@@ -92,10 +93,7 @@ export function Header({ active }: { active: string }) {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/login" tabIndex={-1}>
-                  <span>Hi, </span>
-                  <span className="fw-bold">{user}</span>
-                </Link>
+                <NavUserItem />
               </li>
             </ul>
             <SearchBox initial={keyword}></SearchBox>
@@ -105,6 +103,30 @@ export function Header({ active }: { active: string }) {
         </div>
       </nav>
     </header>
+  );
+}
+
+function NavUserItem() {
+  const { user, setUser } = useStore();
+  const history = useHistory();
+
+  return (
+    <OverlayTrigger
+      overlay={<Tooltip id="signout-tooltip">Sign out</Tooltip>}
+      placement="right"
+    >
+      <Button
+        variant="link"
+        className="nav-link"
+        onClick={() => {
+          setUser("");
+          history.push("/login");
+        }}
+      >
+        <span>Hi, </span>
+        <span className="fw-bold">{user}</span>
+      </Button>
+    </OverlayTrigger>
   );
 }
 

@@ -28,4 +28,4 @@ export type SelectContextType<T> = {
   setSelected: (n: T) => void;
 };
 
-export const ADMINS = ["Bugen"];
+export const ADMINS = ["Bugen", "Admin"];

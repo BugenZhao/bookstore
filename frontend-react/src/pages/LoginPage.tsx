@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useHistory } from "react-router-dom";
-import { useStore } from "../services";
+import { ADMINS, useStore } from "../services";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 export function LoginPage() {
@@ -23,9 +23,10 @@ export function LoginPage() {
         <h1 className="h1 mb-3 fw-bold">Sign in</h1>
         <OverlayTrigger
           placement="left"
+          trigger="focus"
           overlay={
             <Tooltip id="user-tooltip">
-              Sign in as <strong>Bugen</strong> to get the admin permission.
+              Sign in as <strong>{ADMINS.join(" or ")}</strong> to obtain the admin permissions.
             </Tooltip>
           }
         >
