@@ -39,7 +39,7 @@ export function AddressView() {
     <AddressContext.Provider value={{ selected, setSelected }}>
       <div>
         <h4 className="mb-3">Shipping Address</h4>
-        <form className="needs-validation" noValidate={true}>
+        <div>
           <div className="list-group">
             <AddressItem
               address={{
@@ -73,7 +73,7 @@ export function AddressView() {
               <span className="text-muted">Add a new address...</span>
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </AddressContext.Provider>
   );

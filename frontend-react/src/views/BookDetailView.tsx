@@ -1,3 +1,4 @@
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Book, useStore } from "../services";
 
@@ -33,15 +34,26 @@ export function BookDetailView({ book }: { book: Book }) {
               className="btn-group btn-group-lg col-12 col-xl-6 col-lg-8"
               role="group"
             >
-              <button
-                type="button"
-                className="btn btn-outline-danger w-100"
-                onClick={() => {
-                  addToCart(book.id.toString());
-                }}
+              <OverlayTrigger
+                placement="left"
+                trigger="click"
+                overlay={
+                  <Tooltip id="add-tooltip">
+                    Added!
+                  </Tooltip>
+                }
               >
-                Add to Cart
-              </button>
+                <button
+                  type="button"
+                  className="btn btn-outline-danger w-100"
+                  onClick={() => {
+                    addToCart(book.id.toString());
+                  }}
+                >
+                  Add to Cart
+                </button>
+              </OverlayTrigger>
+
               <Link className="btn btn-danger w-100" to="/checkout">
                 Checkout
               </Link>
