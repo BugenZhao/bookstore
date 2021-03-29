@@ -1,109 +1,70 @@
 import { useState } from "react";
-import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
+import {
+  Button,
+  OverlayTrigger,
+  Tooltip,
+  Nav,
+  Navbar,
+  Form,
+  FormControl,
+  Container,
+  Badge,
+} from "react-bootstrap";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import { SearchPageParams } from "../routes";
 import { ADMINS } from "../services";
 import { useStore } from "../services/StoreContext";
 
-function SearchBox({ initial = "" }) {
-  const [input, setInput] = useState(initial);
-  const history = useHistory();
-
-  return (
-    <form
-      className="d-flex mb-2 mb-lg-0"
-      onSubmit={() => {
-        if (input.length > 0) {
-          history.push(`/search/${input}`);
-        }
-      }}
-    >
-      <input
-        className="form-control me-2"
-        type="search"
-        placeholder="Search Books..."
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-      />
-      <button className="btn btn-outline-secondary" type="submit">
-        Search
-      </button>
-    </form>
-  );
-}
-
-export function Header({ active }: { active: string }) {
+export function Header({
+  active,
+}: {
+  active: "home" | "detail" | "search" | "cart" | "orders" | "dashboard";
+}) {
   const { cart, user } = useStore();
   const cartCount = cart.length;
   const keyword = useRouteMatch<SearchPageParams>().params.keyword ?? "";
 
   return (
-    <header>
-      <nav className="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
-        <div className="container">
-          <Link className="navbar-brand fw-bolder" to="/home">
-            Book Store
-          </Link>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
-                <Link
-                  className={`nav-link ${
-                    active === "home" ||
-                    active === "detail" ||
-                    active === "search"
-                      ? "active"
-                      : ""
-                  }`}
-                  to="/home"
+    <Navbar bg="white" expand="lg" className="shadow-sm fixed-top">
+      <Container>
+        <Navbar.Brand className="fw-bolder" as={Link} to="/home">
+          Book Store
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link
+              as={Link}
+              to="/home"
+              active={
+                active === "home" || active === "detail" || active === "search"
+              }
+            >
+              Books
+            </Nav.Link>
+            <Nav.Link as={Link} to="/checkout" active={active === "orders"}>
+              <div className={`d-flex align-items-center`}>
+                <span className="me-1">My Cart</span>
+                <Badge
+                  bg={cartCount === 0 ? "secondary" : "danger"}
+                  pill={true}
                 >
-                  Books
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className={`nav-link d-flex align-items-center ${
-                    active === "cart" ? "active" : ""
-                  }`}
-                  to="/checkout"
-                >
-                  <span className="me-1">My Cart</span>
-                  <span
-                    className={`badge bg-${
-                      cartCount === 0 ? "secondary" : "danger"
-                    } rounded-pill`}
-                  >
-                    {cartCount}
-                  </span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className={`nav-link ${active === "orders" ? "active" : ""}`}
-                  to="#"
-                >
-                  My Orders
-                </Link>
-              </li>
-              <li className="nav-item">
-                <NavUserItem />
-              </li>
-            </ul>
-            <SearchBox initial={keyword}></SearchBox>
+                  {cartCount}
+                </Badge>
+              </div>
+            </Nav.Link>
+            <Nav.Link as={Link} to="#" active={active === "orders"}>
+              My Orders
+            </Nav.Link>
 
-            {ADMINS.includes(user) ? <DashboardButton active={active} /> : null}
-          </div>
-        </div>
-      </nav>
-    </header>
+            <NavUserItem />
+          </Nav>
+
+          <SearchBox initial={keyword}></SearchBox>
+          {ADMINS.includes(user) ? <DashboardButton active={active} /> : null}
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 }
 
@@ -116,9 +77,7 @@ function NavUserItem() {
       overlay={<Tooltip id="signout-tooltip">Sign out</Tooltip>}
       placement="right"
     >
-      <Button
-        variant="link"
-        className="nav-link"
+      <Nav.Link
         onClick={() => {
           setUser("");
           setSignedOut(true);
@@ -127,22 +86,47 @@ function NavUserItem() {
       >
         <span>Hi, </span>
         <span className="fw-bold">{user}</span>
-      </Button>
+      </Nav.Link>
     </OverlayTrigger>
+  );
+}
+
+function SearchBox({ initial = "" }) {
+  const [input, setInput] = useState(initial);
+  const history = useHistory();
+
+  return (
+    <Form
+      className="d-flex mb-2 mb-lg-0"
+      onSubmit={() => {
+        if (input.length > 0) {
+          history.push(`/search/${input}`);
+        }
+      }}
+    >
+      <FormControl
+        className="form-control me-2"
+        type="search"
+        placeholder="Search Books..."
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+      <Button variant="outline-secondary">Search</Button>
+    </Form>
   );
 }
 
 function DashboardButton({ active }: { active: string }) {
   return (
-    <div className="ms-2 d-flex">
+    <div className="ms-md-2 d-flex">
       {active === "dashboard" ? (
-        <Link className="btn btn-success w-100" to="/home">
+        <Button as={Link} to="/home" variant="success" className="w-100">
           Book Store
-        </Link>
+        </Button>
       ) : (
-        <Link className="btn btn-primary w-100" to="/dashboard">
+        <Button as={Link} to="/dashboard" variant="primary" className="w-100">
           Dashboard
-        </Link>
+        </Button>
       )}
     </div>
   );

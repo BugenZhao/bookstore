@@ -1,11 +1,10 @@
 import { ButtonGroup, Button } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Book } from "../services/BooksContext";
 import { useStore } from "../services/StoreContext";
 
 export function BookDetailView({ book }: { book: Book }) {
   const { addToCart } = useStore();
-  const history = useHistory();
 
   return (
     <div>
@@ -45,9 +44,8 @@ export function BookDetailView({ book }: { book: Book }) {
               <Button
                 variant="outline-danger"
                 className="w-100"
-                onClick={() => {
-                  history.push("/checkout");
-                }}
+                as={Link}
+                to="/checkout"
               >
                 Checkout
               </Button>
