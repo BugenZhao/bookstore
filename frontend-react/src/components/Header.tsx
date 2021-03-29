@@ -108,7 +108,7 @@ export function Header({ active }: { active: string }) {
 }
 
 function NavUserItem() {
-  const { user, setUser } = useStore();
+  const { user, setUser, setSignedOut } = useStore();
   const history = useHistory();
 
   return (
@@ -121,6 +121,7 @@ function NavUserItem() {
         className="nav-link"
         onClick={() => {
           setUser("");
+          setSignedOut(true);
           history.push("/login");
         }}
       >
