@@ -75,7 +75,7 @@ function NavUserItem() {
   return (
     <OverlayTrigger
       overlay={<Tooltip id="signout-tooltip">Sign out</Tooltip>}
-      placement="right"
+      placement="auto"
     >
       <Nav.Link
         onClick={() => {

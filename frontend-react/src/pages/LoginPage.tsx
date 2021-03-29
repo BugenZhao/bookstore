@@ -30,7 +30,7 @@ export function LoginPage() {
         >
           <h1 className="h1 mb-3 fw-bold">Sign in</h1>
           <OverlayTrigger
-            placement="left"
+            placement="top-end"
             trigger="focus"
             overlay={
               <Tooltip id="user-tooltip">
