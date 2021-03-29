@@ -2,9 +2,9 @@ import { Header } from "../components/Header";
 import { Main } from "./common/Main";
 import { Body } from "./common/Body";
 import { BookEditorView } from "../views/BookEditorView";
-import { Button, Row, Col } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { useContext, useState } from "react";
-import { ALL_BOOKS, BooksContext } from "../services";
+import { ALL_BOOKS, BooksContext } from "../services/BooksContext";
 
 export function DashboardPage() {
   return (

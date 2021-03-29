@@ -12,7 +12,8 @@ import {
   LoginPage,
   DashboardPage,
 } from "./pages";
-import { ADMINS, useStore } from "./services";
+import { ADMINS } from "./services";
+import { useStore } from "./services/StoreContext";
 
 export function BSRoutes() {
   const { user } = useStore();

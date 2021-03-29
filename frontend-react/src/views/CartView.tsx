@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import _ from "lodash";
-import { Book, BooksContext, useStore } from "../services";
+import { Book, BooksContext } from "../services/BooksContext";
+import { useStore } from "../services/StoreContext";
 import { Link } from "react-router-dom";
 
 function CartItem({ book, count }: { book: Book; count: number }) {

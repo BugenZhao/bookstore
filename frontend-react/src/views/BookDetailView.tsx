@@ -1,6 +1,7 @@
 import { ButtonGroup, Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
-import { Book, useStore } from "../services";
+import { Book } from "../services/BooksContext";
+import { useStore } from "../services/StoreContext";
 
 export function BookDetailView({ book }: { book: Book }) {
   const { addToCart } = useStore();

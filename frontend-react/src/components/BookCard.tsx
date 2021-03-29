@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Book } from "../services";
+import { Book } from "../services/BooksContext";
 
 export function BookCard({
   book,

@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import { SearchPageParams } from "../routes";
-import { ADMINS, useStore } from "../services";
+import { ADMINS } from "../services";
+import { useStore } from "../services/StoreContext";
 
 function SearchBox({ initial = "" }) {
   const [input, setInput] = useState(initial);

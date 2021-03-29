@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { useRouteMatch } from "react-router-dom";
 import _ from "lodash";
 import { BookCard } from "../components/BookCard";
-import { BooksContext } from "../services";
+import { BooksContext } from "../services/BooksContext";
 import { SearchPageParams } from "../routes";
 
 const PER_PAGE = 12;

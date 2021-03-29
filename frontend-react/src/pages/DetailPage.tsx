@@ -5,7 +5,7 @@ import { BookDetailView } from "../views/BookDetailView";
 import { Main } from "./common/Main";
 import { Body } from "./common/Body";
 import { useContext } from "react";
-import { BooksContext } from "../services";
+import { BooksContext } from "../services/BooksContext";
 
 export function DetailPage(
   props: RouteComponentProps<{

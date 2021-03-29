@@ -16,7 +16,8 @@ import {
 import "@devexpress/dx-react-grid-bootstrap4/dist/dx-react-grid-bootstrap4.css";
 
 import { useContext } from "react";
-import { BooksContext, useStore } from "../services";
+import { BooksContext } from "../services/BooksContext";
+import { useStore } from "../services/StoreContext";
 import produce from "immer";
 
 export function BookEditorView() {
@@ -35,32 +36,38 @@ export function BookEditorView() {
   function onCommitChanges({ added, changed, deleted }: ChangeSet) {
     if (added) {
       // [row]
-      setBOOKS(produce(BOOKS, (bs) => {
-        _(added).forEach((rowAdded) => {
-          const newId = _(BOOKS).keys().max() ?? 0 + 1;
-          bs[newId] = { ...rowAdded, id: newId };
-        });
-      }));
+      setBOOKS(
+        produce(BOOKS, (bs) => {
+          _(added).forEach((rowAdded) => {
+            const newId = _(BOOKS).keys().max() ?? 0 + 1;
+            bs[newId] = { ...rowAdded, id: newId };
+          });
+        })
+      );
     }
 
     if (changed) {
       // {id: row}
-      setBOOKS(produce(BOOKS, (bs) => {
-        _(changed)
-          .toPairs()
-          .forEach(([id, rowChanged]) => {
-            bs[id] = { ...bs[id], ...rowChanged };
-          });
-      }));
+      setBOOKS(
+        produce(BOOKS, (bs) => {
+          _(changed)
+            .toPairs()
+            .forEach(([id, rowChanged]) => {
+              bs[id] = { ...bs[id], ...rowChanged };
+            });
+        })
+      );
     }
-    
+
     if (deleted) {
       // [rowIdx]
-      setBOOKS(produce(BOOKS, (bs) => {
-        _(deleted).forEach((id) => {
-          delete bs[id];
-        });
-      }));
+      setBOOKS(
+        produce(BOOKS, (bs) => {
+          _(deleted).forEach((id) => {
+            delete bs[id];
+          });
+        })
+      );
 
       // cleanup the cart
       setCart(
