@@ -1,6 +1,5 @@
 import { useState } from "react";
 import useLocalStorage from "use-local-storage";
-import { useImmer } from "use-immer";
 import { BSRoutes } from "./routes";
 
 import { ALL_BOOKS, BooksContext, StoreContext } from "./services";
@@ -12,10 +11,10 @@ function App() {
   };
   const [user, setUser] = useLocalStorage("bz-user", "");
 
-  const [BOOKS, updateBOOKS] = useImmer(ALL_BOOKS);
+  const [BOOKS, setBOOKS] = useLocalStorage("bz-books", ALL_BOOKS);
 
   return (
-    <BooksContext.Provider value={{ BOOKS, updateBOOKS }}>
+    <BooksContext.Provider value={{ BOOKS, setBOOKS }}>
       <StoreContext.Provider
         value={{ cart, addToCart, setCart, user, setUser }}
       >

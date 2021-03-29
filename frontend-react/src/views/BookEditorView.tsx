@@ -17,9 +17,10 @@ import "@devexpress/dx-react-grid-bootstrap4/dist/dx-react-grid-bootstrap4.css";
 
 import { useContext } from "react";
 import { BooksContext, useStore } from "../services";
+import produce from "immer";
 
 export function BookEditorView() {
-  const { BOOKS, updateBOOKS } = useContext(BooksContext);
+  const { BOOKS, setBOOKS } = useContext(BooksContext);
   const { cart, setCart } = useStore();
 
   const rows = _.values(BOOKS);
@@ -34,32 +35,32 @@ export function BookEditorView() {
   function onCommitChanges({ added, changed, deleted }: ChangeSet) {
     if (added) {
       // [row]
-      updateBOOKS((bs) => {
+      setBOOKS(produce(BOOKS, (bs) => {
         _(added).forEach((rowAdded) => {
           const newId = _(BOOKS).keys().max() ?? 0 + 1;
           bs[newId] = { ...rowAdded, id: newId };
         });
-      });
+      }));
     }
 
     if (changed) {
       // {id: row}
-      updateBOOKS((bs) => {
+      setBOOKS(produce(BOOKS, (bs) => {
         _(changed)
           .toPairs()
           .forEach(([id, rowChanged]) => {
             bs[id] = { ...bs[id], ...rowChanged };
           });
-      });
+      }));
     }
     
     if (deleted) {
       // [rowIdx]
-      updateBOOKS((bs) => {
+      setBOOKS(produce(BOOKS, (bs) => {
         _(deleted).forEach((id) => {
           delete bs[id];
         });
-      });
+      }));
 
       // cleanup the cart
       setCart(

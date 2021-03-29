@@ -17,7 +17,7 @@ export function useStore() {
 export const ALL_BOOKS = _(_BOOKS).keyBy("id").value();
 type BooksContextType = {
   BOOKS: typeof ALL_BOOKS;
-  updateBOOKS: (c: (d: typeof ALL_BOOKS) => void) => void;
+  setBOOKS: (d: typeof ALL_BOOKS) => void;
 };
 export const BooksContext = createContext<BooksContextType>(null!);
 
