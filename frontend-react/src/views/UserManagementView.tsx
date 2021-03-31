@@ -19,7 +19,7 @@ export function UserManagementView() {
       cols={cols}
       booleanCols={["active"]}
       onCommitChanges={({ changed }) => {
-        if (changed && changed.length > 0) {
+        if (changed && _.size(changed) > 0) {
           const newUser: string | undefined = _(changed).values().first().user;
           if (newUser) {
             setUser(newUser);

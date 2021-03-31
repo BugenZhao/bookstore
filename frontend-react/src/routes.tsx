@@ -31,7 +31,9 @@ export function BSRoutes() {
             {isAdmin ? (
               <Route path="/dashboard" component={DashboardPage} />
             ) : null}
-            <Redirect exact path="/" to="/home" />
+            <Route exact path="/">
+              <Redirect to="/home" />
+            </Route>
           </>
         ) : (
           <Redirect to="/login" />

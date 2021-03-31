@@ -3,7 +3,7 @@ import { Main } from "./common/Main";
 import { Body } from "./common/Body";
 import { BookManagementView } from "../views/BookManagementView";
 import { UserManagementView } from "../views/UserManagementView";
-import { Button, Tab, Tabs } from "react-bootstrap";
+import { Badge, Button, Tab, Tabs } from "react-bootstrap";
 import { useContext, useState } from "react";
 import { ALL_BOOKS, BooksContext } from "../services/BooksContext";
 
@@ -40,14 +40,22 @@ function ResetBooksButton() {
 }
 
 function DashboardMain() {
+  const [key, setKey] = useState<String | null>("books");
+
   return (
     <div>
       <div className="d-flex justify-content-between">
         <span className="h1">Dashboard</span>
-        <ResetBooksButton />
+        {key === "books" ? (
+          <ResetBooksButton />
+        ) : (
+          <h4 className="align-self-center">
+            <Badge bg="info">Demo</Badge>
+          </h4>
+        )}
       </div>
       <div className="py-4">
-        <Tabs defaultActiveKey="books" className="mb-3">
+        <Tabs activeKey={key} onSelect={(k) => setKey(k)} className="mb-3">
           <Tab eventKey="books" title="Books">
             <BookManagementView />
           </Tab>
