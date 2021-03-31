@@ -12,7 +12,6 @@ import {
 } from "react-bootstrap";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import { SearchPageParams } from "../routes";
-import { ADMINS } from "../services";
 import { useStore } from "../services/StoreContext";
 
 export function Header({
@@ -20,7 +19,7 @@ export function Header({
 }: {
   active: "home" | "detail" | "search" | "cart" | "orders" | "dashboard";
 }) {
-  const { cart, user } = useStore();
+  const { cart, isAdmin } = useStore();
   const cartCount = cart.length;
   const keyword = useRouteMatch<SearchPageParams>().params.keyword ?? "";
 
@@ -61,7 +60,7 @@ export function Header({
           </Nav>
 
           <SearchBox initial={keyword}></SearchBox>
-          {ADMINS.includes(user) ? <DashboardButton active={active} /> : null}
+          {isAdmin ? <DashboardButton active={active} /> : null}
         </Navbar.Collapse>
       </Container>
     </Navbar>

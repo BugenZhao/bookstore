@@ -49,6 +49,10 @@ export function BookManagementView() {
 
     if (deleted) {
       // [rowIdx]
+      if (_.size(BOOKS) <= deleted.length) {
+        return;
+      }
+
       setBOOKS(
         produce(BOOKS, (bs) => {
           _(deleted).forEach((id) => {

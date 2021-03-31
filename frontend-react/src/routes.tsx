@@ -12,15 +12,11 @@ import {
   LoginPage,
   DashboardPage,
 } from "./pages";
-import { ADMINS } from "./services";
 import { useStore } from "./services/StoreContext";
 
 export function BSRoutes() {
-  const { user } = useStore();
-  const isSignedIn = user !== "";
-  const isAdmin = ADMINS.includes(user);
-
-  console.log({ isSignedIn, isAdmin, user });
+  const { isSignedIn, isAdmin } = useStore();
+  console.log({ isSignedIn, isAdmin });
 
   return (
     <Router>
@@ -35,7 +31,7 @@ export function BSRoutes() {
             {isAdmin ? (
               <Route path="/dashboard" component={DashboardPage} />
             ) : null}
-            <Redirect to="/home" />
+            <Redirect exact path="/" to="/home" />
           </>
         ) : (
           <Redirect to="/login" />

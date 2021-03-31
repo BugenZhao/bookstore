@@ -5,6 +5,8 @@ import {
   ChangeSet,
   SearchState,
   IntegratedFiltering,
+  DataTypeProvider,
+  DataTypeProviderProps,
 } from "@devexpress/dx-react-grid";
 import {
   Grid,
@@ -17,15 +19,19 @@ import {
   Toolbar,
 } from "@devexpress/dx-react-grid-bootstrap4";
 import { PropsWithChildren } from "react";
+import { Form } from "react-bootstrap";
 
 export function ManagementView<T>({
   rows,
   cols,
   onCommitChanges,
+  booleanCols,
+  children,
 }: PropsWithChildren<{
   rows: T[];
   cols: { name: string; title: string }[];
   onCommitChanges: ({ added, changed, deleted }: ChangeSet) => void;
+  booleanCols?: string[];
 }>) {
   return (
     <div className="card">
@@ -34,6 +40,8 @@ export function ManagementView<T>({
         <IntegratedFiltering />
         <PagingState defaultCurrentPage={0} pageSize={20} />
         <IntegratedPaging />
+        {booleanCols ? <BooleanTypeProvider for={booleanCols} /> : null}
+        {children}
         <EditingState onCommitChanges={onCommitChanges} />
         <Table />
         <TableHeaderRow />
@@ -46,3 +54,29 @@ export function ManagementView<T>({
     </div>
   );
 }
+
+const BooleanFormatter = ({ value }: { value: boolean }) => (
+  <Form.Check type="checkbox" defaultChecked={value} disabled={true} />
+);
+
+const BooleanEditor = ({
+  value,
+  onValueChange,
+}: {
+  value: boolean;
+  onValueChange: (b: boolean) => void;
+}) => (
+  <Form.Check
+    type="checkbox"
+    defaultChecked={value}
+    onChange={(e) => onValueChange(e.target.checked)}
+  />
+);
+
+const BooleanTypeProvider = ({ for: booleanCols }: DataTypeProviderProps) => (
+  <DataTypeProvider
+    formatterComponent={BooleanFormatter}
+    editorComponent={BooleanEditor}
+    for={booleanCols}
+  />
+);

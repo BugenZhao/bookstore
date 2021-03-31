@@ -1,12 +1,16 @@
 import { createContext, PropsWithChildren, useContext, useState } from "react";
 import useLocalStorage from "use-local-storage";
 
+export const ADMINS = ["Bugen", "Admin"];
+
 type StoreContextType = {
   cart: string[];
   addToCart: (id: string) => void;
   setCart: (c: string[]) => void;
   user: string;
   setUser: (u: string) => void;
+  isSignedIn: boolean;
+  isAdmin: boolean;
   signedOut: boolean;
   setSignedOut: (s: boolean) => void;
 };
@@ -22,6 +26,8 @@ export function StoreProvider(props: PropsWithChildren<{}>) {
   };
 
   const [user, setUser] = useLocalStorage("bz-user", "");
+  const isSignedIn = user !== "";
+  const isAdmin = ADMINS.includes(user);
 
   const [signedOut, setSignedOut] = useState(false);
 
@@ -33,6 +39,8 @@ export function StoreProvider(props: PropsWithChildren<{}>) {
         setCart,
         user,
         setUser,
+        isSignedIn,
+        isAdmin,
         signedOut,
         setSignedOut,
       }}
