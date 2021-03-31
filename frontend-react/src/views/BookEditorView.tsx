@@ -4,6 +4,8 @@ import {
   PagingState,
   IntegratedPaging,
   ChangeSet,
+  SearchState,
+  IntegratedFiltering,
 } from "@devexpress/dx-react-grid";
 import {
   Grid,
@@ -12,6 +14,8 @@ import {
   TableEditRow,
   TableEditColumn,
   PagingPanel,
+  SearchPanel,
+  Toolbar,
 } from "@devexpress/dx-react-grid-bootstrap4";
 import "@devexpress/dx-react-grid-bootstrap4/dist/dx-react-grid-bootstrap4.css";
 
@@ -81,6 +85,8 @@ export function BookEditorView() {
   return (
     <div className="card">
       <Grid rows={rows} columns={cols} getRowId={(row) => row.id}>
+        <SearchState />
+        <IntegratedFiltering />
         <PagingState defaultCurrentPage={0} pageSize={20} />
         <IntegratedPaging />
         <EditingState onCommitChanges={onCommitChanges} />
@@ -88,6 +94,8 @@ export function BookEditorView() {
         <TableHeaderRow />
         <TableEditRow />
         <TableEditColumn showAddCommand showEditCommand showDeleteCommand />
+        <Toolbar />
+        <SearchPanel />
         <PagingPanel />
       </Grid>
     </div>
