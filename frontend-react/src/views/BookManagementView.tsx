@@ -1,30 +1,14 @@
 import _ from "lodash";
-import {
-  EditingState,
-  PagingState,
-  IntegratedPaging,
-  ChangeSet,
-  SearchState,
-  IntegratedFiltering,
-} from "@devexpress/dx-react-grid";
-import {
-  Grid,
-  Table,
-  TableHeaderRow,
-  TableEditRow,
-  TableEditColumn,
-  PagingPanel,
-  SearchPanel,
-  Toolbar,
-} from "@devexpress/dx-react-grid-bootstrap4";
+import { ChangeSet } from "@devexpress/dx-react-grid";
 import "@devexpress/dx-react-grid-bootstrap4/dist/dx-react-grid-bootstrap4.css";
 
 import { useContext } from "react";
 import { BooksContext } from "../services/BooksContext";
 import { useStore } from "../services/StoreContext";
 import produce from "immer";
+import { ManagementView } from "./ManagementView";
 
-export function BookEditorView() {
+export function BookManagementView() {
   const { BOOKS, setBOOKS } = useContext(BooksContext);
   const { cart, setCart } = useStore();
 
@@ -83,21 +67,6 @@ export function BookEditorView() {
   }
 
   return (
-    <div className="card">
-      <Grid rows={rows} columns={cols} getRowId={(row) => row.id}>
-        <SearchState />
-        <IntegratedFiltering />
-        <PagingState defaultCurrentPage={0} pageSize={20} />
-        <IntegratedPaging />
-        <EditingState onCommitChanges={onCommitChanges} />
-        <Table />
-        <TableHeaderRow />
-        <TableEditRow />
-        <TableEditColumn showAddCommand showEditCommand showDeleteCommand />
-        <Toolbar />
-        <SearchPanel />
-        <PagingPanel />
-      </Grid>
-    </div>
+    <ManagementView rows={rows} cols={cols} onCommitChanges={onCommitChanges} />
   );
 }
