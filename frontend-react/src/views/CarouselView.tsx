@@ -17,7 +17,7 @@ export function CarouselView() {
   ].map((url) => CarouselItem(url));
 
   return (
-    <Carousel className="mb-4" fade={true}>
+    <Carousel className="mb-4" fade>
       {items}
     </Carousel>
   );

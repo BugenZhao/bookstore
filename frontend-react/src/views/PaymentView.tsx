@@ -41,7 +41,7 @@ function CreditCardForm() {
             className="form-control"
             id="cc-name"
             placeholder=""
-            required={true}
+            required
           />
         </div>
 
@@ -54,7 +54,7 @@ function CreditCardForm() {
             className="form-control"
             id="cc-number"
             placeholder=""
-            required={true}
+            required
           />
         </div>
 
@@ -67,7 +67,7 @@ function CreditCardForm() {
             className="form-control"
             id="cc-expiration"
             placeholder=""
-            required={true}
+            required
           />
         </div>
 
@@ -80,7 +80,7 @@ function CreditCardForm() {
             className="form-control"
             id="cc-cvv"
             placeholder=""
-            required={true}
+            required
           />
         </div>
       </div>

@@ -42,8 +42,8 @@ export function LoginPage() {
             <input
               className="form-control"
               placeholder="Username"
-              required={true}
-              autoFocus={true}
+              required
+              autoFocus
               defaultValue={user === "" ? "Guest" : user}
               ref={userInputRef}
             />
@@ -53,7 +53,7 @@ export function LoginPage() {
             type="password"
             className="form-control"
             placeholder="Password"
-            required={true}
+            required
             defaultValue="password"
           />
           <div className="mb-3 form-check form-switch">
@@ -62,7 +62,7 @@ export function LoginPage() {
                 type="checkbox"
                 id="rememberMeCheck"
                 className="form-check-input"
-                defaultChecked={true}
+                defaultChecked
               />
               <label htmlFor="rememberMeCheck" className="form-check-label">
                 Remember me

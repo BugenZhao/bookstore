@@ -44,10 +44,7 @@ export function Header({
             <Nav.Link as={Link} to="/checkout" active={active === "orders"}>
               <div className={`d-flex align-items-center`}>
                 <span className="me-1">My Cart</span>
-                <Badge
-                  bg={cartCount === 0 ? "secondary" : "danger"}
-                  pill={true}
-                >
+                <Badge bg={cartCount === 0 ? "secondary" : "danger"} pill>
                   {cartCount}
                 </Badge>
               </div>

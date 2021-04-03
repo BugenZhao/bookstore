@@ -17,7 +17,7 @@ function CartItem({ book, count }: { book: Book; count: number }) {
     >
       <Row className="justify-content-between">
         <Col sm={3}>
-          <Image src={book.image} fluid={true}></Image>
+          <Image src={book.image} fluid></Image>
         </Col>
         <Col className="d-flex justify-content-between align-items-center">
           <div>
@@ -82,7 +82,7 @@ export function CartView() {
     <div>
       <h4 className="d-flex justify-content-between align-items-center mb-3">
         <span className="text-muted">Your cart</span>
-        <Badge pill={true} bg="secondary">
+        <Badge pill bg="secondary">
           {cart.length}
         </Badge>
       </h4>

@@ -51,7 +51,7 @@ function Books() {
     .filter((book) => _(book).values().join().includes(keyword))
     .map((book) => (
       <div key={`book${book.id}`} className="col">
-        <BookCard book={book} withLink={true} />
+        <BookCard book={book} withLink />
       </div>
     ));
 

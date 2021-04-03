@@ -56,7 +56,7 @@ export function ManagementView<T>({
 }
 
 const BooleanFormatter = ({ value }: { value: boolean }) => (
-  <Form.Check type="checkbox" defaultChecked={value} disabled={true} />
+  <Form.Check type="checkbox" defaultChecked={value} disabled />
 );
 
 const BooleanEditor = ({
