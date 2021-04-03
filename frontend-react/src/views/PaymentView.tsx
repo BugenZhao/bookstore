@@ -3,11 +3,13 @@ import { SelectContextType } from "../services";
 
 const PaymentContext = createContext<SelectContextType<string>>(null!);
 
-function PaymentMethod({
+type PaymentMethod = "PayPal" | "WeChat Pay" | "Alipay" | "Credit card";
+
+function PaymentMethodItem({
   name,
   children,
 }: PropsWithChildren<{
-  name: string;
+  name: PaymentMethod;
 }>) {
   const { selected, setSelected } = useContext(PaymentContext);
 
@@ -96,18 +98,18 @@ export function PaymentView() {
         <div className="row gy-2">
           <div className="col-lg-5 col-xxl-4">
             <div className="list-group">
-              <PaymentMethod name="PayPal" />
-              <PaymentMethod name="WeChat Pay">
+              <PaymentMethodItem name="PayPal" />
+              <PaymentMethodItem name="WeChat Pay">
                 <span className="badge bg-success rounded-pill">
                   Recommended
                 </span>
-              </PaymentMethod>
-              <PaymentMethod name="Alipay" />
-              <PaymentMethod name="Credit card">
+              </PaymentMethodItem>
+              <PaymentMethodItem name="Alipay" />
+              <PaymentMethodItem name="Credit card">
                 <span className="badge bg-secondary rounded-pill">
                   Last used
                 </span>
-              </PaymentMethod>
+              </PaymentMethodItem>
             </div>
           </div>
 

@@ -13,6 +13,7 @@ function CartItem({ book, count }: { book: Book; count: number }) {
       as={Link}
       to={link}
       style={{ color: "inherit", textDecoration: "inherit" }}
+      action
     >
       <Row className="justify-content-between">
         <Col sm={3}>
