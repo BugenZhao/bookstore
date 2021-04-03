@@ -6,6 +6,8 @@ import { Main } from "./common/Main";
 import { Body } from "./common/Body";
 import { useContext } from "react";
 import { BooksContext } from "../services/BooksContext";
+import { Fade } from "react-awesome-reveal";
+import { Row } from "react-bootstrap";
 
 export function DetailPage(
   props: RouteComponentProps<{
@@ -41,14 +43,16 @@ function DetailMain({ id }: { id: string }) {
           <li className="breadcrumb-item active">{book.name}</li>
         </ol>
       </nav>
-      <div className="row">
-        <div className="col-md-6 col-lg-4 align-self-center">
-          <BookCard book={book} withLink={false} />
-        </div>
-        <div className="col-md-6 col-lg-8">
-          <BookDetailView book={book} />
-        </div>
-      </div>
+      <Fade>
+        <Row>
+          <div className="col-md-6 col-lg-4 align-self-center">
+            <BookCard book={book} withLink={false} />
+          </div>
+          <div className="col-md-6 col-lg-8">
+            <BookDetailView book={book} />
+          </div>
+        </Row>
+      </Fade>
     </div>
   );
 }

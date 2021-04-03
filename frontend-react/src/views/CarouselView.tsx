@@ -1,3 +1,4 @@
+import { Fade } from "react-awesome-reveal";
 import { Carousel } from "react-bootstrap";
 
 function CarouselItem(url: string) {
@@ -17,8 +18,10 @@ export function CarouselView() {
   ].map((url) => CarouselItem(url));
 
   return (
-    <Carousel className="mb-4" fade>
-      {items}
-    </Carousel>
+    <Fade triggerOnce>
+      <Carousel className="mb-4" fade>
+        {items}
+      </Carousel>
+    </Fade>
   );
 }

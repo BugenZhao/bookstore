@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Bounce } from "react-awesome-reveal";
 import {
   Button,
   OverlayTrigger,
@@ -44,9 +45,11 @@ export function Header({
             <Nav.Link as={Link} to="/checkout" active={active === "orders"}>
               <div className={`d-flex align-items-center`}>
                 <span className="me-1">My Cart</span>
-                <Badge bg={cartCount === 0 ? "secondary" : "danger"} pill>
-                  {cartCount}
-                </Badge>
+                <Bounce>
+                  <Badge bg={cartCount === 0 ? "secondary" : "danger"} pill>
+                    {cartCount}
+                  </Badge>
+                </Bounce>
               </div>
             </Nav.Link>
             <Nav.Link as={Link} to="#" active={active === "orders"}>

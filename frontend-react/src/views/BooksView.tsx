@@ -4,6 +4,7 @@ import _ from "lodash";
 import { BookCard } from "../components/BookCard";
 import { BooksContext } from "../services/BooksContext";
 import { SearchPageParams } from "../routes";
+import { Fade } from "react-awesome-reveal";
 
 const PER_PAGE = 12;
 
@@ -67,7 +68,7 @@ function Books() {
       className="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-3"
       id="books"
     >
-      {books}
+      <Fade cascade damping={0.025} triggerOnce>{books}</Fade>
     </div>
   );
 }
