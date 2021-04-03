@@ -1,9 +1,10 @@
+import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Book } from "../services/BooksContext";
 
 export function BookCard({
   book,
-  withLink,
+  withLink = true,
 }: {
   book: Book;
   withLink: boolean;
@@ -11,20 +12,22 @@ export function BookCard({
   const path = `/detail/${book.id}`;
 
   return (
-    <div className="card shadow-sm">
-      <img src={book.image} alt="" className="card-img-top" />
+    <Card>
       {withLink ? (
-        <Link to={path} className="stretched-link">
-          <span className="visually-hidden">Details</span>
-        </Link>
+        <Card.Link className="stretched-link" as={Link} to={path} />
       ) : null}
-      <div className="card-body">
-        <h5 className="card-title text-truncate">{book.name}</h5>
+      <Card.Img variant="top" src={book.image} />
+      <Card.Body>
+        <Card.Title className="text-truncate">{book.name}</Card.Title>
         <div className="d-flex justify-content-between align-items-center">
-          <h6 className="card-subtitle text-danger">¥{book.price}</h6>
-          <small className="card-subtitle text-muted">{book.inventory}+</small>
+          <Card.Subtitle className="text-danger" as="h6">
+            ¥{book.price}
+          </Card.Subtitle>
+          <Card.Subtitle className="text-muted" as="small">
+            {book.inventory}+
+          </Card.Subtitle>
         </div>
-      </div>
-    </div>
+      </Card.Body>
+    </Card>
   );
 }

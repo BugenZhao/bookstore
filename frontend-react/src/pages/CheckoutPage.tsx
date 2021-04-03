@@ -9,10 +9,10 @@ function CheckoutMain() {
   return (
     <div>
       <div className="row">
-        <div className="col-md-5 col-lg-4 order-md-last">
+        <div className="col-md-6 col-lg-5 order-md-last">
           <CartView />
         </div>
-        <div className="col-md-7 col-lg-8">
+        <div className="col-md-6 col-lg-7">
           <AddressView />
           <hr className="my-4" />
           <PaymentView />
