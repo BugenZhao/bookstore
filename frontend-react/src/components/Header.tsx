@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Bounce } from "react-awesome-reveal";
 import {
   Button,
@@ -91,13 +91,14 @@ function NavUserItem() {
 }
 
 function SearchBox({ initial = "" }) {
-  const [input, setInput] = useState(initial);
+  const inputRef = useRef<HTMLInputElement>(null!);
   const history = useHistory();
 
   return (
     <Form
       className="d-flex mb-2 mb-lg-0"
       onSubmit={() => {
+        const input = inputRef.current.value;
         if (input.length > 0) {
           history.push(`/search/${input}`);
         }
@@ -107,10 +108,12 @@ function SearchBox({ initial = "" }) {
         className="form-control me-2"
         type="search"
         placeholder="Search Books..."
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
+        defaultValue={initial}
+        ref={inputRef}
       />
-      <Button variant="outline-secondary">Search</Button>
+      <Button variant="outline-secondary" type="submit">
+        Search
+      </Button>
     </Form>
   );
 }

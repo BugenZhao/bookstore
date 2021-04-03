@@ -4,6 +4,7 @@ import { Body } from "./common/Body";
 import { CartView } from "../views/CartView";
 import { PaymentView } from "../views/PaymentView";
 import { AddressView } from "../views/AddressView";
+import { Fade } from "react-awesome-reveal";
 
 function CheckoutMain() {
   return (
@@ -36,7 +37,9 @@ export function CheckoutPage() {
     <Body>
       <Header active="cart" />
       <Main py={5}>
-        <CheckoutMain />
+        <Fade>
+          <CheckoutMain />
+        </Fade>
       </Main>
     </Body>
   );

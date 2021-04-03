@@ -45,7 +45,7 @@ export function LoginPage() {
               <input
                 className="form-control"
                 placeholder="Username"
-                type="email"
+                type="text"
                 required
                 autoFocus
                 defaultValue={user === "" ? "Guest" : user}
