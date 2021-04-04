@@ -41,6 +41,9 @@
       "react-app",
       "react-app/jest"
     ],
+    "plugins": [
+      "react-hooks"
+    ],
     "rules": {
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": [
@@ -49,7 +52,9 @@
           "varsIgnorePattern": "^_",
           "argsIgnorePattern": "^_"
         }
-      ]
+      ],
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn"
     }
   },
   "browserslist": {
@@ -65,6 +70,7 @@
     ]
   },
   "devDependencies": {
+    "eslint-plugin-react-hooks": "^4.2.0",
     "prettier": "2.2.1"
   }
 }

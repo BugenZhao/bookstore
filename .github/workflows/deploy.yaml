@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./frontend-react
+        working-directory: ./frontend
     steps:
       - uses: actions/checkout@v1
       - name: Use Node.js 12.x
@@ -26,5 +26,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./frontend-react/build
+          publish_dir: ./frontend/build
           cname: bookstore.bugenzhao.com
