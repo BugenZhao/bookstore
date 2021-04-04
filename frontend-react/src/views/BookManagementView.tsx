@@ -11,7 +11,7 @@ import titleize from "titleize";
 
 export function BookManagementView() {
   const { BOOKS, setBOOKS } = useContext(BooksContext);
-  const { cart, setCart } = useStore();
+  const { clearCart } = useStore();
 
   const rows = _.values(BOOKS);
   const cols = _(_.first(rows))
@@ -62,12 +62,7 @@ export function BookManagementView() {
         })
       );
 
-      // cleanup the cart
-      setCart(
-        _(cart)
-          .filter((id) => !deleted.includes(id))
-          .value()
-      );
+      clearCart();
     }
   }
 

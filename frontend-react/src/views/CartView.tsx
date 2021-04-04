@@ -62,19 +62,18 @@ function Summary({
 }
 
 export function CartView() {
-  const { cart } = useStore();
+  const { cart, getCartCount } = useStore();
   const { BOOKS } = useContext(BooksContext);
 
-  const booksMap = _(cart)
-    .countBy((i) => i)
+  const cartPairs = _(cart)
     .toPairs()
     .map(([i, c]) => [BOOKS[i], c] as const);
 
-  const sumPrice = booksMap.map(([b, c]) => b.price * c).sum();
+  const sumPrice = cartPairs.map(([b, c]) => b.price * c).sum();
   const discount = Math.min(100.0, sumPrice * 0.3);
   const totalPrice = sumPrice - discount;
 
-  const cartItems = booksMap
+  const cartItems = cartPairs
     .map(([b, c]) => <CartItem book={b} count={c} key={b.id} />)
     .value();
 
@@ -83,7 +82,7 @@ export function CartView() {
       <h4 className="d-flex justify-content-between align-items-center mb-3">
         <span className="text-muted">Your cart</span>
         <Badge pill bg="secondary">
-          {cart.length}
+          {getCartCount()}
         </Badge>
       </h4>
       <ul className="list-group mb-3">

@@ -14,15 +14,17 @@ import {
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import { SearchPageParams } from "../routes";
 import { useStore } from "../services/StoreContext";
+import _ from "lodash";
 
 export function Header({
   active,
 }: {
   active: "home" | "detail" | "search" | "cart" | "orders" | "dashboard";
 }) {
-  const { cart, isAdmin } = useStore();
-  const cartCount = cart.length;
+  const { getCartCount, isAdmin } = useStore();
   const keyword = useRouteMatch<SearchPageParams>().params.keyword ?? "";
+
+  const cartCount = getCartCount();
 
   return (
     <Navbar bg="white" expand="lg" className="shadow-sm fixed-top">

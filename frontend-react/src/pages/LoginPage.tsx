@@ -6,7 +6,7 @@ import { Alert, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { LoginRegView } from "../views/LoginRegView";
 
 export function LoginPage() {
-  const { user, setUser, setCart, signedOut, setSignedOut } = useStore();
+  const { user, setUser, clearCart, signedOut, setSignedOut } = useStore();
   const userInputRef = useRef<HTMLInputElement>(null!);
   const history = useHistory();
 
@@ -23,7 +23,7 @@ export function LoginPage() {
       onSubmit={() => {
         const newUser = userInputRef.current.value;
         if (user !== newUser) {
-          setCart([]);
+          clearCart();
         }
         setUser(newUser);
         setSignedOut(false);

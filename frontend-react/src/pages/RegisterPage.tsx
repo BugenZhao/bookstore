@@ -5,7 +5,7 @@ import { Alert, Form } from "react-bootstrap";
 import { LoginRegView } from "../views/LoginRegView";
 
 export function RegisterPage() {
-  const { user, setUser, setCart, setSignedOut } = useStore();
+  const { user, setUser, clearCart, setSignedOut } = useStore();
   const userInputRef = useRef<HTMLInputElement>(null!);
   const history = useHistory();
 
@@ -21,7 +21,7 @@ export function RegisterPage() {
       onSubmit={() => {
         const newUser = userInputRef.current.value;
         if (user !== newUser) {
-          setCart([]);
+          clearCart();
         }
         setUser(newUser);
         setSignedOut(false);
