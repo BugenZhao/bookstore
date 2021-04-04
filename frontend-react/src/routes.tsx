@@ -9,8 +9,8 @@ import {
   DetailPage,
   HomePage,
   SearchPage,
-  LoginPage,
   DashboardPage,
+  LoginPage,
 } from "./pages";
 import { useStore } from "./services/StoreContext";
 
