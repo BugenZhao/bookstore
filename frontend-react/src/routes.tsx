@@ -17,7 +17,6 @@ import { useStore } from "./services/StoreContext";
 
 export function BSRoutes() {
   const { isSignedIn, isAdmin } = useStore();
-  console.log({ isSignedIn, isAdmin });
 
   return (
     <Router>
