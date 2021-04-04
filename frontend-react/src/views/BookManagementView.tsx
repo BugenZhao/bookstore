@@ -7,6 +7,7 @@ import { BooksContext } from "../services/BooksContext";
 import { useStore } from "../services/StoreContext";
 import produce from "immer";
 import { ManagementView } from "./ManagementView";
+import titleize from "titleize";
 
 export function BookManagementView() {
   const { BOOKS, setBOOKS } = useContext(BooksContext);
@@ -17,7 +18,7 @@ export function BookManagementView() {
     .keys()
     .filter((k) => k !== "id")
     .map((k) => {
-      return { name: k, title: k };
+      return { name: k, title: titleize(k) };
     })
     .value();
 

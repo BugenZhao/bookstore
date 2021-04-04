@@ -9,8 +9,8 @@ export function UserManagementView() {
 
   const rows = [{ id: "0", user: user, active: true }];
   const cols = [
-    { name: "user", title: "user" },
-    { name: "active", title: "active" },
+    { name: "user", title: "User" },
+    { name: "active", title: "Active" },
   ];
 
   return (
