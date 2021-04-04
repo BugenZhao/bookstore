@@ -1,15 +1,22 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { ADMINS } from "../services/StoreContext";
 import { useStore } from "../services/StoreContext";
 import { Alert, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { LoginRegView } from "../views/LoginRegView";
+import { useForm } from "react-hook-form";
+
+export type LoginData = {
+  username: string;
+  password: string;
+};
 
 export function LoginPage() {
   const { user, setUser, clearCart, signedOut, setSignedOut } = useStore();
-  const userInputRef = useRef<HTMLInputElement>(null!);
   const history = useHistory();
   const [banned, setBanned] = useState(false);
+
+  const { register, handleSubmit } = useForm();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -33,8 +40,9 @@ export function LoginPage() {
       </Alert>
       <LoginRegView
         isSignIn
-        onSubmit={() => {
-          const newUser = userInputRef.current.value;
+        onSubmit={handleSubmit((data: LoginData) => {
+          console.log(data);
+          const newUser = data.username;
           if (newUser.toLowerCase() === "banned") {
             setBanned(true);
           } else {
@@ -45,7 +53,7 @@ export function LoginPage() {
             setSignedOut(false);
             history.push("/home");
           }
-        }}
+        })}
       >
         <OverlayTrigger
           placement="bottom-end"
@@ -65,7 +73,7 @@ export function LoginPage() {
             required
             autoFocus
             defaultValue={user === "" ? "Guest" : user}
-            ref={userInputRef}
+            {...register("username")}
           />
         </OverlayTrigger>
 
@@ -75,6 +83,7 @@ export function LoginPage() {
           type="password"
           required
           defaultValue="password"
+          {...register("password")}
         />
         <div className="mb-3 form-check form-switch">
           <label>

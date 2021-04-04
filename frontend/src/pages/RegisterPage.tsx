@@ -1,27 +1,35 @@
-import { useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { useStore } from "../services/StoreContext";
 import { Form } from "react-bootstrap";
 import { LoginRegView } from "../views/LoginRegView";
+import { useForm } from "react-hook-form";
+
+export type RegisterData = {
+  username: string;
+  email: string;
+  password: string;
+};
 
 export function RegisterPage() {
   const { user, setUser, clearCart, setSignedOut } = useStore();
-  const userInputRef = useRef<HTMLInputElement>(null!);
   const history = useHistory();
+
+  const { register, handleSubmit } = useForm();
 
   return (
     <>
       <LoginRegView
         isSignIn={false}
-        onSubmit={() => {
-          const newUser = userInputRef.current.value;
+        onSubmit={handleSubmit((data: RegisterData) => {
+          console.log(data);
+          const newUser = data.username;
           if (user !== newUser) {
             clearCart();
           }
           setUser(newUser);
           setSignedOut(false);
           history.push("/home");
-        }}
+        })}
       >
         <Form.Control
           className="input-first"
@@ -29,13 +37,14 @@ export function RegisterPage() {
           type="email"
           required
           autoFocus
+          {...register("email")}
         ></Form.Control>
         <Form.Control
           className="input-mid"
           placeholder="Username"
           autoComplete="username"
           required
-          ref={userInputRef}
+          {...register("username")}
         ></Form.Control>
         <Form.Control
           className="input-mid"
@@ -43,6 +52,7 @@ export function RegisterPage() {
           type="password"
           autoComplete="new-password"
           required
+          {...register("password")}
         ></Form.Control>
         <Form.Control
           className="input-last"
