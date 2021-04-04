@@ -11,6 +11,7 @@ import {
   SearchPage,
   DashboardPage,
   LoginPage,
+  RegisterPage,
 } from "./pages";
 import { useStore } from "./services/StoreContext";
 
@@ -22,6 +23,7 @@ export function BSRoutes() {
     <Router>
       <Switch>
         <Route path="/login" component={LoginPage} />
+        <Route path="/register" component={RegisterPage} />
         {isSignedIn ? (
           <>
             <Route path="/checkout" component={CheckoutPage} />

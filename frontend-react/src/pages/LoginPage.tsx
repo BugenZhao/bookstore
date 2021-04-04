@@ -33,7 +33,7 @@ export function LoginPage() {
       <OverlayTrigger
         placement="bottom-end"
         trigger="focus"
-        delay={150}
+        delay={300}
         overlay={
           <Tooltip id="user-tooltip">
             Sign in as <strong>{ADMINS.join(" or ")}</strong> to obtain the
@@ -42,9 +42,9 @@ export function LoginPage() {
         }
       >
         <input
-          className="form-control"
+          className="form-control input-first"
           placeholder="Username"
-          type="text"
+          type="username"
           required
           autoFocus
           defaultValue={user === "" ? "Guest" : user}
@@ -53,9 +53,9 @@ export function LoginPage() {
       </OverlayTrigger>
 
       <input
-        type="password"
-        className="form-control"
+        className="form-control input-last"
         placeholder="Password"
+        type="password"
         required
         defaultValue="password"
       />
