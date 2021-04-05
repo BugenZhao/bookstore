@@ -1,8 +1,10 @@
+import { PropsWithChildren } from "react";
 import {
   Route,
   Switch,
   HashRouter as Router,
   Redirect,
+  RouteProps,
 } from "react-router-dom";
 import {
   CheckoutPage,
@@ -15,30 +17,38 @@ import {
 } from "./pages";
 import { useStore } from "./services/StoreContext";
 
-export function BSRoutes() {
-  const { isSignedIn, isAdmin } = useStore();
+function SignedInRoute(props: PropsWithChildren<RouteProps>) {
+  const { isSignedIn } = useStore();
+  if (isSignedIn) {
+    return <Route {...props}>{props.children}</Route>;
+  } else {
+    return <Redirect to="/login" />;
+  }
+}
 
+function AdminRoute(props: PropsWithChildren<RouteProps>) {
+  const { isAdmin } = useStore();
+  if (isAdmin) {
+    return <Route {...props}>{props.children}</Route>;
+  } else {
+    return <Redirect to="/home" />;
+  }
+}
+
+export function BSRoutes() {
   return (
     <Router>
       <Switch>
+        <Route exact path="/">
+          <Redirect to="/home" />
+        </Route>
         <Route path="/login" component={LoginPage} />
         <Route path="/register" component={RegisterPage} />
-        {isSignedIn ? (
-          <>
-            <Route path="/checkout" component={CheckoutPage} />
-            <Route path="/detail/:id" component={DetailPage} />
-            <Route path="/home" component={HomePage} />
-            <Route path="/search/:keyword?" component={SearchPage} />
-            {isAdmin ? (
-              <Route path="/dashboard" component={DashboardPage} />
-            ) : null}
-            <Route exact path="/">
-              <Redirect to="/home" />
-            </Route>
-          </>
-        ) : (
-          <Redirect to="/login" />
-        )}
+        <SignedInRoute path="/checkout" component={CheckoutPage} />
+        <SignedInRoute path="/detail/:id" component={DetailPage} />
+        <SignedInRoute path="/home" component={HomePage} />
+        <SignedInRoute path="/search/:keyword?" component={SearchPage} />
+        <AdminRoute path="/dashboard" component={DashboardPage} />
       </Switch>
     </Router>
   );
