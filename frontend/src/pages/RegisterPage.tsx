@@ -14,13 +14,13 @@ export function RegisterPage() {
   const { user, setUser, clearCart, setSignedOut } = useStore();
   const history = useHistory();
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<RegisterData>();
 
   return (
     <>
       <LoginRegView
         isSignIn={false}
-        onSubmit={handleSubmit((data: RegisterData) => {
+        onSubmit={handleSubmit((data) => {
           console.log(data);
           const newUser = data.username;
           if (user !== newUser) {

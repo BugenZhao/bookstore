@@ -16,7 +16,7 @@ export function LoginPage() {
   const history = useHistory();
   const [banned, setBanned] = useState(false);
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<LoginData>();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -40,7 +40,7 @@ export function LoginPage() {
       </Alert>
       <LoginRegView
         isSignIn
-        onSubmit={handleSubmit((data: LoginData) => {
+        onSubmit={handleSubmit((data) => {
           console.log(data);
           const newUser = data.username;
           if (newUser.toLowerCase() === "banned") {

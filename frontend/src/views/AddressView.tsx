@@ -1,16 +1,23 @@
 import { createContext, useContext, useState } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
+import { useForm } from "react-hook-form";
 import { SelectContextType } from "../services";
 
-type AddressContextType = SelectContextType<number>;
+type AddressContextType = SelectContextType<number> & {
+  modalShow: boolean;
+  setModalShow: (b: boolean) => void;
+};
 const AddressContext = createContext<AddressContextType>(null!);
 
-export type Address = {
-  id: number;
+export type NewAddressData = {
   name: string;
-  tag: string;
   phone: string;
   address: string;
+};
+
+export type Address = NewAddressData & {
+  id: number;
+  tag: string;
 };
 
 function AddressItem({ address }: { address: Address }) {
@@ -34,9 +41,90 @@ function AddressItem({ address }: { address: Address }) {
   );
 }
 
-function AddNewAddressItem() {
-  const [modalShow, setModalShow] = useState(false);
+function AddNewAddressModal() {
+  const { modalShow, setModalShow } = useContext(AddressContext);
+  const { register, handleSubmit } = useForm<NewAddressData>();
 
+  return (
+    <Modal
+      show={modalShow}
+      size="lg"
+      onHide={() => setModalShow(false)}
+      backdrop="static"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>Add a New Address</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form
+          onSubmit={handleSubmit((data) => {
+            alert(JSON.stringify(data));
+            console.log(data);
+            setModalShow(false);
+          })}
+          id="add-new-address-form"
+        >
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm={3}>
+              Name
+            </Form.Label>
+            <Col sm={9}>
+              <Form.Control
+                placeholder="Enter full name"
+                required
+                {...register("name")}
+              />
+            </Col>
+          </Form.Group>
+
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm={3}>
+              Phone Number
+            </Form.Label>
+            <Col sm={9}>
+              <Form.Control
+                placeholder="Enter phone number"
+                required
+                {...register("phone")}
+              />
+            </Col>
+          </Form.Group>
+
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm={3}>
+              Address
+            </Form.Label>
+            <Col sm={9}>
+              <Form.Control
+                as="textarea"
+                placeholder="Enter address"
+                required
+                {...register("address")}
+              />
+            </Col>
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Check
+              type="checkbox"
+              label="Set as default"
+              id="set-as-default"
+            />
+          </Form.Group>
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="primary" type="submit" form="add-new-address-form">
+          Confirm
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
+}
+
+function AddNewAddressItem() {
+  const { setModalShow } = useContext(AddressContext);
   return (
     <>
       <button
@@ -45,74 +133,18 @@ function AddNewAddressItem() {
       >
         <span className="text-muted">Add a new address...</span>
       </button>
-      <Modal
-        show={modalShow}
-        size="lg"
-        onHide={() => setModalShow(false)}
-        backdrop="static"
-        keyboard={false}
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Add a New Address</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm={3}>
-                Name
-              </Form.Label>
-              <Col sm={9}>
-                <Form.Control placeholder="Enter full name" required />
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm={3}>
-                Phone Number
-              </Form.Label>
-              <Col sm={9}>
-                <Form.Control placeholder="Enter phone number" required />
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm={3}>
-                Address
-              </Form.Label>
-              <Col sm={9}>
-                <Form.Control
-                  as="textarea"
-                  placeholder="Enter address"
-                  required
-                />
-              </Col>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Check type="checkbox" label="Set as default" />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="primary"
-            onClick={() => setModalShow(false)}
-            type="submit"
-          >
-            Confirm
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </>
   );
 }
 
 export function AddressView() {
   const [selected, setSelected] = useState(0);
+  const [modalShow, setModalShow] = useState(false);
 
   return (
-    <AddressContext.Provider value={{ selected, setSelected }}>
+    <AddressContext.Provider
+      value={{ selected, setSelected, modalShow, setModalShow }}
+    >
       <div>
         <h4 className="mb-3">Shipping Address</h4>
         <div>
@@ -145,6 +177,7 @@ export function AddressView() {
               }}
             />
             <AddNewAddressItem />
+            <AddNewAddressModal />
           </div>
         </div>
       </div>
