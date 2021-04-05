@@ -21,6 +21,9 @@ export function BookDetailView({ book }: { book: Book }) {
             <dt className="col-sm-3">Press</dt>
             <dd className="col-sm-9">Unknown Press</dd>
 
+            <dt className="col-sm-3">ISBN</dt>
+            <dd className="col-sm-9">{book.isbn}</dd>
+
             <dt className="col-sm-3">Category</dt>
             <dd className="col-sm-9">{book.type}</dd>
 

@@ -45,10 +45,10 @@ function DetailMain({ id }: { id: string }) {
       </nav>
       <Fade>
         <Row>
-          <div className="col-md-6 col-lg-4 align-self-center">
+          <div className="col-md-5 col-lg-4 align-self-center">
             <BookCard book={book} withLink={false} />
           </div>
-          <div className="col-md-6 col-lg-8">
+          <div className="col-md-7 col-lg-8">
             <BookDetailView book={book} />
           </div>
         </Row>

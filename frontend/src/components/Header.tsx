@@ -122,7 +122,7 @@ function SearchBox({ initial = "" }) {
 
 function DashboardButton({ active }: { active: string }) {
   return (
-    <div className="ms-md-2 d-flex">
+    <div className="ms-lg-2 d-flex">
       {active === "dashboard" ? (
         <Button as={Link} to="/home" variant="success" className="w-100">
           Book Store
