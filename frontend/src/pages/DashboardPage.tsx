@@ -40,7 +40,7 @@ function ResetBooksButton() {
 }
 
 function DashboardMain() {
-  const [key, setKey] = useState<String | null>("books");
+  const [key, setKey] = useState<string | undefined>("books");
 
   return (
     <div>
@@ -55,7 +55,11 @@ function DashboardMain() {
         )}
       </div>
       <div className="py-4">
-        <Tabs activeKey={key} onSelect={(k) => setKey(k)} className="mb-3">
+        <Tabs
+          activeKey={key}
+          onSelect={(k) => setKey(k ?? undefined)}
+          className="mb-3"
+        >
           <Tab eventKey="books" title="Books">
             <BookManagementView />
           </Tab>
