@@ -4,10 +4,10 @@ import { Header } from "../components/Header";
 import { BookDetailView } from "../views/BookDetailView";
 import { Main } from "./common/Main";
 import { Body } from "./common/Body";
-import { useContext } from "react";
-import { BooksContext } from "../services/BooksContext";
+import { Book } from "../services/BooksContext";
 import { Fade } from "react-awesome-reveal";
-import { Row } from "react-bootstrap";
+import { Row, Spinner } from "react-bootstrap";
+import { useFetch } from "../services";
 
 export function DetailPage(
   props: RouteComponentProps<{
@@ -27,9 +27,16 @@ export function DetailPage(
 }
 
 function DetailMain({ id }: { id: string }) {
-  const { BOOKS } = useContext(BooksContext);
-  const book = BOOKS[id];
+  const { data: book } = useFetch<Book>(`/book/${id}`);
   const history = useHistory();
+
+  if (!book) {
+    return (
+      <>
+        <Spinner animation="border" variant="primary" />
+      </>
+    );
+  }
 
   return (
     <div>

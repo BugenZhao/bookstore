@@ -3,14 +3,26 @@ import _ from "lodash";
 import _BOOKS from "../resources/books.json";
 import useLocalStorage from "use-local-storage";
 
-export const ALL_BOOKS = _(_BOOKS).keyBy("id").value();
+export type Book = {
+  id: number;
+  isbn: string;
+  name: string;
+  type: string;
+  author: string;
+  price: number;
+  description: string;
+  inventory: number;
+  image: string;
+};
+export type BookDict = Record<string, Book>;
+
 type BooksContextType = {
-  BOOKS: typeof ALL_BOOKS;
-  setBOOKS: (d: typeof ALL_BOOKS) => void;
+  BOOKS: BookDict;
+  setBOOKS: (d: BookDict) => void;
 };
 export const BooksContext = createContext<BooksContextType>(null!);
 
-export type Book = typeof _BOOKS[0];
+export const ALL_BOOKS: BookDict = _(_BOOKS).keyBy("id").value();
 
 export function BooksProvider(props: PropsWithChildren<{}>) {
   const [BOOKS, setBOOKS] = useLocalStorage("bz-books", ALL_BOOKS);
@@ -21,4 +33,3 @@ export function BooksProvider(props: PropsWithChildren<{}>) {
     </BooksContext.Provider>
   );
 }
-
