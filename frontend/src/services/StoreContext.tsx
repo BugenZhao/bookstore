@@ -11,7 +11,6 @@ type StoreContextType = {
   setCart: (c: Cart) => void;
   clearCart: () => void;
   getCartCount: () => number;
-  isAdmin: boolean;
   signedOut: boolean;
   setSignedOut: (s: boolean) => void;
 };
@@ -43,7 +42,6 @@ export function StoreProvider(props: PropsWithChildren<{}>) {
         setCart,
         clearCart,
         getCartCount,
-        isAdmin: true,
         signedOut,
         setSignedOut,
       }}

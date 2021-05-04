@@ -4,7 +4,7 @@ import { useUser } from "../services";
 import { ManagementView } from "./ManagementView";
 
 export function UserManagementView() {
-  const currentUser = useUser().data ?? "";
+  const currentUser = useUser().data?.username ?? "???";
   const [user, setUser] = useState(currentUser);
 
   const rows = [{ id: "0", user: user, active: true }];

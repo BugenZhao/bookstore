@@ -73,7 +73,7 @@ export function LoginPage() {
             type="username"
             required
             autoFocus
-            defaultValue={"Guest"}
+            defaultValue={"thunderboy"}
             {...register("username")}
           />
         </OverlayTrigger>
@@ -83,7 +83,7 @@ export function LoginPage() {
           placeholder="Password"
           type="password"
           required
-          defaultValue="password"
+          defaultValue="reins1409"
           {...register("password")}
         />
         <div className="mb-3 form-check form-switch">

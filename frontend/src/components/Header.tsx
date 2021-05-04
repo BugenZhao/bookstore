@@ -15,14 +15,15 @@ import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import { SearchPageParams } from "../routes";
 import { useStore } from "../services/StoreContext";
 import _ from "lodash";
-import { post, useUser } from "../services";
+import { post, UserType, useUser } from "../services";
 
 export function Header({
   active,
 }: {
   active: "home" | "detail" | "search" | "cart" | "orders" | "dashboard";
 }) {
-  const { getCartCount, isAdmin } = useStore();
+  const { getCartCount } = useStore();
+  const isAdmin = useUser().data?.user_type === UserType.admin ?? false;
   const keyword = useRouteMatch<SearchPageParams>().params.keyword ?? "";
 
   const cartCount = getCartCount();
@@ -89,7 +90,7 @@ function NavUserItem() {
         }}
       >
         <span>Hi, </span>
-        <span className="fw-bold">{user}</span>
+        <span className="fw-bold">{user?.username ?? "???"}</span>
       </Nav.Link>
     </OverlayTrigger>
   );

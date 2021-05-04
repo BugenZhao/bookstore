@@ -20,6 +20,16 @@ export function post(path: string, body?: BodyInit | null) {
   return fetch(url, { method: "POST", body: body, credentials: "include" });
 }
 
+export enum UserType {
+  admin = 0,
+  normal = 1,
+}
+
+export type AuthedUser = {
+  username: string;
+  user_type: UserType;
+};
+
 export function useUser() {
-  return useFetch<string>("/users/check");
+  return useFetch<AuthedUser>("/users/check");
 }
