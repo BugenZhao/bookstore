@@ -31,5 +31,10 @@ export type AuthedUser = {
 };
 
 export function useUser() {
-  return useFetch<AuthedUser>("/users/check");
+  const r = useFetch<AuthedUser>("/users/check");
+  const isAdmin = r.data ? r.data.user_type === UserType.admin : undefined;
+  return {
+    isAdmin,
+    ...r,
+  };
 }

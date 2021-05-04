@@ -15,7 +15,7 @@ import {
   LoginPage,
   RegisterPage,
 } from "./pages";
-import { UserType, useUser } from "./services";
+import { useUser } from "./services";
 
 function SignedInRoute(props: PropsWithChildren<RouteProps>) {
   const { data, error } = useUser();
@@ -28,7 +28,7 @@ function SignedInRoute(props: PropsWithChildren<RouteProps>) {
 }
 
 function AdminRoute(props: PropsWithChildren<RouteProps>) {
-  const isAdmin = useUser().data?.user_type === UserType.admin ?? false;
+  const isAdmin = useUser().isAdmin ?? false;
   if (isAdmin) {
     return <Route {...props}>{props.children}</Route>;
   } else {

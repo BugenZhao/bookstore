@@ -15,7 +15,7 @@ import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import { SearchPageParams } from "../routes";
 import { useStore } from "../services/StoreContext";
 import _ from "lodash";
-import { post, UserType, useUser } from "../services";
+import { post, useUser } from "../services";
 
 export function Header({
   active,
@@ -23,7 +23,7 @@ export function Header({
   active: "home" | "detail" | "search" | "cart" | "orders" | "dashboard";
 }) {
   const { getCartCount } = useStore();
-  const isAdmin = useUser().data?.user_type === UserType.admin ?? false;
+  const isAdmin = useUser().isAdmin ?? false;
   const keyword = useRouteMatch<SearchPageParams>().params.keyword ?? "";
 
   const cartCount = getCartCount();
