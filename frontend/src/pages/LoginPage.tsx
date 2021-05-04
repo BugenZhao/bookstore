@@ -5,6 +5,7 @@ import { useStore } from "../services/StoreContext";
 import { Alert, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { LoginRegView } from "../views/LoginRegView";
 import { useForm } from "react-hook-form";
+import { post, useUser } from "../services";
 
 export type LoginData = {
   username: string;
@@ -12,7 +13,8 @@ export type LoginData = {
 };
 
 export function LoginPage() {
-  const { user, setUser, clearCart, signedOut, setSignedOut } = useStore();
+  const { signedOut, setSignedOut } = useStore();
+  const { revalidate } = useUser();
   const history = useHistory();
   const [banned, setBanned] = useState(false);
 
@@ -40,16 +42,15 @@ export function LoginPage() {
       </Alert>
       <LoginRegView
         isSignIn
-        onSubmit={handleSubmit((data) => {
+        onSubmit={handleSubmit(async (data) => {
           console.log(data);
           const newUser = data.username;
+
           if (newUser.toLowerCase() === "banned") {
             setBanned(true);
           } else {
-            if (user !== newUser) {
-              clearCart();
-            }
-            setUser(newUser);
+            await post("/users/login", JSON.stringify(data));
+            await revalidate();
             setSignedOut(false);
             history.push("/home");
           }
@@ -72,7 +73,7 @@ export function LoginPage() {
             type="username"
             required
             autoFocus
-            defaultValue={user === "" ? "Guest" : user}
+            defaultValue={"Guest"}
             {...register("username")}
           />
         </OverlayTrigger>

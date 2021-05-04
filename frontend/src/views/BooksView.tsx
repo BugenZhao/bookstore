@@ -6,7 +6,7 @@ import { BookDict } from "../services/BooksContext";
 import { SearchPageParams } from "../routes";
 import { Fade } from "react-awesome-reveal";
 import { useFetch } from "../services";
-import { Spinner } from "react-bootstrap";
+import { Row, Spinner } from "react-bootstrap";
 
 const PER_PAGE = 12;
 
@@ -57,9 +57,9 @@ function Books() {
 
   if (!allBooks) {
     return (
-      <>
+      <Row className="justify-content-center mt-5">
         <Spinner animation="border" variant="primary" />
-      </>
+      </Row>
     );
   }
 

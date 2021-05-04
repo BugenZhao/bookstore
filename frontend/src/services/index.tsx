@@ -7,10 +7,19 @@ export type SelectContextType<T> = {
 };
 
 export function useFetch<Data>(path: string) {
-  const fetcher = (...args: Parameters<typeof fetch>) =>
-    fetch(...args).then((res) => res.json());
+  const fetcher = (url: string) =>
+    fetch(url, { credentials: "include" }).then((res) => res.json());
   const url = API_BASE + path;
 
-  const { data, error } = useSWR<Data, any>(url, fetcher);
-  return { data, error };
+  return useSWR<Data, any>(url, fetcher);
+}
+
+export function post(path: string, body?: BodyInit | null) {
+  const url = API_BASE + path;
+
+  return fetch(url, { method: "POST", body: body, credentials: "include" });
+}
+
+export function useUser() {
+  return useFetch<string>("/users/check");
 }

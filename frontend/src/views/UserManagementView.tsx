@@ -1,10 +1,10 @@
 import _ from "lodash";
 import { useState } from "react";
-import { useStore } from "../services/StoreContext";
+import { useUser } from "../services";
 import { ManagementView } from "./ManagementView";
 
 export function UserManagementView() {
-  const { user: currentUser } = useStore();
+  const currentUser = useUser().data ?? "";
   const [user, setUser] = useState(currentUser);
 
   const rows = [{ id: "0", user: user, active: true }];

@@ -15,6 +15,7 @@ import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import { SearchPageParams } from "../routes";
 import { useStore } from "../services/StoreContext";
 import _ from "lodash";
+import { post, useUser } from "../services";
 
 export function Header({
   active,
@@ -70,8 +71,9 @@ export function Header({
 }
 
 function NavUserItem() {
-  const { user, setUser, setSignedOut } = useStore();
+  const { setSignedOut } = useStore();
   const history = useHistory();
+  const { data: user, revalidate } = useUser();
 
   return (
     <OverlayTrigger
@@ -79,8 +81,9 @@ function NavUserItem() {
       placement="auto"
     >
       <Nav.Link
-        onClick={() => {
-          setUser("");
+        onClick={async () => {
+          await post("/users/logout");
+          await revalidate();
           setSignedOut(true);
           history.push("/login");
         }}

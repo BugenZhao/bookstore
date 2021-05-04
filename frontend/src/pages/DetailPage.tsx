@@ -27,29 +27,22 @@ export function DetailPage(
 }
 
 function DetailMain({ id }: { id: string }) {
-  const { data: book } = useFetch<Book>(`/book/${id}`);
-  const history = useHistory();
+  const { data: book } = useFetch<Book>(`/books/${id}`);
 
   if (!book) {
     return (
-      <>
-        <Spinner animation="border" variant="primary" />
-      </>
+      <div>
+        <BreadCrumb />
+        <Row className="justify-content-center mt-5">
+          <Spinner animation="border" variant="primary" />
+        </Row>
+      </div>
     );
   }
 
   return (
     <div>
-      <nav>
-        <ol className="breadcrumb h6">
-          <li className="breadcrumb-item">
-            <Link to="#" className="" onClick={() => history.goBack()}>
-              Books
-            </Link>
-          </li>
-          <li className="breadcrumb-item active">{book.name}</li>
-        </ol>
-      </nav>
+      <BreadCrumb name={book.name} />
       <Fade>
         <Row>
           <div className="col-md-5 col-lg-4 align-self-center">
@@ -61,5 +54,26 @@ function DetailMain({ id }: { id: string }) {
         </Row>
       </Fade>
     </div>
+  );
+}
+
+function BreadCrumb({ name }: { name?: string }) {
+  const history = useHistory();
+
+  return (
+    <nav>
+      <ol className="breadcrumb h6">
+        <li className="breadcrumb-item">
+          <Link to="#" className="" onClick={() => history.goBack()}>
+            Books
+          </Link>
+        </li>
+        {name ? (
+          <li className="breadcrumb-item active">{name}</li>
+        ) : (
+          <li className="breadcrumb-item">...</li>
+        )}
+      </ol>
+    </nav>
   );
 }

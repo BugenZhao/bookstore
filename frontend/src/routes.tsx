@@ -15,14 +15,16 @@ import {
   LoginPage,
   RegisterPage,
 } from "./pages";
+import { useUser } from "./services";
 import { useStore } from "./services/StoreContext";
 
 function SignedInRoute(props: PropsWithChildren<RouteProps>) {
-  const { isSignedIn } = useStore();
-  if (isSignedIn) {
-    return <Route {...props}>{props.children}</Route>;
-  } else {
+  const { data, error } = useUser();
+  console.log(data, error);
+  if (error) {
     return <Redirect to="/login" />;
+  } else {
+    return <Route {...props}>{props.children}</Route>;
   }
 }
 

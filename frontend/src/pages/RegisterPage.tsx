@@ -11,7 +11,7 @@ export type RegisterData = {
 };
 
 export function RegisterPage() {
-  const { user, setUser, clearCart, setSignedOut } = useStore();
+  const { setSignedOut } = useStore();
   const history = useHistory();
 
   const { register, handleSubmit } = useForm<RegisterData>();
@@ -22,11 +22,11 @@ export function RegisterPage() {
         isSignIn={false}
         onSubmit={handleSubmit((data) => {
           console.log(data);
-          const newUser = data.username;
-          if (user !== newUser) {
-            clearCart();
-          }
-          setUser(newUser);
+          // const newUser = data.username;
+          // if (user !== newUser) {
+          //   clearCart();
+          // }
+          // setUser(newUser);
           setSignedOut(false);
           history.push("/home");
         })}

@@ -1,5 +1,4 @@
 import { createContext, PropsWithChildren, useContext, useState } from "react";
-import useLocalStorage from "use-local-storage";
 import _ from "lodash";
 import produce from "immer";
 
@@ -12,9 +11,6 @@ type StoreContextType = {
   setCart: (c: Cart) => void;
   clearCart: () => void;
   getCartCount: () => number;
-  user: string;
-  setUser: (u: string) => void;
-  isSignedIn: boolean;
   isAdmin: boolean;
   signedOut: boolean;
   setSignedOut: (s: boolean) => void;
@@ -37,10 +33,6 @@ export function StoreProvider(props: PropsWithChildren<{}>) {
   const clearCart = () => setCart({});
   const getCartCount = () => _(cart).values().sum();
 
-  const [user, setUser] = useLocalStorage("bz-user", "");
-  const isSignedIn = user !== "";
-  const isAdmin = ADMINS.includes(user);
-
   const [signedOut, setSignedOut] = useState(false);
 
   return (
@@ -51,10 +43,7 @@ export function StoreProvider(props: PropsWithChildren<{}>) {
         setCart,
         clearCart,
         getCartCount,
-        user,
-        setUser,
-        isSignedIn,
-        isAdmin,
+        isAdmin: true,
         signedOut,
         setSignedOut,
       }}
