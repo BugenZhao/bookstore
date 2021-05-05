@@ -55,7 +55,7 @@ export function Header({
                 </Bounce>
               </div>
             </Nav.Link>
-            <Nav.Link as={Link} to="#" active={active === "orders"}>
+            <Nav.Link as={Link} to="/orders" active={active === "orders"}>
               My Orders
             </Nav.Link>
 

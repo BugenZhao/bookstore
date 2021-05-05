@@ -14,6 +14,7 @@ import {
   DashboardPage,
   LoginPage,
   RegisterPage,
+  OrdersPage,
 } from "./pages";
 import { useUser } from "./services/auth";
 
@@ -48,6 +49,7 @@ export function BSRoutes() {
         <SignedInRoute path="/detail/:id" component={DetailPage} />
         <SignedInRoute path="/home" component={HomePage} />
         <SignedInRoute path="/search/:keyword?" component={SearchPage} />
+        <SignedInRoute path="/orders" component={OrdersPage} />
         <AdminRoute path="/dashboard" component={DashboardPage} />
       </Switch>
     </Router>

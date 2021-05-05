@@ -17,7 +17,7 @@ function CartItem({ book, count }: { book: Book; count: number }) {
       action
     >
       <Row className="d-flex justify-content-between">
-        <Col sm={3}>
+        <Col xs={3}>
           <Image src={book.image} fluid></Image>
         </Col>
         <Col className="d-flex align-items-center">
