@@ -16,17 +16,16 @@ import { SearchPageParams } from "../routes";
 import { useStore } from "../services/StoreContext";
 import _ from "lodash";
 import { postLogout, useUser } from "../services/auth";
+import { useCart } from "../services/cart";
 
 export function Header({
   active,
 }: {
   active: "home" | "detail" | "search" | "cart" | "orders" | "dashboard";
 }) {
-  const { getCartCount } = useStore();
+  const { cartCount } = useCart();
   const isAdmin = useUser().isAdmin ?? false;
   const keyword = useRouteMatch<SearchPageParams>().params.keyword ?? "";
-
-  const cartCount = getCartCount();
 
   return (
     <Navbar bg="white" expand="lg" className="shadow-sm fixed-top">

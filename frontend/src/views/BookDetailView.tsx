@@ -1,10 +1,10 @@
 import { ButtonGroup, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Book } from "../services/BooksContext";
-import { useStore } from "../services/StoreContext";
+import { putCart, useCart } from "../services/cart";
 
 export function BookDetailView({ book }: { book: Book }) {
-  const { addToCart } = useStore();
+  const { revalidate } = useCart();
 
   return (
     <div
@@ -44,8 +44,9 @@ export function BookDetailView({ book }: { book: Book }) {
             <Button
               variant="outline-danger"
               className="w-100"
-              onClick={() => {
-                addToCart(book.id.toString());
+              onClick={async () => {
+                await putCart(book.id.toString());
+                await revalidate();
               }}
             >
               Add to Cart

@@ -1,9 +1,9 @@
 import { PropsWithChildren, useContext } from "react";
 import _ from "lodash";
 import { Book, BooksContext } from "../services/BooksContext";
-import { useStore } from "../services/StoreContext";
 import { Link } from "react-router-dom";
 import { Badge, Col, Image, ListGroup, Row } from "react-bootstrap";
+import { useCart } from "../services/cart";
 
 function CartItem({ book, count }: { book: Book; count: number }) {
   const link = `/detail/${book.id}`;
@@ -62,7 +62,7 @@ function Summary({
 }
 
 export function CartView() {
-  const { cart, getCartCount } = useStore();
+  const { cart, cartCount } = useCart();
   const { BOOKS } = useContext(BooksContext);
 
   const cartPairs = _(cart)
@@ -82,7 +82,7 @@ export function CartView() {
       <h4 className="d-flex justify-content-between align-items-center mb-3">
         <span className="text-muted">Your cart</span>
         <Badge pill bg="secondary">
-          {getCartCount()}
+          {cartCount}
         </Badge>
       </h4>
       <ul className="list-group mb-3">
