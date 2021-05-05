@@ -1,12 +1,13 @@
-import { PropsWithChildren, useContext } from "react";
+import { PropsWithChildren } from "react";
 import _ from "lodash";
-import { Book, BooksContext } from "../services/BooksContext";
+import { Book } from "../services/BooksContext";
 import { Link } from "react-router-dom";
-import { Badge, Col, Image, ListGroup, Row } from "react-bootstrap";
-import { useCart } from "../services/cart";
+import { Badge, Button, Col, Image, ListGroup, Row } from "react-bootstrap";
+import { deleteFromCart, emptyCart, useCart } from "../services/cart";
 
 function CartItem({ book, count }: { book: Book; count: number }) {
   const link = `/detail/${book.id}`;
+  const { revalidate } = useCart();
 
   return (
     <ListGroup.Item
@@ -15,19 +16,31 @@ function CartItem({ book, count }: { book: Book; count: number }) {
       style={{ color: "inherit", textDecoration: "inherit" }}
       action
     >
-      <Row className="justify-content-between">
+      <Row className="d-flex justify-content-between">
         <Col sm={3}>
           <Image src={book.image} fluid></Image>
         </Col>
-        <Col className="d-flex justify-content-between align-items-center">
-          <div>
-            <h6 className="my-0">{book.name}</h6>
+        <Col className="d-flex align-items-center">
+          <div className="me-auto">
+            <h6 className="mb-0">{book.name}</h6>
             <small className="text-muted">{book.author}</small>
           </div>
-          <div>
+          <div className="me-3">
             <span className="h5">¥{book.price}</span>
             {count > 1 ? <span className="text-muted"> x{count}</span> : null}
           </div>
+          <Badge
+            pill
+            as={Button}
+            variant="secondary"
+            onClick={async (e) => {
+              e.preventDefault();
+              await deleteFromCart(book.id.toString());
+              await revalidate();
+            }}
+          >
+            —
+          </Badge>
         </Col>
       </Row>
     </ListGroup.Item>
@@ -62,33 +75,37 @@ function Summary({
 }
 
 export function CartView() {
-  const { cart, cartCount } = useCart();
-  const { BOOKS } = useContext(BooksContext);
+  const { books, cartCount, discount, total, revalidate } = useCart();
 
-  const cartPairs = _(cart)
-    .toPairs()
-    .map(([i, c]) => [BOOKS[i], c] as const);
-
-  const sumPrice = cartPairs.map(([b, c]) => b.price * c).sum();
-  const discount = Math.min(100.0, sumPrice * 0.3);
-  const totalPrice = sumPrice - discount;
-
-  const cartItems = cartPairs
-    .map(([b, c]) => <CartItem book={b} count={c} key={b.id} />)
+  const cartItems = _(books)
+    .map((b) => <CartItem book={b.book} count={b.count} key={b.book.id} />)
     .value();
 
   return (
     <div>
-      <h4 className="d-flex justify-content-between align-items-center mb-3">
-        <span className="text-muted">Your cart</span>
-        <Badge pill bg="secondary">
+      <h4 className="d-flex align-items-center mb-3">
+        <span className="text-muted me-2">My cart</span>
+        <Badge pill bg="secondary" className="me-auto">
           {cartCount}
         </Badge>
+        {cartCount > 0 ? (
+          <Badge
+            pill
+            as={Button}
+            variant="danger"
+            onClick={async () => {
+              await emptyCart();
+              await revalidate();
+            }}
+          >
+            Clear
+          </Badge>
+        ) : null}
       </h4>
       <ul className="list-group mb-3">
         {cartItems}
         <Summary title="Discount" value={discount} />
-        <Summary title="Total" value={totalPrice} />
+        <Summary title="Total" value={total} />
       </ul>
     </div>
   );

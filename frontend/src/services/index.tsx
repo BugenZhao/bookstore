@@ -22,3 +22,8 @@ export function put(path: string, body?: BodyInit | null) {
   const url = API_BASE + path;
   return fetch(url, { method: "PUT", body: body });
 }
+
+export function delete_(path: string, body?: BodyInit | null) {
+  const url = API_BASE + path;
+  return fetch(url, { method: "DELETE", body: body });
+}
