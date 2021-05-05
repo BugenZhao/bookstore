@@ -1,24 +1,28 @@
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { ADMINS } from "../services/StoreContext";
 import { useStore } from "../services/StoreContext";
-import { Alert, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Alert, Form, OverlayTrigger } from "react-bootstrap";
 import { LoginRegView } from "../views/LoginRegView";
 import { useForm } from "react-hook-form";
-import { post, useUser } from "../services";
+import { useUser } from "../services/auth";
+import { LoginData, postLogin } from "../services/auth";
 
-export type LoginData = {
-  username: string;
-  password: string;
-};
+type LoginFormData = LoginData;
 
 export function LoginPage() {
   const { signedOut, setSignedOut } = useStore();
   const { revalidate } = useUser();
   const history = useHistory();
   const [banned, setBanned] = useState(false);
+  const [processing, setProcessing] = useState(false);
+  const [wrong, setWrong] = useState(false);
 
-  const { register, handleSubmit } = useForm<LoginData>();
+  const { register, handleSubmit } = useForm<LoginFormData>({
+    defaultValues: {
+      username: "thunderboy",
+      password: "reins1409",
+    },
+  });
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -43,62 +47,62 @@ export function LoginPage() {
       <LoginRegView
         isSignIn
         onSubmit={handleSubmit(async (data) => {
-          console.log(data);
-          const newUser = data.username;
-
-          if (newUser.toLowerCase() === "banned") {
+          if (data.username.toLowerCase() === "banned") {
+            // TODO: real ban
             setBanned(true);
           } else {
-            await post("/users/login", JSON.stringify(data));
+            setProcessing(true);
+            const res = await postLogin(data);
             await revalidate();
-            setSignedOut(false);
-            history.push("/home");
+            setProcessing(false);
+            if (res.ok) {
+              setSignedOut(false);
+              history.push("/home");
+            } else {
+              setWrong(true);
+            }
           }
         })}
+        isProcessing={processing}
       >
         <OverlayTrigger
           placement="bottom-end"
           trigger="focus"
           delay={300}
           overlay={
-            <Tooltip id="user-tooltip">
-              Sign in as <strong>{ADMINS.join(" or ")}</strong> to obtain the
-              admin permissions.
-            </Tooltip>
+            // <Tooltip id="user-tooltip">
+            //   Sign in as <strong>{ADMINS.join(" or ")}</strong> to obtain the
+            //   admin permissions.
+            // </Tooltip>
+            <div />
           }
         >
-          <input
-            className="form-control input-first"
+          <Form.Control
+            className="input-first"
             placeholder="Username"
-            type="username"
+            autoComplete="username"
             required
             autoFocus
-            defaultValue={"thunderboy"}
+            isInvalid={wrong}
             {...register("username")}
           />
         </OverlayTrigger>
-
-        <input
-          className="form-control input-last"
+        <Form.Control
+          className="input-last"
           placeholder="Password"
           type="password"
           required
-          defaultValue="reins1409"
+          isInvalid={wrong}
           {...register("password")}
-        />
-        <div className="mb-3 form-check form-switch">
-          <label>
-            <input
-              type="checkbox"
-              id="rememberMeCheck"
-              className="form-check-input"
-              defaultChecked
-            />
-            <label htmlFor="rememberMeCheck" className="form-check-label">
-              Remember me
-            </label>
-          </label>
-        </div>
+        ></Form.Control>
+
+        {wrong ? (
+          <Form.Control.Feedback type="invalid">
+            Please try again.
+          </Form.Control.Feedback>
+        ) : null}
+        
+        <Form.Switch className="mt-3" label="Remember me" defaultChecked />
       </LoginRegView>
     </>
   );

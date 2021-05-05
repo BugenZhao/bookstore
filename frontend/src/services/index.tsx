@@ -20,21 +20,3 @@ export function post(path: string, body?: BodyInit | null) {
   return fetch(url, { method: "POST", body: body, credentials: "include" });
 }
 
-export enum UserType {
-  admin = 0,
-  normal = 1,
-}
-
-export type AuthedUser = {
-  username: string;
-  user_type: UserType;
-};
-
-export function useUser() {
-  const r = useFetch<AuthedUser>("/users/check");
-  const isAdmin = r.data ? r.data.user_type === UserType.admin : undefined;
-  return {
-    isAdmin,
-    ...r,
-  };
-}

@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { useState } from "react";
-import { useUser } from "../services";
+import { useUser } from "../services/auth";
 import { ManagementView } from "./ManagementView";
 
 export function UserManagementView() {

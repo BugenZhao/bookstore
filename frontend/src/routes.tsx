@@ -15,7 +15,7 @@ import {
   LoginPage,
   RegisterPage,
 } from "./pages";
-import { useUser } from "./services";
+import { useUser } from "./services/auth";
 
 function SignedInRoute(props: PropsWithChildren<RouteProps>) {
   const { data, error } = useUser();

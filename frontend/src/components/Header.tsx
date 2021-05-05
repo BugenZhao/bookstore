@@ -15,7 +15,7 @@ import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import { SearchPageParams } from "../routes";
 import { useStore } from "../services/StoreContext";
 import _ from "lodash";
-import { post, useUser } from "../services";
+import { postLogout, useUser } from "../services/auth";
 
 export function Header({
   active,
@@ -83,7 +83,7 @@ function NavUserItem() {
     >
       <Nav.Link
         onClick={async () => {
-          await post("/users/logout");
+          await postLogout();
           await revalidate();
           setSignedOut(true);
           history.push("/login");
