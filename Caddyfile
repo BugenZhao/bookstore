@@ -4,8 +4,8 @@ handle_path /api/* {
 	reverse_proxy localhost:8000
 }
 
-handle_path /static/* {
-    rewrite * /static/{path}
+handle_path /resources/* {
+    rewrite * /resources/{path}
     reverse_proxy localhost:8000
 }
 
