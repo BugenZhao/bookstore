@@ -12,7 +12,7 @@ export function BookManagementView() {
   const rows = _.values(books);
   const cols = _(_.first(rows))
     .keys()
-    .filter((k) => k !== "id")
+    // .filter((k) => k !== "id")
     .map((k) => {
       return { name: k, title: titleize(k) };
     })

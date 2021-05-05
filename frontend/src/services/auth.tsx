@@ -28,6 +28,7 @@ export enum UserType {
 }
 
 export type AuthedUser = {
+  user_id: number;
   username: string;
   user_type: UserType;
 };
@@ -37,6 +38,14 @@ export function useUser() {
   const isAdmin = r.data ? r.data.user_type === UserType.admin : undefined;
   return {
     isAdmin,
+    ...r,
+  };
+}
+
+export function useUsers() {
+  const r = useFetch<Record<number, AuthedUser>>("/users/");
+  return {
+    users: r.data,
     ...r,
   };
 }

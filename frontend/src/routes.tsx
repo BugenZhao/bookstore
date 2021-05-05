@@ -18,7 +18,7 @@ import {
 import { useUser } from "./services/auth";
 
 function SignedInRoute(props: PropsWithChildren<RouteProps>) {
-  const { data, error } = useUser();
+  const { error } = useUser();
   if (error) {
     return <Redirect to="/login" />;
   } else {
@@ -27,7 +27,7 @@ function SignedInRoute(props: PropsWithChildren<RouteProps>) {
 }
 
 function AdminRoute(props: PropsWithChildren<RouteProps>) {
-  const isAdmin = useUser().isAdmin ?? false;
+  const isAdmin = useUser().isAdmin ?? true;
   if (isAdmin) {
     return <Route {...props}>{props.children}</Route>;
   } else {

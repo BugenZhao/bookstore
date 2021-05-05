@@ -3,7 +3,7 @@ import { Main } from "./common/Main";
 import { Body } from "./common/Body";
 import { BookManagementView } from "../views/BookManagementView";
 import { UserManagementView } from "../views/UserManagementView";
-import { Badge, Button, Tab, Tabs } from "react-bootstrap";
+import { Button, Tab, Tabs } from "react-bootstrap";
 import { useState } from "react";
 
 export function DashboardPage() {
@@ -44,13 +44,12 @@ function DashboardMain() {
     <div>
       <div className="d-flex justify-content-between">
         <span className="h1">Dashboard</span>
-        {key === "books" ? (
-          <ResetBooksButton />
-        ) : (
-          <h4 className="align-self-center">
-            <Badge bg="info">Demo</Badge>
-          </h4>
-        )}
+        {
+          key === "books" ? <ResetBooksButton /> : null
+          // <h4 className="align-self-center">
+          //   <Badge bg="info">Demo</Badge>
+          // </h4>
+        }
       </div>
       <div className="py-4">
         <Tabs
