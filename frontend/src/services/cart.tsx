@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { delete_, put, useFetch } from ".";
+import { delete_, post, put, useFetch } from ".";
 import { Book } from "./book";
 
 export type Cart = {
@@ -35,4 +35,8 @@ export function deleteFromCart(id: string) {
 
 export function emptyCart() {
   return delete_("/cart");
+}
+
+export function checkout() {
+  return post("/cart/checkout");
 }
