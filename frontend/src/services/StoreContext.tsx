@@ -1,15 +1,11 @@
 import { createContext, PropsWithChildren, useContext, useState } from "react";
 import _ from "lodash";
 
-export const ADMINS = ["Bugen", "Admin"];
-
-export type Cart = Record<string, number>;
 type StoreContextType = {
-  clearCart: () => void;
   signedOut: boolean;
   setSignedOut: (s: boolean) => void;
 };
-export const StoreContext = createContext<StoreContextType>(null!);
+export const StoreContext = createContext<StoreContextType>(undefined!);
 export function useStore() {
   return useContext(StoreContext);
 }
@@ -20,7 +16,6 @@ export function StoreProvider(props: PropsWithChildren<{}>) {
   return (
     <StoreContext.Provider
       value={{
-        clearCart: () => {},
         signedOut,
         setSignedOut,
       }}

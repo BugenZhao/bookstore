@@ -4,8 +4,7 @@ import { Body } from "./common/Body";
 import { BookManagementView } from "../views/BookManagementView";
 import { UserManagementView } from "../views/UserManagementView";
 import { Badge, Button, Tab, Tabs } from "react-bootstrap";
-import { useContext, useState } from "react";
-import { ALL_BOOKS, BooksContext } from "../services/BooksContext";
+import { useState } from "react";
 
 export function DashboardPage() {
   return (
@@ -19,7 +18,6 @@ export function DashboardPage() {
 }
 
 function ResetBooksButton() {
-  const { setBOOKS } = useContext(BooksContext);
   const [rep, setRep] = useState(false);
 
   return (
@@ -29,7 +27,7 @@ function ResetBooksButton() {
       className="align-self-center"
       onClick={() => {
         if (rep) {
-          setBOOKS(ALL_BOOKS);
+          // setBOOKS(ALL_BOOKS);
         }
         setRep(!rep);
       }}

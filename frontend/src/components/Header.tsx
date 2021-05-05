@@ -45,7 +45,7 @@ export function Header({
             >
               Books
             </Nav.Link>
-            <Nav.Link as={Link} to="/checkout" active={active === "orders"}>
+            <Nav.Link as={Link} to="/checkout" active={active === "cart"}>
               <div className={`d-flex align-items-center`}>
                 <span className="me-1">My Cart</span>
                 <Bounce>
@@ -77,7 +77,7 @@ function NavUserItem() {
 
   return (
     <OverlayTrigger
-      overlay={<Tooltip id="signout-tooltip">Sign out</Tooltip>}
+      overlay={<Tooltip id="signout-tooltip">Click to sign out</Tooltip>}
       placement="auto"
     >
       <Nav.Link

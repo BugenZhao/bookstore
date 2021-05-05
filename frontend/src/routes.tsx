@@ -19,7 +19,6 @@ import { useUser } from "./services/auth";
 
 function SignedInRoute(props: PropsWithChildren<RouteProps>) {
   const { data, error } = useUser();
-  console.log(data, error);
   if (error) {
     return <Redirect to="/login" />;
   } else {

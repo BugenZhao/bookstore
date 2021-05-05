@@ -32,7 +32,7 @@ function CartItem({ book, count }: { book: Book; count: number }) {
           <Badge
             pill
             as={Button}
-            variant="secondary"
+            variant="danger"
             onClick={async (e) => {
               e.preventDefault();
               await deleteFromCart(book.id.toString());
