@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { delete_, put, useFetch } from ".";
-import { Book } from "./BooksContext";
+import { Book } from "./book";
 
 export type Cart = {
   books: { book: Book; count: number }[];

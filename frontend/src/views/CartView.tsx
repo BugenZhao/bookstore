@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 import _ from "lodash";
-import { Book } from "../services/BooksContext";
+import { Book } from "../services/book";
 import { Link } from "react-router-dom";
 import { Badge, Button, Col, Image, ListGroup, Row } from "react-bootstrap";
 import { deleteFromCart, emptyCart, useCart } from "../services/cart";

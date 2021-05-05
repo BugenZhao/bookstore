@@ -4,10 +4,9 @@ import { Header } from "../components/Header";
 import { BookDetailView } from "../views/BookDetailView";
 import { Main } from "./common/Main";
 import { Body } from "./common/Body";
-import { Book } from "../services/BooksContext";
 import { Fade } from "react-awesome-reveal";
 import { Row, Spinner } from "react-bootstrap";
-import { useFetch } from "../services";
+import { useBook } from "../services/book";
 
 export function DetailPage(
   props: RouteComponentProps<{
@@ -27,7 +26,7 @@ export function DetailPage(
 }
 
 function DetailMain({ id }: { id: string }) {
-  const { data: book } = useFetch<Book>(`/books/${id}`);
+  const { book } = useBook(id);
 
   if (!book) {
     return (

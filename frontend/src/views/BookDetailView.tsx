@@ -1,6 +1,6 @@
 import { ButtonGroup, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { Book } from "../services/BooksContext";
+import { Book } from "../services/book";
 import { putCart, useCart } from "../services/cart";
 
 export function BookDetailView({ book }: { book: Book }) {

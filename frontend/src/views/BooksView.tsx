@@ -2,11 +2,10 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useRouteMatch } from "react-router-dom";
 import _ from "lodash";
 import { BookCard } from "../components/BookCard";
-import { BookDict } from "../services/BooksContext";
 import { SearchPageParams } from "../routes";
 import { Fade } from "react-awesome-reveal";
-import { useFetch } from "../services";
 import { Row, Spinner } from "react-bootstrap";
+import { useBooks } from "../services/book";
 
 const PER_PAGE = 12;
 
@@ -48,7 +47,7 @@ function Pagination() {
 function Books() {
   const { setTotal, page } = useContext(GalleryContext);
   const keyword = useRouteMatch<SearchPageParams>().params.keyword ?? "";
-  const { data: allBooks } = useFetch<BookDict>("/books");
+  const { books: allBooks } = useBooks();
 
   const allBooksIter = _(allBooks).filter((book) =>
     _(book).values().join().includes(keyword)
