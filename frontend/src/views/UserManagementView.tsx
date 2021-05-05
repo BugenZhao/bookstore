@@ -6,6 +6,7 @@ export function UserManagementView() {
   const { users } = useUsers();
   const rows = _.values(users).map((user) => {
     return {
+      id: user.user_id,
       admin: user.user_type === UserType.admin,
       ...user,
     };
