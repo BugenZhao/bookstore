@@ -23,7 +23,7 @@ export function useBook(id: string) {
 }
 
 export function useBooks() {
-  const r = useFetch<BookDict>(`/books`);
+  const r = useFetch<BookDict>(`/books/`);
   return {
     books: r.data,
     ...r,

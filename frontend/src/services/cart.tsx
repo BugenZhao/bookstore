@@ -9,7 +9,7 @@ export type Cart = {
 };
 
 export function useCart() {
-  const r = useFetch<Cart>("/cart");
+  const r = useFetch<Cart>("/cart/");
   const cartCount =
     r.data !== undefined
       ? _(r.data.books)
@@ -34,7 +34,7 @@ export function deleteFromCart(id: string) {
 }
 
 export function emptyCart() {
-  return delete_("/cart");
+  return delete_("/cart/");
 }
 
 export function checkout() {
