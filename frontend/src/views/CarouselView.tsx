@@ -1,6 +1,6 @@
 import { Fade } from "react-awesome-reveal";
 import { Carousel } from "react-bootstrap";
-import { useFetch } from "../services";
+import { useCarousels } from "../services/carousel";
 
 function CarouselItem(url: string) {
   return (
@@ -11,7 +11,7 @@ function CarouselItem(url: string) {
 }
 
 export function CarouselView() {
-  const paths = useFetch<string[]>("/carousels/").data ?? [];
+  const paths = useCarousels().carousels;
   const items = paths.map((url) => CarouselItem(url));
 
   return (

@@ -7,7 +7,13 @@ export type SelectContextType<T> = {
 };
 
 export function useFetch<Data>(path: string) {
-  const fetcher = (url: string) => fetch(url).then((res) => res.json());
+  const fetcher = async (url: string) => {
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw res.json();
+    }
+    return res.json();
+  };
   const url = API_BASE + path;
 
   return useSWR<Data, any>(url, fetcher);

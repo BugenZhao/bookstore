@@ -11,15 +11,15 @@ export type Cart = {
 export function useCart() {
   const r = useFetch<Cart>("/cart/");
   const cartCount =
-    r.data !== undefined
+    r.data && !r.error
       ? _(r.data.books)
           .map((b) => b.count)
           .sum()
       : 0;
   return {
-    books: r.data?.books ?? [],
-    discount: r.data?.discount ?? 0,
-    total: r.data?.total ?? 0,
+    books: (r.error ? undefined : r.data?.books) ?? [],
+    discount: (r.error ? undefined : r.data?.discount) ?? 0,
+    total: (r.error ? undefined : r.data?.total) ?? 0,
     cartCount,
     ...r,
   };

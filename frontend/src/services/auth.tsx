@@ -35,7 +35,8 @@ export type AuthedUser = {
 
 export function useUser() {
   const r = useFetch<AuthedUser>("/users/check");
-  const isAdmin = r.data ? r.data.user_type === UserType.admin : undefined;
+  const isAdmin =
+    r.data && !r.error ? r.data.user_type === UserType.admin : undefined;
   return {
     isAdmin,
     ...r,
@@ -45,7 +46,7 @@ export function useUser() {
 export function useUsers() {
   const r = useFetch<Record<number, AuthedUser>>("/users/");
   return {
-    users: r.data,
+    users: r.error ? undefined : r.data,
     ...r,
   };
 }

@@ -17,7 +17,7 @@ export type BookDict = Record<string, Book>;
 export function useBook(id: string) {
   const r = useFetch<Book>(`/books/${id}`);
   return {
-    book: r.data,
+    book: r.error ? undefined : r.data,
     ...r,
   };
 }
@@ -25,7 +25,7 @@ export function useBook(id: string) {
 export function useBooks() {
   const r = useFetch<BookDict>(`/books/`);
   return {
-    books: r.data,
+    books: r.error ? undefined : r.data,
     ...r,
   };
 }
