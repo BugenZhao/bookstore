@@ -1,5 +1,6 @@
 import { Fade } from "react-awesome-reveal";
 import { Carousel } from "react-bootstrap";
+import { useCarousels } from "../services/carousel";
 
 function CarouselItem(url: string) {
   return (
@@ -10,12 +11,8 @@ function CarouselItem(url: string) {
 }
 
 export function CarouselView() {
-  const items = [
-    "static/book1.jpg",
-    "static/book2.jpg",
-    "static/book3.jpg",
-    "static/book4.jpg",
-  ].map((url) => CarouselItem(url));
+  const paths = useCarousels().carousels;
+  const items = paths.map((url) => CarouselItem(url));
 
   return (
     <Fade triggerOnce>

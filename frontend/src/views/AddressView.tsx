@@ -60,7 +60,6 @@ function AddNewAddressModal() {
         <Form
           onSubmit={handleSubmit((data) => {
             alert(JSON.stringify(data));
-            console.log(data);
             setModalShow(false);
           })}
           id="add-new-address-form"

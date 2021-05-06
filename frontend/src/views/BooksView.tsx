@@ -1,10 +1,11 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useRouteMatch } from "react-router-dom";
 import _ from "lodash";
 import { BookCard } from "../components/BookCard";
-import { BooksContext } from "../services/BooksContext";
 import { SearchPageParams } from "../routes";
 import { Fade } from "react-awesome-reveal";
+import { Row, Spinner } from "react-bootstrap";
+import { useBooks } from "../services/book";
 
 const PER_PAGE = 12;
 
@@ -44,31 +45,41 @@ function Pagination() {
 }
 
 function Books() {
-  const { BOOKS } = useContext(BooksContext);
   const { setTotal, page } = useContext(GalleryContext);
   const keyword = useRouteMatch<SearchPageParams>().params.keyword ?? "";
+  const { books: allBooks } = useBooks();
 
-  const allBooksIter = _(BOOKS)
-    .filter((book) => _(book).values().join().includes(keyword))
+  const allBooksIter = _(allBooks).filter((book) =>
+    _(book).values().join().includes(keyword)
+  );
+  useEffect(() => setTotal(allBooksIter.size()));
+
+  if (!allBooks) {
+    return (
+      <Row className="justify-content-center mt-5">
+        <Spinner animation="border" variant="primary" />
+      </Row>
+    );
+  }
+
+  const booksThisPage = allBooksIter
     .map((book) => (
       <div key={`book${book.id}`} className="col">
         <BookCard book={book} withLink />
       </div>
-    ));
-
-  const books = allBooksIter
+    ))
     .drop((page - 1) * PER_PAGE)
     .take(PER_PAGE)
     .value();
-
-  useEffect(() => setTotal(allBooksIter.size()));
 
   return (
     <div
       className="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-3"
       id="books"
     >
-      <Fade cascade damping={0.025} triggerOnce>{books}</Fade>
+      <Fade cascade damping={0.025} triggerOnce>
+        {booksThisPage}
+      </Fade>
     </div>
   );
 }
@@ -89,7 +100,7 @@ export function BooksView() {
   return (
     <GalleryContext.Provider value={{ total, setTotal, page, setPage }}>
       <div>
-        <Books></Books>
+        <Books />
         <Pagination />
       </div>
     </GalleryContext.Provider>

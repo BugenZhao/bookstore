@@ -14,20 +14,21 @@ import {
   DashboardPage,
   LoginPage,
   RegisterPage,
+  OrdersPage,
 } from "./pages";
-import { useStore } from "./services/StoreContext";
+import { useUser } from "./services/auth";
 
 function SignedInRoute(props: PropsWithChildren<RouteProps>) {
-  const { isSignedIn } = useStore();
-  if (isSignedIn) {
-    return <Route {...props}>{props.children}</Route>;
-  } else {
+  const { error } = useUser();
+  if (error) {
     return <Redirect to="/login" />;
+  } else {
+    return <Route {...props}>{props.children}</Route>;
   }
 }
 
 function AdminRoute(props: PropsWithChildren<RouteProps>) {
-  const { isAdmin } = useStore();
+  const isAdmin = useUser().isAdmin ?? true;
   if (isAdmin) {
     return <Route {...props}>{props.children}</Route>;
   } else {
@@ -48,6 +49,7 @@ export function BSRoutes() {
         <SignedInRoute path="/detail/:id" component={DetailPage} />
         <SignedInRoute path="/home" component={HomePage} />
         <SignedInRoute path="/search/:keyword?" component={SearchPage} />
+        <SignedInRoute path="/orders" component={OrdersPage} />
         <AdminRoute path="/dashboard" component={DashboardPage} />
       </Switch>
     </Router>

@@ -1,31 +1,28 @@
 import _ from "lodash";
-import { useState } from "react";
-import { useStore } from "../services/StoreContext";
+import { UserType, useUsers } from "../services/auth";
 import { ManagementView } from "./ManagementView";
 
 export function UserManagementView() {
-  const { user: currentUser } = useStore();
-  const [user, setUser] = useState(currentUser);
-
-  const rows = [{ id: "0", user: user, active: true }];
+  const { users } = useUsers();
+  const rows = _.values(users).map((user) => {
+    return {
+      id: user.user_id,
+      admin: user.user_type === UserType.admin,
+      ...user,
+    };
+  });
   const cols = [
-    { name: "user", title: "User" },
-    { name: "active", title: "Active" },
+    { name: "user_id", title: "User ID" },
+    { name: "username", title: "Username" },
+    { name: "admin", title: "Admin" },
   ];
 
   return (
     <ManagementView
       rows={rows}
       cols={cols}
-      booleanCols={["active"]}
-      onCommitChanges={({ changed }) => {
-        if (changed && _.size(changed) > 0) {
-          const newUser: string | undefined = _(changed).values().first().user;
-          if (newUser) {
-            setUser(newUser);
-          }
-        }
-      }}
+      booleanCols={["admin"]}
+      onCommitChanges={() => {}}
     ></ManagementView>
   );
 }

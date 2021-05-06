@@ -1,6 +1,7 @@
 import { PropsWithChildren } from "react";
 import { Link } from "react-router-dom";
 import { Fade } from "react-awesome-reveal";
+import { Button } from "react-bootstrap";
 
 function LoginRegTitle({
   isSignIn,
@@ -29,9 +30,11 @@ export function LoginRegView({
   isSignIn,
   children,
   onSubmit,
+  isProcessing,
 }: PropsWithChildren<{
   isSignIn: boolean;
   onSubmit: () => void;
+  isProcessing: boolean;
 }>) {
   return (
     <>
@@ -40,9 +43,17 @@ export function LoginRegView({
           <LoginRegTitle isSignIn={isSignIn} />
           <form onSubmit={onSubmit}>
             {children}
-            <button className="btn btn-dark w-100 btn-lg" type="submit">
-              {isSignIn ? "Sign in" : "Sign up"}
-            </button>
+            <Button
+              className="w-100 mt-3"
+              variant="dark"
+              size="lg"
+              type="submit"
+              disabled={isProcessing}
+            >
+              {isProcessing ? "Signing " : "Sign "}
+              {isSignIn ? "in" : "up"}
+              {isProcessing ? "..." : ""}
+            </Button>
           </form>
         </Fade>
       </main>

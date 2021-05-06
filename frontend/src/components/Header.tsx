@@ -15,16 +15,17 @@ import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import { SearchPageParams } from "../routes";
 import { useStore } from "../services/StoreContext";
 import _ from "lodash";
+import { postLogout, useUser } from "../services/auth";
+import { useCart } from "../services/cart";
 
 export function Header({
   active,
 }: {
   active: "home" | "detail" | "search" | "cart" | "orders" | "dashboard";
 }) {
-  const { getCartCount, isAdmin } = useStore();
+  const { cartCount } = useCart();
+  const isAdmin = useUser().isAdmin ?? false;
   const keyword = useRouteMatch<SearchPageParams>().params.keyword ?? "";
-
-  const cartCount = getCartCount();
 
   return (
     <Navbar bg="white" expand="lg" className="shadow-sm fixed-top">
@@ -44,7 +45,7 @@ export function Header({
             >
               Books
             </Nav.Link>
-            <Nav.Link as={Link} to="/checkout" active={active === "orders"}>
+            <Nav.Link as={Link} to="/checkout" active={active === "cart"}>
               <div className={`d-flex align-items-center`}>
                 <span className="me-1">My Cart</span>
                 <Bounce>
@@ -54,7 +55,7 @@ export function Header({
                 </Bounce>
               </div>
             </Nav.Link>
-            <Nav.Link as={Link} to="#" active={active === "orders"}>
+            <Nav.Link as={Link} to="/orders" active={active === "orders"}>
               My Orders
             </Nav.Link>
 
@@ -70,23 +71,25 @@ export function Header({
 }
 
 function NavUserItem() {
-  const { user, setUser, setSignedOut } = useStore();
+  const { setSignedOut } = useStore();
   const history = useHistory();
+  const { data: user, revalidate } = useUser();
 
   return (
     <OverlayTrigger
-      overlay={<Tooltip id="signout-tooltip">Sign out</Tooltip>}
+      overlay={<Tooltip id="signout-tooltip">Click to sign out</Tooltip>}
       placement="auto"
     >
       <Nav.Link
-        onClick={() => {
-          setUser("");
+        onClick={async () => {
+          await postLogout();
+          await revalidate();
           setSignedOut(true);
           history.push("/login");
         }}
       >
         <span>Hi, </span>
-        <span className="fw-bold">{user}</span>
+        <span className="fw-bold">{user?.username ?? "???"}</span>
       </Nav.Link>
     </OverlayTrigger>
   );

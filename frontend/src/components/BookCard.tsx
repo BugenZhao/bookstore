@@ -1,6 +1,6 @@
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { Book } from "../services/BooksContext";
+import { Book } from "../services/book";
 
 export function BookCard({
   book,
