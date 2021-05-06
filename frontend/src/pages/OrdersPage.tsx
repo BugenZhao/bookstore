@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { ListGroup, Image, Table, Row, Col } from "react-bootstrap";
+import { Table, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Header } from "../components/Header";
 import { Order, useOrders } from "../services/order";
