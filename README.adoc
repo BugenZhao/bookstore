@@ -2,14 +2,10 @@
 BugenZhao <bugenzhao@sjtu.edu.cn>
 :hide-uri-scheme:
 
-== Preview
-On GitHub Pages::
-    `http://bookstore.bugenzhao.com`
+== Frontend
+- _TypeScript_ is awesome! 😍
+- Built with _React_ and `react-bootstrap`.
 
-== TODO
-.Frontend
-- [ ] Refactor using `react-bootstrap`
-- [ ] Redesign detail page
-
-.Backend
-- [ ] _TBD_
+== Backend
+- _Spring_ is difficult! 😭
+- See link:https://github.com/BugenZhao/bookstore-rocket[BugenZhao/bookstore-rocket] to get a much simpler one.
