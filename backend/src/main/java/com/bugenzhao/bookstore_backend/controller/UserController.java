@@ -7,9 +7,10 @@ import com.bugenzhao.bookstore_backend.utils.SessionUtils;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,13 +24,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping("/check")
+    @GetMapping("/check")
     public AuthedUser check(HttpServletRequest request) throws Exception {
         var authedUser = SessionUtils.getAuth(request);
         return authedUser;
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody LoginInfo info, HttpServletRequest request) throws Exception {
         return userService.checkLoginInfo(info).map((userAuth) -> {
             var authedUser = new AuthedUser(userAuth.userId, userAuth.username, userAuth.userType);
@@ -38,7 +39,7 @@ public class UserController {
         }).orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null));
     }
 
-    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    @PostMapping("/logout")
     public void logout(HttpServletRequest request) {
         SessionUtils.removeAuth(request);
     }

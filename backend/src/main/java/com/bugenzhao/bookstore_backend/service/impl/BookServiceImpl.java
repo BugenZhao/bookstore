@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.bugenzhao.bookstore_backend.entity.Book;
-import com.bugenzhao.bookstore_backend.rowmapper.BookRowMapper;
+import com.bugenzhao.bookstore_backend.entity.rowmapper.BookRowMapper;
 import com.bugenzhao.bookstore_backend.service.BookService;
 
 import org.springframework.jdbc.core.JdbcTemplate;

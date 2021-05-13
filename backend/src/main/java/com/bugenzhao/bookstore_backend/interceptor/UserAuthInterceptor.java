@@ -1,4 +1,4 @@
-package com.bugenzhao.bookstore_backend.config.interceptor;
+package com.bugenzhao.bookstore_backend.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -7,9 +7,12 @@ import com.bugenzhao.bookstore_backend.entity.Book;
 import com.bugenzhao.bookstore_backend.service.BookService;
 import com.bugenzhao.bookstore_backend.service.CartService;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 class BookWithCount {
@@ -45,7 +48,7 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    @RequestMapping("/")
+    @GetMapping("/")
     public CartResponse getCart() {
         var cart = cartService.get();
         var books = cart.entrySet().stream()
@@ -57,22 +60,22 @@ public class CartController {
         return new CartResponse(books, discount, total - discount);
     }
 
-    @RequestMapping(value = "/{bookId}", method = RequestMethod.PUT)
+    @PutMapping("/{bookId}")
     public void putABook(@PathVariable int bookId) {
         cartService.addABook(bookId);
     }
 
-    @RequestMapping(value = "/{bookId}", method = RequestMethod.DELETE)
+    @DeleteMapping("/{bookId}")
     public void deleteBooks(@PathVariable int bookId) {
         cartService.deleteBooks(bookId);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.DELETE)
+    @DeleteMapping("/")
     public void emptyCart() {
         cartService.empty();
     }
 
-    @RequestMapping(value = "/checkout", method = RequestMethod.POST)
+    @PostMapping("/checkout")
     public void checkout() {
         emptyCart();
     }

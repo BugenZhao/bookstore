@@ -5,6 +5,7 @@ import com.bugenzhao.bookstore_backend.service.BookService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,12 +23,12 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @RequestMapping("/")
+    @GetMapping("/")
     public Map<Integer, Book> getAllBooks() throws Exception {
         return bookService.findAll().stream().collect(Collectors.toMap((b) -> b.id, Function.identity()));
     }
 
-    @RequestMapping("/{bookId}")
+    @GetMapping("/{bookId}")
     public ResponseEntity<Book> getBook(@PathVariable int bookId) throws Exception {
         return bookService.findById(bookId).map((book) -> ResponseEntity.ok(book))
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
