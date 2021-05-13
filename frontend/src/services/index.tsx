@@ -19,17 +19,21 @@ export function useFetch<Data>(path: string) {
   return useSWR<Data, any>(url, fetcher);
 }
 
+const headers = {
+  "Content-type": "application/json; charset=UTF-8",
+};
+
 export function post(path: string, body?: BodyInit | null) {
   const url = API_BASE + path;
-  return fetch(url, { method: "POST", body: body });
+  return fetch(url, { method: "POST", body: body, headers: headers });
 }
 
 export function put(path: string, body?: BodyInit | null) {
   const url = API_BASE + path;
-  return fetch(url, { method: "PUT", body: body });
+  return fetch(url, { method: "PUT", body: body, headers: headers });
 }
 
 export function delete_(path: string, body?: BodyInit | null) {
   const url = API_BASE + path;
-  return fetch(url, { method: "DELETE", body: body });
+  return fetch(url, { method: "DELETE", body: body, headers: headers });
 }
