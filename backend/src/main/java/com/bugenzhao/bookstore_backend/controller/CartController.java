@@ -1,11 +1,12 @@
 package com.bugenzhao.bookstore_backend.controller;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
-import com.bugenzhao.bookstore_backend.entity.Book;
+import com.bugenzhao.bookstore_backend.entity.BookWithCount;
+import com.bugenzhao.bookstore_backend.entity.Cart;
 import com.bugenzhao.bookstore_backend.service.BookService;
 import com.bugenzhao.bookstore_backend.service.CartService;
+import com.bugenzhao.bookstore_backend.service.OrderService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,41 +16,21 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-class BookWithCount {
-    public Book book;
-    public int count;
-
-    public BookWithCount(Book book, int count) {
-        this.book = book;
-        this.count = count;
-    }
-}
-
-class CartResponse {
-    public List<BookWithCount> books;
-    public double discount;
-    public double total;
-
-    public CartResponse(List<BookWithCount> books, double discount, double total) {
-        this.books = books;
-        this.discount = discount;
-        this.total = total;
-    }
-}
-
 @RestController
 @RequestMapping("/cart/")
 public class CartController {
-    BookService bookService;
-    CartService cartService;
+    final BookService bookService;
+    final CartService cartService;
+    final OrderService orderService;
 
-    public CartController(BookService bookService, CartService cartService) {
+    public CartController(BookService bookService, CartService cartService, OrderService orderService) {
         this.bookService = bookService;
         this.cartService = cartService;
+        this.orderService = orderService;
     }
 
     @GetMapping("/")
-    public CartResponse getCart() {
+    public Cart getCart() {
         var cart = cartService.get();
         var books = cart.entrySet().stream()
                 .map((e) -> new BookWithCount(bookService.findById(e.getKey()).get(), e.getValue()))
@@ -57,7 +38,7 @@ public class CartController {
         var total = books.stream().map((b) -> b.book.price * b.count).reduce(0.0, Double::sum);
         var discount = Double.min(total * 0.3, 100.0);
 
-        return new CartResponse(books, discount, total - discount);
+        return new Cart(books, discount, total - discount);
     }
 
     @PutMapping("/{bookId}")
@@ -77,6 +58,8 @@ public class CartController {
 
     @PostMapping("/checkout")
     public void checkout() {
+        var cart = getCart();
+        orderService.newOrder(cart);
         emptyCart();
     }
 }
