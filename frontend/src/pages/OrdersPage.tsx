@@ -23,7 +23,7 @@ export function OrderItem({
   order: Order;
 }>) {
   const cartItems = order.cart.books.map((b) => (
-    <Row>
+    <Row key={b.book.id}>
       <Link to={`/detail/${b.book.id}`} className="d-flex nav-link">
         <span className="me-auto">{b.book.name}</span>
         <span className="text-muted">x{b.count}</span>
@@ -46,7 +46,9 @@ export function OrderItem({
 export function OrdersMain() {
   const { orders } = useOrders();
 
-  const orderItems = orders.map((order) => <OrderItem order={order} />);
+  const orderItems = orders.map((order) => (
+    <OrderItem order={order} key={order.id} />
+  ));
 
   return (
     <>

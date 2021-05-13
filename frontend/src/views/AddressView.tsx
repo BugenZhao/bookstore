@@ -3,11 +3,11 @@ import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { SelectContextType } from "../services";
 
-type AddressContextType = SelectContextType<number> & {
+type AddressContextType = SelectContextType<Address | undefined> & {
   modalShow: boolean;
   setModalShow: (b: boolean) => void;
 };
-const AddressContext = createContext<AddressContextType>(null!);
+const AddressContext = createContext<AddressContextType>(undefined!);
 
 export type NewAddressData = {
   name: string;
@@ -26,9 +26,9 @@ function AddressItem({ address }: { address: Address }) {
 
   return (
     <button
-      onClick={() => setSelected(address.id)}
+      onClick={() => setSelected(address)}
       className={`list-group-item list-group-item-action ${
-        selected === address.id ? "active" : ""
+        (selected?.id ?? 0) === address.id ? "active" : ""
       }`}
     >
       <div className="d-flex w-100 justify-content-between align-items-center">
@@ -137,7 +137,7 @@ function AddNewAddressItem() {
 }
 
 export function AddressView() {
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState<Address>();
   const [modalShow, setModalShow] = useState(false);
 
   return (

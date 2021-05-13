@@ -6,14 +6,16 @@ import { PaymentView } from "../views/PaymentView";
 import { AddressView } from "../views/AddressView";
 import { Fade } from "react-awesome-reveal";
 import { checkout, useCart } from "../services/cart";
-import { Modal } from "react-bootstrap";
+import { Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
 function CheckoutMain() {
-  const { revalidate } = useCart();
+  const { cartCount, revalidate } = useCart();
   const [modalShow, setModalShow] = useState(false);
   const [processing, setProcessing] = useState(false);
+
+  const noBook = cartCount === 0;
 
   return (
     <div>
@@ -41,19 +43,32 @@ function CheckoutMain() {
           <PaymentView />
           <hr className="my-4" />
           <div className="d-flex justify-content-end">
-            <button
-              className="btn btn-primary btn-lg col-12 col-lg-3"
-              type="submit"
-              disabled={processing}
-              onClick={async () => {
-                setProcessing(true);
-                await checkout();
-                await revalidate();
-                setModalShow(true);
-              }}
+            <OverlayTrigger
+              overlay={
+                <Tooltip id="no-book-tooltip">
+                  There's no book in the cart
+                </Tooltip>
+              }
+              placement="bottom"
+              show={noBook}
             >
-              {processing ? "Processing..." : "Checkout"}
-            </button>
+              <button
+                className="btn btn-primary btn-lg col-12 col-lg-3"
+                type="submit"
+                disabled={processing || noBook}
+                onClick={async () => {
+                  setProcessing(true);
+                  const result = await checkout();
+                  await revalidate();
+                  if (result.ok) {
+                    setModalShow(true);
+                  }
+                  setProcessing(false);
+                }}
+              >
+                {processing ? "Processing..." : "Checkout"}
+              </button>
+            </OverlayTrigger>
           </div>
         </div>
       </div>
