@@ -8,6 +8,8 @@ import com.bugenzhao.bookstore_backend.service.BookService;
 import com.bugenzhao.bookstore_backend.service.CartService;
 import com.bugenzhao.bookstore_backend.service.OrderService;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,9 +59,14 @@ public class CartController {
     }
 
     @PostMapping("/checkout")
-    public void checkout() {
+    public ResponseEntity<Void> checkout() {
         var cart = getCart();
-        orderService.newOrder(cart);
-        emptyCart();
+        var ok = orderService.newOrder(cart);
+        if (ok) {
+            emptyCart();
+            return ResponseEntity.ok(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(null);
+        }
     }
 }

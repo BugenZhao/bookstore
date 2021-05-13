@@ -8,5 +8,5 @@ import com.bugenzhao.bookstore_backend.entity.Order;
 public interface OrderService {
     List<Order> findAll();
 
-    void newOrder(Cart cart);
+    boolean newOrder(Cart cart);
 }

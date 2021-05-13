@@ -29,7 +29,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void newOrder(Cart cart) {
+    public boolean newOrder(Cart cart) {
+        if (cart.books.isEmpty()) {
+            return false;
+        }
         var datetime = Date.from(Instant.now());
         var datetimeFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         var id = datetimeFormat.format(datetime);
@@ -38,5 +41,6 @@ public class OrderServiceImpl implements OrderService {
 
         var order = new Order(id, datetime, cart, consignee, status);
         orders.add(order);
+        return true;
     }
 }
