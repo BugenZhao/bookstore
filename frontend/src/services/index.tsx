@@ -10,7 +10,7 @@ export function useFetch<Data>(path: string) {
   const fetcher = async (url: string) => {
     const res = await fetch(url);
     if (!res.ok) {
-      throw res.json();
+      throw res;
     }
     return res.json();
   };
