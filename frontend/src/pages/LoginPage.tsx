@@ -101,7 +101,7 @@ export function LoginPage() {
             Please try again.
           </Form.Control.Feedback>
         ) : null}
-        
+
         <Form.Switch className="mt-3" label="Remember me" defaultChecked />
       </LoginRegView>
     </>

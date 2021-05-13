@@ -36,7 +36,7 @@ export function OrderItem({
       <td className="align-middle">{order.id}</td>
       <td className="align-middle">{order.datetime}</td>
       <td className="align-middle w-25">{cartItems}</td>
-      <td className="align-middle">¥{order.cart.total}</td>
+      <td className="align-middle">¥{order.cart.total.toFixed(2)}</td>
       <td className="align-middle">{order.consignee}</td>
       <td className="align-middle">{order.status}</td>
     </tr>
@@ -44,7 +44,7 @@ export function OrderItem({
 }
 
 export function OrdersMain() {
-  const orders = useOrders();
+  const { orders } = useOrders();
 
   const orderItems = orders.map((order) => <OrderItem order={order} />);
 
