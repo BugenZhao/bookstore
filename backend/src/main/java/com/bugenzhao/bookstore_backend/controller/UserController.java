@@ -2,12 +2,11 @@ package com.bugenzhao.bookstore_backend.controller;
 
 import com.bugenzhao.bookstore_backend.entity.AuthedUser;
 import com.bugenzhao.bookstore_backend.entity.LoginInfo;
-import com.bugenzhao.bookstore_backend.rowmapper.UserAuthRowMapper;
+import com.bugenzhao.bookstore_backend.service.UserService;
 import com.bugenzhao.bookstore_backend.utils.SessionUtils;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,10 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/users/")
 public class UserController {
-    JdbcTemplate jdbcTemplate;
+    UserService userService;
 
-    public UserController(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @RequestMapping("/check")
@@ -32,16 +31,11 @@ public class UserController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<Void> login(@RequestBody LoginInfo info, HttpServletRequest request) throws Exception {
-        var userAuths = jdbcTemplate.query("select * from user_auths where username = ? and password = ?",
-                new UserAuthRowMapper(), info.username, info.password);
-        if (!userAuths.isEmpty()) {
-            var userAuth = userAuths.get(0);
+        return userService.checkLoginInfo(info).map((userAuth) -> {
             var authedUser = new AuthedUser(userAuth.userId, userAuth.username, userAuth.userType);
             SessionUtils.setAuth(request, authedUser);
-            return ResponseEntity.ok(null);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
+            return ResponseEntity.ok((Void) null);
+        }).orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null));
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.POST)

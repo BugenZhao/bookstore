@@ -31,7 +31,7 @@ public class SessionUtils {
         if (session == null) {
             return false;
         }
-        session.removeAttribute(Constants.AUTHED_USER.name());
+        session.invalidate();
         return true;
     }
 }
