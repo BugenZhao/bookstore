@@ -1,15 +1,22 @@
 package com.bugenzhao.bookstore_backend.entity;
 
-public class UserAuth {
-    public int user_id;
-    public String username;
-    public String password;
-    public int user_type;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    public UserAuth(int user_id, String username, String password, int user_type) {
-        this.user_id = user_id;
+public class UserAuth {
+    @JsonProperty("user_id")
+    public int userId;
+
+    public String username;
+
+    public String password;
+
+    @JsonProperty("user_type")
+    public int userType;
+
+    public UserAuth(int userId, String username, String password, int userType) {
+        this.userId = userId;
         this.username = username;
         this.password = password;
-        this.user_type = user_type;
+        this.userType = userType;
     }
 }

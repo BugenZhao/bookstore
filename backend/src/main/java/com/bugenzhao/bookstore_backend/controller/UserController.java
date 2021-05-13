@@ -4,7 +4,6 @@ import com.bugenzhao.bookstore_backend.entity.AuthedUser;
 import com.bugenzhao.bookstore_backend.entity.LoginInfo;
 import com.bugenzhao.bookstore_backend.rowmapper.UserAuthRowMapper;
 import com.bugenzhao.bookstore_backend.utils.SessionUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,21 +25,22 @@ public class UserController {
     }
 
     @RequestMapping("/check")
-    public String check(HttpServletRequest request) throws Exception {
+    public AuthedUser check(HttpServletRequest request) throws Exception {
         var authedUser = SessionUtils.getAuth(request);
-        return new ObjectMapper().writeValueAsString(authedUser);
+        return authedUser;
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(@RequestBody LoginInfo info, HttpServletRequest request) throws Exception {
-        var userAuth = jdbcTemplate.queryForObject("select * from user_auths where username = ? and password = ?",
+    public ResponseEntity<Void> login(@RequestBody LoginInfo info, HttpServletRequest request) throws Exception {
+        var userAuths = jdbcTemplate.query("select * from user_auths where username = ? and password = ?",
                 new UserAuthRowMapper(), info.username, info.password);
-        if (userAuth != null) {
-            var authedUser = new AuthedUser(userAuth.user_id, userAuth.username, userAuth.user_type);
+        if (!userAuths.isEmpty()) {
+            var userAuth = userAuths.get(0);
+            var authedUser = new AuthedUser(userAuth.userId, userAuth.username, userAuth.userType);
             SessionUtils.setAuth(request, authedUser);
-            return new ObjectMapper().writeValueAsString(authedUser);
+            return ResponseEntity.ok(null);
         } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 
