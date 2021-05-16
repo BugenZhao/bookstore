@@ -1,10 +1,11 @@
-package com.bugenzhao.bookstore_backend.entity.rowmapper;
+package com.bugenzhao.bookstore_backend.entity.db.rowmapper;
 
-import com.bugenzhao.bookstore_backend.entity.Book;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import com.bugenzhao.bookstore_backend.entity.db.Book;
 
 public class BookRowMapper implements RowMapper<Book> {
     @Override

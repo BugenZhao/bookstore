@@ -1,5 +1,7 @@
 package com.bugenzhao.bookstore_backend.entity;
 
+import com.bugenzhao.bookstore_backend.entity.db.Book;
+
 public class BookWithCount {
     public Book book;
     public int count;

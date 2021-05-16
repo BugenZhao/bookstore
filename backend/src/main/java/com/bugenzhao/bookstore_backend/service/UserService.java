@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import com.bugenzhao.bookstore_backend.entity.LoginInfo;
 import com.bugenzhao.bookstore_backend.entity.RegisterInfo;
-import com.bugenzhao.bookstore_backend.entity.UserAuth;
+import com.bugenzhao.bookstore_backend.entity.db.UserAuth;
 
 public interface UserService {
     Optional<UserAuth> findByUsername(String username);

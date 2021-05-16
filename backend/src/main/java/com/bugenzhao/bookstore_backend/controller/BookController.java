@@ -1,6 +1,6 @@
 package com.bugenzhao.bookstore_backend.controller;
 
-import com.bugenzhao.bookstore_backend.entity.Book;
+import com.bugenzhao.bookstore_backend.entity.db.Book;
 import com.bugenzhao.bookstore_backend.service.BookService;
 
 import org.springframework.http.HttpStatus;

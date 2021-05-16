@@ -1,4 +1,4 @@
-package com.bugenzhao.bookstore_backend.entity;
+package com.bugenzhao.bookstore_backend.entity.db;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

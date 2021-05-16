@@ -1,5 +1,6 @@
 package com.bugenzhao.bookstore_backend.entity;
 
+import com.bugenzhao.bookstore_backend.entity.db.UserAuth;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AuthedUser {

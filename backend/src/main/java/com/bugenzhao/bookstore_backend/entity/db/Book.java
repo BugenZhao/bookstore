@@ -1,4 +1,4 @@
-package com.bugenzhao.bookstore_backend.entity;
+package com.bugenzhao.bookstore_backend.entity.db;
 
 public class Book {
     public int id;
