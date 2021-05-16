@@ -13,10 +13,13 @@ public class UserAuth {
     @JsonProperty("user_type")
     public int userType;
 
-    public UserAuth(int userId, String username, String password, int userType) {
+    public boolean banned;
+
+    public UserAuth(int userId, String username, String password, int userType, boolean banned) {
         this.userId = userId;
         this.username = username;
         this.password = password;
         this.userType = userType;
+        this.banned = banned;
     }
 }

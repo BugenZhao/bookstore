@@ -40,8 +40,7 @@ public class UserServiceImpl implements UserService {
             return Optional.empty();
         }
         // TODO: password format check
-        jdbcTemplate.update("insert into user_auths(username, password, user_type) values (?, ?, 1)", info.username,
-                info.password);
+        jdbcTemplate.update("insert into user_auths(username, password) values (?, ?)", info.username, info.password);
         return findByUsername(info.username);
     }
 }

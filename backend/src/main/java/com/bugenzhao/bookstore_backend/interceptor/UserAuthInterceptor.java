@@ -13,7 +13,7 @@ public class UserAuthInterceptor implements HandlerInterceptor {
             throws Exception {
         var authed = SessionUtils.checkAuth(request);
         if (!authed) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
         return true;

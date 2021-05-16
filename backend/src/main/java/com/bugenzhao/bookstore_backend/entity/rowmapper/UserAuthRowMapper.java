@@ -10,6 +10,6 @@ public class UserAuthRowMapper implements RowMapper<UserAuth> {
     @Override
     public UserAuth mapRow(ResultSet rs, int rowNum) throws SQLException {
         return new UserAuth(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"),
-                rs.getInt("user_type"));
+                rs.getInt("user_type"), rs.getBoolean("banned"));
     }
 }

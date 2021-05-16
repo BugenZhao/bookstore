@@ -388,7 +388,8 @@ CREATE TABLE `user_auths` (
     `user_id` int(11) AUTO_INCREMENT NOT NULL,
     `username` varchar(255) NOT NULL,
     `password` varchar(255) NOT NULL,
-    `user_type` int(11) NOT NULL,
+    `user_type` int(11) NOT NULL DEFAULT '1',
+    `banned` boolean NOT NULL DEFAULT false,
     PRIMARY KEY(`user_id`)
 ) /* ENGINE = InnoDB DEFAULT CHARSET = utf8 */;
 -- ----------------------------
@@ -397,6 +398,8 @@ CREATE TABLE `user_auths` (
 INSERT INTO `user_auths`(`username`, `password`, `user_type`)
 VALUES
 ('thunderboy', 'reins1409', '0'),
-('guest', 'guest', '1'),
-('admin', 'admin', '0'),
-('bugen', 'bugen', '0');
+('admin', 'admin', '0');
+INSERT INTO `user_auths`(`username`, `password`, `banned`)
+VALUES
+('guest', 'guest', false),
+('badguy', 'badguy', true);
