@@ -15,7 +15,9 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.xerial:sqlite-jdbc:3.34.0'
+    implementation 'org.xerial:sqlite-jdbc'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'com.h2database:h2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
