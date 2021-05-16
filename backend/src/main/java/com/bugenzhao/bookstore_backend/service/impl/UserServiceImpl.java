@@ -1,6 +1,5 @@
 package com.bugenzhao.bookstore_backend.service.impl;
 
-import java.sql.PreparedStatement;
 import java.util.Optional;
 
 import com.bugenzhao.bookstore_backend.entity.LoginInfo;

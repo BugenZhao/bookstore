@@ -403,3 +403,12 @@ INSERT INTO `user_auths`(`username`, `password`, `banned`)
 VALUES
 ('guest', 'guest', false),
 ('badguy', 'badguy', true);
+
+
+DROP TABLE IF EXISTS `carts`;
+CREATE TABLE `carts` (
+    `id` int(11) AUTO_INCREMENT NOT NULL,
+    `user_id` int(11) NOT NULL,
+    `book_id` int(11) NOT NULL,
+    PRIMARY KEY(`id`)
+);
