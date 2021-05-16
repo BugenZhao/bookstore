@@ -1,6 +1,6 @@
 package com.bugenzhao.bookstore_backend.service;
 
-import java.util.Map;
+import com.bugenzhao.bookstore_backend.entity.Cart;
 
 public interface CartService {
     void addABook(int bookId);
@@ -9,5 +9,9 @@ public interface CartService {
 
     void empty();
 
-    Map<Integer, Integer> get();
+    Cart get();
+
+    Cart getByOrderId(int orderId);
+
+    boolean checkout();
 }

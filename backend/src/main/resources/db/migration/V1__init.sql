@@ -410,5 +410,17 @@ CREATE TABLE `carts` (
     `id` int(11) AUTO_INCREMENT NOT NULL,
     `user_id` int(11) NOT NULL,
     `book_id` int(11) NOT NULL,
+    `order_id` int(11),
+    PRIMARY KEY(`id`)
+);
+
+
+DROP TABLE IF EXISTS `orders`;
+CREATE TABLE `orders` (
+    `id` int(11) AUTO_INCREMENT NOT NULL,
+    `user_id` int(11) NOT NULL,
+    `created_at` datetime NOT NULL DEFAULT now(),
+    `consignee` varchar(255) NOT NULL,
+    `status` int NOT NULL DEFAULT 0,
     PRIMARY KEY(`id`)
 );
