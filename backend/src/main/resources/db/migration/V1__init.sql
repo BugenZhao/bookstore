@@ -18,7 +18,7 @@
 -- ----------------------------
 DROP TABLE IF EXISTS `books`;
 CREATE TABLE `books` (
-    `id` int(11) NOT NULL,
+    `id` int(11) AUTO_INCREMENT NOT NULL,
     `isbn` varchar(255) NOT NULL,
     `name` varchar(255) NOT NULL,
     `type` varchar(255) NOT NULL,
@@ -381,28 +381,11 @@ VALUES (
         'http://img3m4.ddimg.cn/71/20/25479404-1_w_1.jpg'
     );
 -- ----------------------------
--- Table structure for user
--- ----------------------------
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE `users` (
-    `user_id` int(11) NOT NULL,
-    `nickname` varchar(255) NOT NULL,
-    `name` varchar(255) DEFAULT NULL,
-    `tel` varchar(255) DEFAULT NULL,
-    `address` varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`user_id`)
-) /* ENGINE = InnoDB DEFAULT CHARSET = utf8 */;
--- ----------------------------
--- Records of user
--- ----------------------------
-INSERT INTO `users`
-VALUES ('1', '奔雷少年', '奔少', null, null);
--- ----------------------------
 -- Table structure for user_auth
 -- ----------------------------
 DROP TABLE IF EXISTS `user_auths`;
 CREATE TABLE `user_auths` (
-    `user_id` int(11) NOT NULL,
+    `user_id` int(11) AUTO_INCREMENT NOT NULL,
     `username` varchar(255) NOT NULL,
     `password` varchar(255) NOT NULL,
     `user_type` int(11) NOT NULL,
@@ -411,11 +394,9 @@ CREATE TABLE `user_auths` (
 -- ----------------------------
 -- Records of user_auth
 -- ----------------------------
-INSERT INTO `user_auths`
-VALUES ('1', 'thunderboy', 'reins1409', '0');
-INSERT INTO `user_auths`
-VALUES ('2', 'guest', 'guest', '1');
-INSERT INTO `user_auths`
-VALUES ('3', 'admin', 'admin', '0');
-INSERT INTO `user_auths`
-VALUES ('4', 'bugen', 'bugen', '0');
+INSERT INTO `user_auths`(`username`, `password`, `user_type`)
+VALUES
+('thunderboy', 'reins1409', '0'),
+('guest', 'guest', '1'),
+('admin', 'admin', '0'),
+('bugen', 'bugen', '0');

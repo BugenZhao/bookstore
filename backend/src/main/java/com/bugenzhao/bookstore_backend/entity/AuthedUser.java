@@ -16,4 +16,10 @@ public class AuthedUser {
         this.username = username;
         this.userType = userType;
     }
+
+    public AuthedUser(UserAuth userAuth) {
+        this.userId = userAuth.userId;
+        this.username = userAuth.username;
+        this.userType = userAuth.userType;
+    }
 }
