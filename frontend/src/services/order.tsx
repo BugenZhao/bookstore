@@ -1,5 +1,5 @@
 import { useFetch } from ".";
-import { Cart } from "./cart";
+import { Book } from "./book";
 
 export enum OrderStatus {
   submitted = "submitted",
@@ -10,10 +10,14 @@ export enum OrderStatus {
 
 export type Order = {
   id: string;
-  datetime: string;
-  cart: Cart;
+  createdAt: string;
   consignee: string;
   status: OrderStatus;
+  items: {
+    book: Book;
+    quantity: number;
+  }[];
+  totalPrice: number;
 };
 
 export function useOrders() {

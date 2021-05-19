@@ -22,11 +22,11 @@ export function OrderItem({
 }: PropsWithChildren<{
   order: Order;
 }>) {
-  const cartItems = order.cart.books.map((b) => (
-    <Row key={b.book.id}>
-      <Link to={`/detail/${b.book.id}`} className="d-flex nav-link">
-        <span className="me-auto">{b.book.name}</span>
-        <span className="text-muted">x{b.count}</span>
+  const cartItems = order.items.map(({ book, quantity }) => (
+    <Row key={book.id}>
+      <Link to={`/detail/${book.id}`} className="d-flex nav-link">
+        <span className="me-auto">{book.name}</span>
+        <span className="text-muted">x{quantity}</span>
       </Link>
     </Row>
   ));
@@ -34,9 +34,9 @@ export function OrderItem({
   return (
     <tr>
       <td className="align-middle">{order.id}</td>
-      <td className="align-middle">{order.datetime}</td>
+      <td className="align-middle">{order.createdAt}</td>
       <td className="align-middle w-25">{cartItems}</td>
-      <td className="align-middle">¥{order.cart.total.toFixed(2)}</td>
+      <td className="align-middle">¥{order.totalPrice.toFixed(2)}</td>
       <td className="align-middle">{order.consignee}</td>
       <td className="align-middle">{order.status}</td>
     </tr>
