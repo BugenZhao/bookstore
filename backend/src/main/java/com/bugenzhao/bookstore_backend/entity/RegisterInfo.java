@@ -1,7 +1,10 @@
 package com.bugenzhao.bookstore_backend.entity;
 
-public class RegisterInfo extends LoginInfo {
-    public RegisterInfo(String username, String password) {
-        super(username, password);
-    }
+import lombok.*;
+
+@Data
+@AllArgsConstructor
+public class RegisterInfo {
+    private String username;
+    private String password;
 }

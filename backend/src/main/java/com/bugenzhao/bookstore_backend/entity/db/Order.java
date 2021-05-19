@@ -26,7 +26,7 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
-    private UserAuth user;
+    private User user;
 
     @CreationTimestamp
     private Date createdAt;

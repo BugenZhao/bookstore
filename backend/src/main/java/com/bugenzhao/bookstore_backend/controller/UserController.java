@@ -33,11 +33,11 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody LoginInfo info, HttpServletRequest request) throws Exception {
-        return userService.checkLoginInfo(info).map((userAuth) -> {
-            if (userAuth.getBanned()) {
+        return userService.checkLoginInfo(info).map((user) -> {
+            if (user.getBanned()) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body((Void) null);
             } else {
-                SessionUtils.setAuth(request, new AuthedUser(userAuth));
+                SessionUtils.setAuth(request, new AuthedUser(user));
                 return ResponseEntity.ok((Void) null);
             }
         }).orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null));
@@ -45,8 +45,8 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody RegisterInfo info, HttpServletRequest request) throws Exception {
-        return userService.register(info).map((userAuth) -> {
-            SessionUtils.setAuth(request, new AuthedUser(userAuth));
+        return userService.register(info).map((user) -> {
+            SessionUtils.setAuth(request, new AuthedUser(user));
             return ResponseEntity.ok((Void) null);
         }).orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null));
     }

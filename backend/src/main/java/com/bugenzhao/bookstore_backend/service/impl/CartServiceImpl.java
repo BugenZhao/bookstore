@@ -14,7 +14,7 @@ import com.bugenzhao.bookstore_backend.entity.db.Cart;
 import com.bugenzhao.bookstore_backend.entity.db.CartItem;
 import com.bugenzhao.bookstore_backend.repository.BookRepository;
 import com.bugenzhao.bookstore_backend.repository.CartRepository;
-import com.bugenzhao.bookstore_backend.repository.UserAuthRepository;
+import com.bugenzhao.bookstore_backend.repository.UserRepository;
 import com.bugenzhao.bookstore_backend.service.CartService;
 import com.bugenzhao.bookstore_backend.utils.SessionUtils;
 
@@ -27,17 +27,17 @@ import org.springframework.web.context.WebApplicationContext;
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CartServiceImpl implements CartService {
     final CartRepository cartRepo;
-    final UserAuthRepository userAuthRepo;
+    final UserRepository userRepo;
     final BookRepository bookRepo;
 
-    final AuthedUser user;
+    final AuthedUser auth;
 
-    public CartServiceImpl(CartRepository cartRepository, UserAuthRepository userAuthRepo, BookRepository bookRepo,
+    public CartServiceImpl(CartRepository cartRepository, UserRepository userRepo, BookRepository bookRepo,
             HttpServletRequest request) {
         this.cartRepo = cartRepository;
-        this.userAuthRepo = userAuthRepo;
+        this.userRepo = userRepo;
         this.bookRepo = bookRepo;
-        this.user = SessionUtils.getAuth(request);
+        this.auth = SessionUtils.getAuth(request);
     }
 
     @Override
@@ -67,10 +67,10 @@ public class CartServiceImpl implements CartService {
     }
 
     private Cart getOrCreateCart() {
-        var userAuth = userAuthRepo.getOne(user.getUserId());
+        var user = userRepo.getOne(auth.getUserId());
 
-        var cart = cartRepo.findByUser_Id(user.getUserId()).orElseGet(() -> {
-            var newCart = Cart.builder().user(userAuth).build();
+        var cart = cartRepo.findByUser_Id(auth.getUserId()).orElseGet(() -> {
+            var newCart = Cart.builder().user(user).build();
             return cartRepo.save(newCart);
         });
 

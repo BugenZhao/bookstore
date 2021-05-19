@@ -7,7 +7,7 @@ import com.bugenzhao.bookstore_backend.utils.SessionUtils;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 
-public class UserAuthInterceptor implements HandlerInterceptor {
+public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {

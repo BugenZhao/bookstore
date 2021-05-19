@@ -1,6 +1,5 @@
 package com.bugenzhao.bookstore_backend.controller;
 
-import com.bugenzhao.bookstore_backend.entity.OrderResponse;
 import com.bugenzhao.bookstore_backend.entity.db.Order;
 import com.bugenzhao.bookstore_backend.service.OrderService;
 

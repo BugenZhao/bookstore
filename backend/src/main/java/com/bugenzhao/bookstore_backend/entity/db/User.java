@@ -10,8 +10,8 @@ import lombok.*;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "user_auths")
-public class UserAuth {
+@Table(name = "users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

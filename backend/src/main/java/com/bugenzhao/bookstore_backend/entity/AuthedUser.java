@@ -1,6 +1,6 @@
 package com.bugenzhao.bookstore_backend.entity;
 
-import com.bugenzhao.bookstore_backend.entity.db.UserAuth;
+import com.bugenzhao.bookstore_backend.entity.db.User;
 import com.bugenzhao.bookstore_backend.entity.db.UserType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -15,9 +15,9 @@ public class AuthedUser {
     @JsonProperty("user_type")
     private UserType userType;
 
-    public AuthedUser(UserAuth userAuth) {
-        this.userId = userAuth.getId();
-        this.username = userAuth.getUsername();
-        this.userType = userAuth.getType();
+    public AuthedUser(User user) {
+        this.userId = user.getId();
+        this.username = user.getUsername();
+        this.userType = user.getType();
     }
 }

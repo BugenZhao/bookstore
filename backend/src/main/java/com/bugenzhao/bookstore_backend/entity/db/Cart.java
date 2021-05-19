@@ -19,7 +19,7 @@ public class Cart {
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private UserAuth user;
+    private User user;
 
     @Builder.Default
     @OneToMany(cascade = CascadeType.ALL)
