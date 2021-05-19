@@ -34,7 +34,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody LoginInfo info, HttpServletRequest request) throws Exception {
         return userService.checkLoginInfo(info).map((userAuth) -> {
-            if (userAuth.banned) {
+            if (userAuth.isBanned()) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body((Void) null);
             } else {
                 SessionUtils.setAuth(request, new AuthedUser(userAuth));

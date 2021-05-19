@@ -8,6 +8,7 @@
 		}
 	],
 	"settings": {
-		"editor.minimap.enabled": false
+		"editor.minimap.enabled": false,
+		"java.configuration.updateBuildConfiguration": "interactive"
 	}
 }

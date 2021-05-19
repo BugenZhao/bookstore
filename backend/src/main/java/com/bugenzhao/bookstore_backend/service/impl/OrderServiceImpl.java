@@ -36,11 +36,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderResponse> findAll() {
         var orderIds = jdbcTemplate.query("select * from orders where user_id = ? order by created_at desc",
-                new OrderRowMapper(), user.userId);
+                new OrderRowMapper(), user.getUserId());
         return orderIds.stream().map((raw) -> {
-            var orderId = raw.id;
+            var orderId = raw.getId();
             var cart = cartService.getByOrderId(orderId);
-            return new OrderResponse(raw.id, raw.createdAt, cart, raw.consignee, raw.status);
+            return new OrderResponse(raw.getId(), raw.getCreatedAt(), cart, raw.getConsignee(), raw.getStatus());
         }).collect(Collectors.toList());
     }
 }

@@ -4,18 +4,15 @@ import java.util.Date;
 
 import com.bugenzhao.bookstore_backend.entity.OrderStatus;
 
-public class Order {
-    public long id;
-    public long userId;
-    public Date createdAt;
-    public String consignee;
-    public OrderStatus status;
+import lombok.*;
 
-    public Order(long id, long userId, Date createdAt, String consignee, OrderStatus status) {
-        this.id = id;
-        this.userId = userId;
-        this.createdAt = createdAt;
-        this.consignee = consignee;
-        this.status = status;
-    }
+@Data
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Order {
+    private long id;
+    private long userId;
+    private Date createdAt;
+    private String consignee;
+    private OrderStatus status;
 }

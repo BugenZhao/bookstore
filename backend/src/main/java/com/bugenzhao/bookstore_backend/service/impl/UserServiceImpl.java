@@ -29,17 +29,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<UserAuth> checkLoginInfo(LoginInfo info) {
         var result = jdbcTemplate.query("select * from user_auths where username = ? and password = ?",
-                new UserAuthRowMapper(), info.username, info.password);
+                new UserAuthRowMapper(), info.getUsername(), info.getPassword());
         return result.stream().findFirst();
     }
 
     @Override
     public Optional<UserAuth> register(RegisterInfo info) {
-        if (findByUsername(info.username).isPresent()) {
+        if (findByUsername(info.getUsername()).isPresent()) {
             return Optional.empty();
         }
         // TODO: password format check
-        jdbcTemplate.update("insert into user_auths(username, password) values (?, ?)", info.username, info.password);
-        return findByUsername(info.username);
+        jdbcTemplate.update("insert into user_auths(username, password) values (?, ?)", info.getUsername(),
+                info.getPassword());
+        return findByUsername(info.getUsername());
     }
 }

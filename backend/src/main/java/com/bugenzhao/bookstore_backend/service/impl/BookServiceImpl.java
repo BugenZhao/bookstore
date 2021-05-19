@@ -4,29 +4,26 @@ import java.util.List;
 import java.util.Optional;
 
 import com.bugenzhao.bookstore_backend.entity.db.Book;
-import com.bugenzhao.bookstore_backend.entity.db.rowmapper.BookRowMapper;
+import com.bugenzhao.bookstore_backend.repository.BookRepository;
 import com.bugenzhao.bookstore_backend.service.BookService;
 
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BookServiceImpl implements BookService {
-    JdbcTemplate jdbcTemplate;
+    BookRepository repo;
 
-    public BookServiceImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public BookServiceImpl(BookRepository repo) {
+        this.repo = repo;
     }
 
     @Override
     public Optional<Book> findById(long bookId) {
-        var result = jdbcTemplate.query("select * from books where id = ?", new BookRowMapper(), bookId);
-        return result.stream().findFirst();
+        return repo.findById(bookId);
     }
 
     @Override
     public List<Book> findAll() {
-        var result = jdbcTemplate.query("select * from books", new BookRowMapper());
-        return result;
+        return repo.findAll();
     }
 }

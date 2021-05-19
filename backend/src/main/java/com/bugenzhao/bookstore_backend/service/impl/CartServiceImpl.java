@@ -40,24 +40,25 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void addABook(long bookId) {
-        jdbcTemplate.update("insert into carts(user_id, book_id) values (?, ?)", user.userId, bookId);
+        jdbcTemplate.update("insert into carts(user_id, book_id) values (?, ?)", user.getUserId(), bookId);
     }
 
     @Override
     public void deleteBooks(long bookId) {
-        jdbcTemplate.update("delete from carts where user_id = ? and book_id = ? and order_id is null", user.userId,
+        jdbcTemplate.update("delete from carts where user_id = ? and book_id = ? and order_id is null",
+                user.getUserId(),
                 bookId);
     }
 
     @Override
     public void empty() {
-        jdbcTemplate.update("delete from carts where user_id = ? and order_id is null", user.userId);
+        jdbcTemplate.update("delete from carts where user_id = ? and order_id is null", user.getUserId());
     }
 
     private Map<Integer, Integer> getMap() {
         var list = jdbcTemplate.queryForList(
                 "select book_id, count(*) count from carts where user_id = ? and order_id is null group by book_id",
-                user.userId);
+                user.getUserId());
         var map = list.stream().collect(
                 Collectors.toMap((m) -> (Integer) m.get("book_id"), (m) -> ((Long) m.get("count")).intValue()));
         return map;
@@ -66,7 +67,7 @@ public class CartServiceImpl implements CartService {
     private Map<Integer, Integer> getMapByOrderId(long orderId) {
         var list = jdbcTemplate.queryForList(
                 "select book_id, count(*) count from carts where user_id = ? and order_id = ? group by book_id",
-                user.userId, orderId);
+                user.getUserId(), orderId);
         var map = list.stream().collect(
                 Collectors.toMap((m) -> (Integer) m.get("book_id"), (m) -> ((Long) m.get("count")).intValue()));
         return map;
@@ -81,7 +82,7 @@ public class CartServiceImpl implements CartService {
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
                 var ps = con.prepareStatement("insert into orders (user_id, consignee) values (?, ?)",
                         new String[] { "id" });
-                ps.setLong(1, user.userId);
+                ps.setLong(1, user.getUserId());
                 ps.setString(2, consignee);
                 return ps;
             }
@@ -99,15 +100,16 @@ public class CartServiceImpl implements CartService {
 
         var orderId = newOrder();
         jdbcTemplate.update("update carts set order_id = ? where user_id = ? and order_id is null", orderId,
-                user.userId);
+                user.getUserId());
         return true;
     }
 
     private Cart mapToCart(Map<Integer, Integer> map) {
         var books = map.entrySet().stream()
                 .map((e) -> new BookWithCount(bookService.findById(e.getKey()).get(), e.getValue()))
-                .filter((b) -> b.book != null).collect(Collectors.toList());
-        var total = books.stream().map((b) -> b.book.price.doubleValue() * b.count).reduce(0.0, Double::sum);
+                .filter((b) -> b.getBook() != null).collect(Collectors.toList());
+        var total = books.stream().map((b) -> b.getBook().getPrice().doubleValue() * b.getCount()).reduce(0.0,
+                Double::sum);
         var discount = Double.min(total * 0.3, 100.0);
 
         return new Cart(books, discount, total - discount);

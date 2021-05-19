@@ -2,27 +2,29 @@ package com.bugenzhao.bookstore_backend.entity.db;
 
 import java.math.BigDecimal;
 
-public class Book {
-    public long id;
-    public String isbn;
-    public String name;
-    public String type;
-    public String author;
-    public BigDecimal price;
-    public String description;
-    public int inventory;
-    public String image;
+import javax.persistence.*;
+import javax.validation.constraints.*;
 
-    public Book(long id, String isbn, String name, String type, String author, BigDecimal price, String description,
-            int inventory, String image) {
-        this.id = id;
-        this.isbn = isbn;
-        this.name = name;
-        this.type = type;
-        this.author = author;
-        this.price = price;
-        this.description = description;
-        this.inventory = inventory;
-        this.image = image;
-    }
+import lombok.*;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+
+@Entity
+@Table(name = "books")
+public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    private String isbn;
+    private String name;
+    private String type;
+    private String author;
+    @DecimalMin(value = "0.00")
+    private BigDecimal price;
+    private String description;
+    @Min(value = 0)
+    private int inventory;
+    private String image;
 }

@@ -1,6 +1,10 @@
 package com.bugenzhao.bookstore_backend.entity;
 
+import lombok.*;
+
+@Data
+@AllArgsConstructor
 public class LoginInfo {
-    public String username;
-    public String password;
+    private String username;
+    private String password;
 }

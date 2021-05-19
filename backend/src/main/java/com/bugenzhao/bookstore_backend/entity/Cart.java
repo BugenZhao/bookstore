@@ -2,14 +2,12 @@ package com.bugenzhao.bookstore_backend.entity;
 
 import java.util.List;
 
-public class Cart {
-    public List<BookWithCount> books;
-    public double discount;
-    public double total;
+import lombok.*;
 
-    public Cart(List<BookWithCount> books, double discount, double total) {
-        this.books = books;
-        this.discount = discount;
-        this.total = total;
-    }
+@Data
+@AllArgsConstructor
+public class Cart {
+    private List<BookWithCount> books;
+    private double discount;
+    private double total;
 }

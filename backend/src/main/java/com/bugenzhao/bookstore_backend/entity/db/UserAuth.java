@@ -2,20 +2,16 @@ package com.bugenzhao.bookstore_backend.entity.db;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.*;
+
+@Data
+@AllArgsConstructor
 public class UserAuth {
     @JsonProperty("user_id")
-    public long userId;
-    public String username;
-    public String password;
+    private long userId;
+    private String username;
+    private String password;
     @JsonProperty("user_type")
-    public int userType;
-    public boolean banned;
-
-    public UserAuth(long userId, String username, String password, int userType, boolean banned) {
-        this.userId = userId;
-        this.username = username;
-        this.password = password;
-        this.userType = userType;
-        this.banned = banned;
-    }
+    private int userType;
+    private boolean banned;
 }
