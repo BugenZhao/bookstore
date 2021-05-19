@@ -4,10 +4,14 @@ import java.util.Optional;
 
 import com.bugenzhao.bookstore_backend.entity.db.User;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.Repository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends Repository<User, Long> {
     Optional<User> findByUsername(String username);
 
     Optional<User> findByUsernameAndPassword(String username, String password);
+
+    User getOne(Long userId);
+
+    User save(User userToSave);
 }

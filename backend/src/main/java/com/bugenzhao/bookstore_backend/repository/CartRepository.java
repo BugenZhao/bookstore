@@ -4,8 +4,10 @@ import java.util.Optional;
 
 import com.bugenzhao.bookstore_backend.entity.db.Cart;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.Repository;
 
-public interface CartRepository extends JpaRepository<Cart, Long> {
+public interface CartRepository extends Repository<Cart, Long> {
     Optional<Cart> findByUser_Id(long userId);
+
+    Cart save(Cart newCart);
 }

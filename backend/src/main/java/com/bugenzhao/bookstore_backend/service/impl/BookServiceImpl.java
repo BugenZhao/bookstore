@@ -8,8 +8,10 @@ import com.bugenzhao.bookstore_backend.repository.BookRepository;
 import com.bugenzhao.bookstore_backend.service.BookService;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class BookServiceImpl implements BookService {
     BookRepository bookRepo;
 

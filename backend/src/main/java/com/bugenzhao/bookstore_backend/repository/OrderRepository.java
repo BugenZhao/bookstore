@@ -4,8 +4,10 @@ import java.util.List;
 
 import com.bugenzhao.bookstore_backend.entity.db.Order;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.Repository;
 
-public interface OrderRepository extends JpaRepository<Order, Long> {
+public interface OrderRepository extends Repository<Order, Long> {
     List<Order> findByUser_Id(long userId);
+
+    Order save(Order order);
 }
