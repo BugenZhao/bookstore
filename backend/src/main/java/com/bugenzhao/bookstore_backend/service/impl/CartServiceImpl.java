@@ -39,12 +39,12 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void addABook(int bookId) {
+    public void addABook(long bookId) {
         jdbcTemplate.update("insert into carts(user_id, book_id) values (?, ?)", user.userId, bookId);
     }
 
     @Override
-    public void deleteBooks(int bookId) {
+    public void deleteBooks(long bookId) {
         jdbcTemplate.update("delete from carts where user_id = ? and book_id = ? and order_id is null", user.userId,
                 bookId);
     }
@@ -63,7 +63,7 @@ public class CartServiceImpl implements CartService {
         return map;
     }
 
-    private Map<Integer, Integer> getMapByOrderId(int orderId) {
+    private Map<Integer, Integer> getMapByOrderId(long orderId) {
         var list = jdbcTemplate.queryForList(
                 "select book_id, count(*) count from carts where user_id = ? and order_id = ? group by book_id",
                 user.userId, orderId);
@@ -72,7 +72,7 @@ public class CartServiceImpl implements CartService {
         return map;
     }
 
-    private int newOrder() {
+    private long newOrder() {
         var consignee = "Bugen Zhao";
 
         var keyHolder = new GeneratedKeyHolder();
@@ -81,7 +81,7 @@ public class CartServiceImpl implements CartService {
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
                 var ps = con.prepareStatement("insert into orders (user_id, consignee) values (?, ?)",
                         new String[] { "id" });
-                ps.setInt(1, user.userId);
+                ps.setLong(1, user.userId);
                 ps.setString(2, consignee);
                 return ps;
             }
@@ -119,7 +119,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart getByOrderId(int orderId) {
+    public Cart getByOrderId(long orderId) {
         return mapToCart(getMapByOrderId(orderId));
     }
 

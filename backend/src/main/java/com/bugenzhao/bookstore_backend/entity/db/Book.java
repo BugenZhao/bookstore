@@ -3,7 +3,7 @@ package com.bugenzhao.bookstore_backend.entity.db;
 import java.math.BigDecimal;
 
 public class Book {
-    public int id;
+    public long id;
     public String isbn;
     public String name;
     public String type;
@@ -13,7 +13,7 @@ public class Book {
     public int inventory;
     public String image;
 
-    public Book(int id, String isbn, String name, String type, String author, BigDecimal price, String description,
+    public Book(long id, String isbn, String name, String type, String author, BigDecimal price, String description,
             int inventory, String image) {
         this.id = id;
         this.isbn = isbn;

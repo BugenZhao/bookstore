@@ -19,7 +19,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<Book> findById(int bookId) {
+    public Optional<Book> findById(long bookId) {
         var result = jdbcTemplate.query("select * from books where id = ?", new BookRowMapper(), bookId);
         return result.stream().findFirst();
     }

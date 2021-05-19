@@ -6,7 +6,7 @@ import java.util.Optional;
 import com.bugenzhao.bookstore_backend.entity.db.Book;
 
 public interface BookService {
-    Optional<Book> findById(int bookId);
+    Optional<Book> findById(long bookId);
 
     List<Book> findAll();
 }

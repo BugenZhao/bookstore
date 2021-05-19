@@ -3,15 +3,15 @@ package com.bugenzhao.bookstore_backend.service;
 import com.bugenzhao.bookstore_backend.entity.Cart;
 
 public interface CartService {
-    void addABook(int bookId);
+    void addABook(long bookId);
 
-    void deleteBooks(int bookId);
+    void deleteBooks(long bookId);
 
     void empty();
 
     Cart get();
 
-    Cart getByOrderId(int orderId);
+    Cart getByOrderId(long orderId);
 
     boolean checkout();
 }

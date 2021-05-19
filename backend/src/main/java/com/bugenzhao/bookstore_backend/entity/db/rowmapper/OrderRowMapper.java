@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.RowMapper;
 public class OrderRowMapper implements RowMapper<Order> {
     @Override
     public Order mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return new Order(rs.getInt("id"), rs.getInt("user_id"), rs.getTimestamp("created_at"),
+        return new Order(rs.getLong("id"), rs.getLong("user_id"), rs.getTimestamp("created_at"),
                 rs.getString("consignee"), OrderStatus.values()[rs.getInt("status")]);
     }
 }

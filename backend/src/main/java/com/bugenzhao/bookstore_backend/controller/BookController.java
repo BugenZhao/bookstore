@@ -24,7 +24,7 @@ public class BookController {
     }
 
     @GetMapping("/")
-    public Map<Integer, Book> getAllBooks() throws Exception {
+    public Map<Long, Book> getAllBooks() throws Exception {
         return bookService.findAll().stream().collect(Collectors.toMap((b) -> b.id, Function.identity()));
     }
 

@@ -5,13 +5,13 @@ import java.util.Date;
 import com.bugenzhao.bookstore_backend.entity.OrderStatus;
 
 public class Order {
-    public int id;
-    public int userId;
+    public long id;
+    public long userId;
     public Date createdAt;
     public String consignee;
     public OrderStatus status;
 
-    public Order(int id, int userId, Date createdAt, String consignee, OrderStatus status) {
+    public Order(long id, long userId, Date createdAt, String consignee, OrderStatus status) {
         this.id = id;
         this.userId = userId;
         this.createdAt = createdAt;
