@@ -2,10 +2,10 @@ import { useFetch } from ".";
 import { Cart } from "./cart";
 
 export enum OrderStatus {
-  submitted,
-  shipped,
-  delivered,
-  cancelled,
+  submitted = "submitted",
+  shipped = "shipped",
+  delivered = "delivered",
+  cancelled = "cancelled",
 }
 
 export type Order = {

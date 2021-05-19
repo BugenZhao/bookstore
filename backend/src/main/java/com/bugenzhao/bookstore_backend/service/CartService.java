@@ -1,6 +1,6 @@
 package com.bugenzhao.bookstore_backend.service;
 
-import com.bugenzhao.bookstore_backend.entity.Cart;
+import com.bugenzhao.bookstore_backend.entity.CartResponse;
 
 public interface CartService {
     void addABook(long bookId);
@@ -9,9 +9,9 @@ public interface CartService {
 
     void empty();
 
-    Cart get();
+    CartResponse get();
 
-    Cart getByOrderId(long orderId);
+    CartResponse getByOrderId(long orderId);
 
     boolean checkout();
 }

@@ -4,15 +4,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 
 import com.bugenzhao.bookstore_backend.entity.AuthedUser;
 import com.bugenzhao.bookstore_backend.entity.BookWithCount;
-import com.bugenzhao.bookstore_backend.entity.Cart;
+import com.bugenzhao.bookstore_backend.entity.CartResponse;
+import com.bugenzhao.bookstore_backend.entity.db.Cart;
+import com.bugenzhao.bookstore_backend.entity.db.CartItem;
+import com.bugenzhao.bookstore_backend.repository.BookRepository;
+import com.bugenzhao.bookstore_backend.repository.CartRepository;
+import com.bugenzhao.bookstore_backend.repository.UserAuthRepository;
 import com.bugenzhao.bookstore_backend.service.BookService;
 import com.bugenzhao.bookstore_backend.service.CartService;
 import com.bugenzhao.bookstore_backend.utils.SessionUtils;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,39 +31,52 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Service
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CartServiceImpl implements CartService {
     BookService bookService;
     JdbcTemplate jdbcTemplate;
+    CartRepository repo;
+    UserAuthRepository userAuthRepo;
+    BookRepository bookRepo;
+
     AuthedUser user;
 
-    public CartServiceImpl(BookService bookService, JdbcTemplate jdbcTemplate) {
+    public CartServiceImpl(BookService bookService, JdbcTemplate jdbcTemplate, CartRepository cartRepository,
+            UserAuthRepository userAuthRepo, BookRepository bookRepo, HttpServletRequest request) {
         this.bookService = bookService;
         this.jdbcTemplate = jdbcTemplate;
-
-        var attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        this.user = SessionUtils.getAuth(attr.getRequest());
+        this.repo = cartRepository;
+        this.userAuthRepo = userAuthRepo;
+        this.bookRepo = bookRepo;
+        this.user = SessionUtils.getAuth(request);
     }
 
     @Override
     public void addABook(long bookId) {
-        jdbcTemplate.update("insert into carts(user_id, book_id) values (?, ?)", user.getUserId(), bookId);
+        var cart = getOrCreateCart();
+        var book = bookRepo.getOne(bookId);
+        var newItem = CartItem.builder().book(book).build();
+
+        cart.getItems().add(newItem);
+        repo.save(cart);
     }
 
     @Override
     public void deleteBooks(long bookId) {
-        jdbcTemplate.update("delete from carts where user_id = ? and book_id = ? and order_id is null",
-                user.getUserId(),
-                bookId);
+        var cart = getOrCreateCart();
+
+        cart.getItems().removeIf((item) -> item.getBook().getId() == bookId);
+        repo.save(cart);
     }
 
     @Override
     public void empty() {
-        jdbcTemplate.update("delete from carts where user_id = ? and order_id is null", user.getUserId());
+        var cart = getOrCreateCart();
+
+        cart.getItems().clear();
+        repo.save(cart);
     }
 
     private Map<Integer, Integer> getMap() {
@@ -104,25 +128,39 @@ public class CartServiceImpl implements CartService {
         return true;
     }
 
-    private Cart mapToCart(Map<Integer, Integer> map) {
-        var books = map.entrySet().stream()
-                .map((e) -> new BookWithCount(bookService.findById(e.getKey()).get(), e.getValue()))
-                .filter((b) -> b.getBook() != null).collect(Collectors.toList());
-        var total = books.stream().map((b) -> b.getBook().getPrice().doubleValue() * b.getCount()).reduce(0.0,
+    private Cart getOrCreateCart() {
+        var userAuth = userAuthRepo.getOne(user.getUserId());
+
+        var cart = repo.findByUser_Id(user.getUserId()).orElseGet(() -> {
+            var newCart = Cart.builder().user(userAuth).build();
+            return repo.save(newCart);
+        });
+
+        return cart;
+    }
+
+    private CartResponse itemsToResponse(Set<CartItem> items) {
+        var bookToCounts = items.stream().map((item) -> item.getBook())
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        var bookWithCounts = bookToCounts.entrySet().stream().map((e) -> new BookWithCount(e.getKey(), e.getValue()))
+                .collect(Collectors.toList());
+        var total = bookWithCounts.stream().map((b) -> b.getBook().getPrice().doubleValue() * b.getCount()).reduce(0.0,
                 Double::sum);
         var discount = Double.min(total * 0.3, 100.0);
 
-        return new Cart(books, discount, total - discount);
+        return new CartResponse(bookWithCounts, discount, total - discount);
     }
 
     @Override
-    public Cart get() {
-        return mapToCart(getMap());
+    public CartResponse get() {
+        var cart = getOrCreateCart();
+        var items = cart.getItems();
+        return itemsToResponse(items);
     }
 
     @Override
-    public Cart getByOrderId(long orderId) {
-        return mapToCart(getMapByOrderId(orderId));
+    public CartResponse getByOrderId(long orderId) {
+        throw new UnsupportedOperationException();
     }
 
 }

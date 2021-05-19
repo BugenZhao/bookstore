@@ -1,6 +1,7 @@
 package com.bugenzhao.bookstore_backend.entity;
 
 import com.bugenzhao.bookstore_backend.entity.db.UserAuth;
+import com.bugenzhao.bookstore_backend.entity.db.UserType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.*;
@@ -12,11 +13,11 @@ public class AuthedUser {
     private Long userId;
     private String username;
     @JsonProperty("user_type")
-    private Integer userType;
+    private UserType userType;
 
     public AuthedUser(UserAuth userAuth) {
-        this.userId = userAuth.getUserId();
+        this.userId = userAuth.getId();
         this.username = userAuth.getUsername();
-        this.userType = userAuth.getUserType();
+        this.userType = userAuth.getType();
     }
 }

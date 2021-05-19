@@ -6,7 +6,7 @@ import lombok.*;
 
 @Data
 @AllArgsConstructor
-public class Cart {
+public class CartResponse {
     private List<BookWithCount> books;
     private double discount;
     private double total;

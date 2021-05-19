@@ -23,8 +23,8 @@ export function postRegister(data: RegisterData) {
 }
 
 export enum UserType {
-  admin = 0,
-  normal = 1,
+  admin = "admin",
+  normal = "normal",
 }
 
 export type AuthedUser = {

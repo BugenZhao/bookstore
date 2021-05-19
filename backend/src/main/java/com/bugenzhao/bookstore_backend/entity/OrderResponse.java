@@ -9,7 +9,7 @@ import lombok.*;
 public class OrderResponse {
     private long id;
     private Date datetime;
-    private Cart cart;
+    private CartResponse cart;
     private String consignee;
     private OrderStatus status;
 }

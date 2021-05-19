@@ -1,5 +1,8 @@
 package com.bugenzhao.bookstore_backend.entity.db;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.*;
 
 import lombok.*;
@@ -10,21 +13,15 @@ import lombok.*;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "user_auths")
-public class UserAuth {
+public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private String username;
-
-    private String password;
+    @OneToOne
+    private UserAuth user;
 
     @Builder.Default
-    @Enumerated
-    private UserType type = UserType.normal;
-
-    @Builder.Default
-    private Boolean banned = false;
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<CartItem> items = new HashSet<>();
 }

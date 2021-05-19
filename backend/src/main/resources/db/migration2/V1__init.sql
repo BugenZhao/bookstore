@@ -16,19 +16,19 @@
 -- ----------------------------
 -- Table structure for book
 -- ----------------------------
-DROP TABLE IF EXISTS `books`;
-CREATE TABLE `books` (
-    `id` int(11) AUTO_INCREMENT NOT NULL,
-    `isbn` varchar(255) NOT NULL,
-    `name` varchar(255) NOT NULL,
-    `type` varchar(255) NOT NULL,
-    `author` varchar(255) NOT NULL,
-    `price` decimal(10, 2) NOT NULL,
-    `description` varchar(2000) NOT NULL,
-    `inventory` int(11) NOT NULL,
-    `image` varchar(255) NOT NULL,
-    PRIMARY KEY (`id`)
-);
+-- DROP TABLE IF EXISTS `books`;
+-- CREATE TABLE `books` (
+--     `id` int(11) AUTO_INCREMENT NOT NULL,
+--     `isbn` varchar(255) NOT NULL,
+--     `name` varchar(255) NOT NULL,
+--     `type` varchar(255) NOT NULL,
+--     `author` varchar(255) NOT NULL,
+--     `price` decimal(10, 2) NOT NULL,
+--     `description` varchar(2000) NOT NULL,
+--     `inventory` int(11) NOT NULL,
+--     `image` varchar(255) NOT NULL,
+--     PRIMARY KEY (`id`)
+-- );
 -- ----------------------------
 -- Records of book
 -- ----------------------------
@@ -404,13 +404,11 @@ VALUES
 ('badguy', 'badguy', '1', true);
 
 
-DROP TABLE IF EXISTS `carts`;
-CREATE TABLE `carts` (
-    `id` int(11) AUTO_INCREMENT NOT NULL,
+DROP TABLE IF EXISTS `cart`;
+CREATE TABLE `cart` (
     `user_id` int(11) NOT NULL,
     `book_id` int(11) NOT NULL,
-    `order_id` int(11),
-    PRIMARY KEY(`id`)
+    `added_at` datetime NOT NULL
 );
 
 
@@ -418,8 +416,17 @@ DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
     `id` int(11) AUTO_INCREMENT NOT NULL,
     `user_id` int(11) NOT NULL,
-    `created_at` datetime NOT NULL DEFAULT now(),
+    `created_at` datetime NOT NULL,
     `consignee` varchar(255) NOT NULL,
+    `total_price` decimal(10, 2) NOT NULL,
     `status` int NOT NULL DEFAULT 0,
     PRIMARY KEY(`id`)
 );
+
+
+DROP TABLE IF EXISTS `order_books`;
+CREATE TABLE `order_books` (
+    `order_id` int(11) NOT NULL,
+    `book_id` int(11) NOT NULL,
+    `count` int(11) NOT NULL
+)

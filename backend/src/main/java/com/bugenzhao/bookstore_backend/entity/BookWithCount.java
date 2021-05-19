@@ -8,5 +8,5 @@ import lombok.*;
 @AllArgsConstructor
 public class BookWithCount {
     private Book book;
-    private int count;
+    private long count;
 }
