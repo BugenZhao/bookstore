@@ -3,44 +3,60 @@ package com.bugenzhao.bookstore_backend.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.bugenzhao.bookstore_backend.entity.AuthedUser;
-import com.bugenzhao.bookstore_backend.entity.OrderResponse;
-import com.bugenzhao.bookstore_backend.entity.db.rowmapper.OrderRowMapper;
+import com.bugenzhao.bookstore_backend.entity.db.Order;
+import com.bugenzhao.bookstore_backend.entity.db.OrderItem;
+import com.bugenzhao.bookstore_backend.entity.db.OrderStatus;
+import com.bugenzhao.bookstore_backend.repository.OrderRepository;
+import com.bugenzhao.bookstore_backend.repository.UserAuthRepository;
 import com.bugenzhao.bookstore_backend.service.CartService;
 import com.bugenzhao.bookstore_backend.service.OrderService;
 import com.bugenzhao.bookstore_backend.utils.SessionUtils;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Service
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class OrderServiceImpl implements OrderService {
-    CartService cartService;
-    JdbcTemplate jdbcTemplate;
-    AuthedUser user;
+    final CartService cartService;
+    final UserAuthRepository userAuthRepo;
+    final OrderRepository orderRepo;
 
-    public OrderServiceImpl(CartService cartService, JdbcTemplate jdbcTemplate) {
+    final AuthedUser user;
+
+    public OrderServiceImpl(CartService cartService, UserAuthRepository userAuthRepo, OrderRepository orderRepository,
+            HttpServletRequest request) {
         this.cartService = cartService;
-        this.jdbcTemplate = jdbcTemplate;
-
-        var attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        this.user = SessionUtils.getAuth(attr.getRequest());
+        this.userAuthRepo = userAuthRepo;
+        this.orderRepo = orderRepository;
+        this.user = SessionUtils.getAuth(request);
     }
 
     @Override
-    public List<OrderResponse> findAll() {
-        var orderIds = jdbcTemplate.query("select * from orders where user_id = ? order by created_at desc",
-                new OrderRowMapper(), user.getUserId());
-        return orderIds.stream().map((raw) -> {
-            var orderId = raw.getId();
-            var cart = cartService.getByOrderId(orderId);
-            return new OrderResponse(raw.getId(), raw.getCreatedAt(), cart, raw.getConsignee(), raw.getStatus());
-        }).collect(Collectors.toList());
+    public List<Order> findAll() {
+        return orderRepo.findAll();
+    }
+
+    @Override
+    public boolean checkout() {
+        var cart = cartService.getThenEmpty();
+        if (cart.getBooks().isEmpty()) {
+            return false;
+        }
+
+        var orderItems = cart.getBooks().stream()
+                .map((bwc) -> OrderItem.builder().book(bwc.getBook()).quantity(bwc.getCount()).build())
+                .collect(Collectors.toSet());
+        var userAuth = userAuthRepo.getOne(user.getUserId());
+        var order = Order.builder().user(userAuth).consignee("Bugen Zhao").status(OrderStatus.submitted)
+                .items(orderItems).totalPrice(cart.getTotal()).build();
+
+        orderRepo.save(order);
+        return true;
     }
 }

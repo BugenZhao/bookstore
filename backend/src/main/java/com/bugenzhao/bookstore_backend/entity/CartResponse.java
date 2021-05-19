@@ -1,5 +1,6 @@
 package com.bugenzhao.bookstore_backend.entity;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import lombok.*;
@@ -8,6 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 public class CartResponse {
     private List<BookWithCount> books;
-    private double discount;
-    private double total;
+    private BigDecimal discount;
+    private BigDecimal total;
 }

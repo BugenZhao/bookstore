@@ -2,6 +2,8 @@ package com.bugenzhao.bookstore_backend.entity;
 
 import java.util.Date;
 
+import com.bugenzhao.bookstore_backend.entity.db.OrderStatus;
+
 import lombok.*;
 
 @Data

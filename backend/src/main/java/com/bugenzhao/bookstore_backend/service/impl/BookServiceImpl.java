@@ -11,19 +11,19 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BookServiceImpl implements BookService {
-    BookRepository repo;
+    BookRepository bookRepo;
 
     public BookServiceImpl(BookRepository repo) {
-        this.repo = repo;
+        this.bookRepo = repo;
     }
 
     @Override
     public Optional<Book> findById(long bookId) {
-        return repo.findById(bookId);
+        return bookRepo.findById(bookId);
     }
 
     @Override
     public List<Book> findAll() {
-        return repo.findAll();
+        return bookRepo.findAll();
     }
 }

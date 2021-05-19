@@ -11,7 +11,5 @@ public interface CartService {
 
     CartResponse get();
 
-    CartResponse getByOrderId(long orderId);
-
-    boolean checkout();
+    CartResponse getThenEmpty();
 }

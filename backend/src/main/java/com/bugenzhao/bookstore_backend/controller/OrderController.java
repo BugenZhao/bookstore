@@ -1,6 +1,7 @@
 package com.bugenzhao.bookstore_backend.controller;
 
 import com.bugenzhao.bookstore_backend.entity.OrderResponse;
+import com.bugenzhao.bookstore_backend.entity.db.Order;
 import com.bugenzhao.bookstore_backend.service.OrderService;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ public class OrderController {
     }
 
     @GetMapping("/")
-    public List<OrderResponse> getAllOrders() throws Exception {
+    public List<Order> getAllOrders() throws Exception {
         return orderService.findAll();
     }
 }

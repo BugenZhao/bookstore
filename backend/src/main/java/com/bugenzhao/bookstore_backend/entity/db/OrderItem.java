@@ -1,10 +1,8 @@
 package com.bugenzhao.bookstore_backend.entity.db;
 
-import java.util.Date;
-
 import javax.persistence.*;
 
-import org.hibernate.annotations.CreationTimestamp;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
 
@@ -14,14 +12,15 @@ import lombok.*;
 @NoArgsConstructor
 
 @Entity
-public class CartItem {
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Long id;
 
     @ManyToOne
     private Book book;
 
-    @CreationTimestamp
-    private Date createdAt;
+    @Builder.Default
+    private Long quantity = 0l;
 }

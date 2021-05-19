@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/cart/")
 public class CartController {
-    final BookService bookService;
     final CartService cartService;
+    final OrderService orderService;
 
-    public CartController(BookService bookService, CartService cartService, OrderService orderService) {
-        this.bookService = bookService;
+    public CartController(CartService cartService, OrderService orderService) {
         this.cartService = cartService;
+        this.orderService = orderService;
     }
 
     @GetMapping("/")
@@ -49,7 +49,7 @@ public class CartController {
 
     @PostMapping("/checkout")
     public ResponseEntity<Void> checkout() {
-        var ok = cartService.checkout();
+        var ok = orderService.checkout();
         if (ok) {
             return ResponseEntity.ok(null);
         } else {
