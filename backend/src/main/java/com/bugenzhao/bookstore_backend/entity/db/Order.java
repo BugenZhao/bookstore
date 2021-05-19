@@ -7,11 +7,12 @@ import com.bugenzhao.bookstore_backend.entity.OrderStatus;
 import lombok.*;
 
 @Data
+@Builder
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Order {
-    private long id;
-    private long userId;
+    private Long id;
+    private Long userId;
     private Date createdAt;
     private String consignee;
     private OrderStatus status;

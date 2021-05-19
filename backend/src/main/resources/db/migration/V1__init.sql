@@ -28,7 +28,7 @@ CREATE TABLE `books` (
     `inventory` int(11) NOT NULL,
     `image` varchar(255) NOT NULL,
     PRIMARY KEY (`id`)
-) /* ENGINE = InnoDB  DEFAULT  CHARSET = utf8 */;
+);
 -- ----------------------------
 -- Records of book
 -- ----------------------------
@@ -388,21 +388,20 @@ CREATE TABLE `user_auths` (
     `user_id` int(11) AUTO_INCREMENT NOT NULL,
     `username` varchar(255) NOT NULL,
     `password` varchar(255) NOT NULL,
-    `user_type` int(11) NOT NULL DEFAULT '1',
-    `banned` boolean NOT NULL DEFAULT false,
+    `user_type` int(11) NOT NULL,
+    `banned` boolean NOT NULL,
+    UNIQUE(`username`),
     PRIMARY KEY(`user_id`)
-) /* ENGINE = InnoDB DEFAULT CHARSET = utf8 */;
+);
 -- ----------------------------
 -- Records of user_auth
 -- ----------------------------
-INSERT INTO `user_auths`(`username`, `password`, `user_type`)
+INSERT INTO `user_auths`(`username`, `password`, `user_type`, `banned`)
 VALUES
-('thunderboy', 'reins1409', '0'),
-('admin', 'admin', '0');
-INSERT INTO `user_auths`(`username`, `password`, `banned`)
-VALUES
-('guest', 'guest', false),
-('badguy', 'badguy', true);
+('thunderboy', 'reins1409', '0', false),
+('admin', 'admin', '0', false),
+('guest', 'guest', '1', false),
+('badguy', 'badguy', '1', true);
 
 
 DROP TABLE IF EXISTS `carts`;

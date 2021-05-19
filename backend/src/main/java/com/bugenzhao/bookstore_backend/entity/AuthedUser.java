@@ -9,10 +9,10 @@ import lombok.*;
 @AllArgsConstructor
 public class AuthedUser {
     @JsonProperty("user_id")
-    private long userId;
+    private Long userId;
     private String username;
     @JsonProperty("user_type")
-    private int userType;
+    private Integer userType;
 
     public AuthedUser(UserAuth userAuth) {
         this.userId = userAuth.getUserId();
