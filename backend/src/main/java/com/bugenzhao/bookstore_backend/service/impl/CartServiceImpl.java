@@ -107,7 +107,7 @@ public class CartServiceImpl implements CartService {
         var books = map.entrySet().stream()
                 .map((e) -> new BookWithCount(bookService.findById(e.getKey()).get(), e.getValue()))
                 .filter((b) -> b.book != null).collect(Collectors.toList());
-        var total = books.stream().map((b) -> b.book.price * b.count).reduce(0.0, Double::sum);
+        var total = books.stream().map((b) -> b.book.price.doubleValue() * b.count).reduce(0.0, Double::sum);
         var discount = Double.min(total * 0.3, 100.0);
 
         return new Cart(books, discount, total - discount);
