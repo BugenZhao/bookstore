@@ -1,5 +1,7 @@
 package com.bugenzhao.bookstore_backend.service.impl;
 
+import java.util.Optional;
+
 import javax.validation.ConstraintViolationException;
 
 import com.bugenzhao.bookstore_backend.entity.db.Book;
@@ -9,6 +11,7 @@ import com.bugenzhao.bookstore_backend.utils.BzBeanUtils;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 @Service
 @Transactional
@@ -29,6 +32,17 @@ public class AdminBookServiceImpl implements AdminBookService {
         } catch (ConstraintViolationException e) {
             // FIXME: failed to catch
             return false;
+        }
+    }
+
+    @Override
+    public Optional<Book> putBook(Book bookToSave) {
+        try {
+            var book = bookRepo.save(bookToSave);
+            return Optional.of(book);
+        } catch (ConstraintViolationException e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return Optional.empty();
         }
     }
 }

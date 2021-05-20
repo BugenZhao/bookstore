@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,5 +30,11 @@ public class AdminBookController {
     public ResponseEntity<Void> patchUser(@PathVariable long bookId, @RequestBody Book patch) {
         var ok = bookService.patchById(bookId, patch);
         return ok ? ResponseEntity.ok(null) : ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+    }
+
+    @PutMapping("/")
+    public ResponseEntity<Book> putBook(@RequestBody Book bookToSave) {
+        return bookService.putBook(bookToSave).map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null));
     }
 }
