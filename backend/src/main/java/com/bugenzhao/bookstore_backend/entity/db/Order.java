@@ -7,7 +7,8 @@ import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.bugenzhao.bookstore_backend.utils.JsonViews;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
@@ -27,9 +28,9 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
+    @ManyToOne
     @NotNull
+    @JsonView(JsonViews.Admin.class)
     private User user;
 
     @CreationTimestamp
