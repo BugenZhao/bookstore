@@ -7,5 +7,7 @@ import com.bugenzhao.bookstore_backend.entity.db.Book;
 public interface AdminBookService {
     boolean patchById(long bookId, Book patch);
 
-    Optional<Book> putBook(Book book);
+    Optional<Book> put(Book book);
+
+    void deleteById(long bookId);
 }

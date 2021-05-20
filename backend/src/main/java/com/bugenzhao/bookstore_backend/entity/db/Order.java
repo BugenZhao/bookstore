@@ -10,6 +10,8 @@ import javax.validation.constraints.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import lombok.*;
 
@@ -40,6 +42,8 @@ public class Order {
     private OrderStatus status;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn
     @NotNull
     private Set<OrderItem> items;
 

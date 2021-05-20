@@ -1,15 +1,11 @@
 package com.bugenzhao.bookstore_backend.controller;
 
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import com.bugenzhao.bookstore_backend.entity.db.Book;
 import com.bugenzhao.bookstore_backend.service.AdminBookService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,7 +30,12 @@ public class AdminBookController {
 
     @PutMapping("/")
     public ResponseEntity<Book> putBook(@RequestBody Book bookToSave) {
-        return bookService.putBook(bookToSave).map(ResponseEntity::ok)
+        return bookService.put(bookToSave).map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null));
+    }
+
+    @DeleteMapping("/{bookId}")
+    public void deleteBook(@PathVariable long bookId) {
+        bookService.deleteById(bookId);
     }
 }

@@ -9,6 +9,8 @@ import com.bugenzhao.bookstore_backend.repository.AdminBookRepository;
 import com.bugenzhao.bookstore_backend.service.AdminBookService;
 import com.bugenzhao.bookstore_backend.utils.BzBeanUtils;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -16,6 +18,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 @Service
 @Transactional
 public class AdminBookServiceImpl implements AdminBookService {
+    Logger logger = LogManager.getLogger();
     AdminBookRepository bookRepo;
 
     public AdminBookServiceImpl(AdminBookRepository bookRepo) {
@@ -36,13 +39,19 @@ public class AdminBookServiceImpl implements AdminBookService {
     }
 
     @Override
-    public Optional<Book> putBook(Book bookToSave) {
+    public Optional<Book> put(Book bookToSave) {
         try {
             var book = bookRepo.save(bookToSave);
             return Optional.of(book);
         } catch (ConstraintViolationException e) {
+            logger.info("put an invalid book: " + bookToSave);
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Optional.empty();
         }
+    }
+
+    @Override
+    public void deleteById(long bookId) {
+        bookRepo.deleteById(bookId);
     }
 }

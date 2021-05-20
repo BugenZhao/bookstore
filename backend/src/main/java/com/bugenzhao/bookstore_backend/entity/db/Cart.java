@@ -5,6 +5,9 @@ import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import lombok.*;
 
 @Data
@@ -23,6 +26,8 @@ public class Cart {
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn
     @NotNull
     private Set<CartItem> items;
 }
