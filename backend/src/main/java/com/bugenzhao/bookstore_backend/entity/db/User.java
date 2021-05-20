@@ -15,26 +15,27 @@ import lombok.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
+    @NotNull
     private String username;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     @Email
+    @NotNull
     private String email;
 
-    @Column(nullable = false)
     @Size(min = 4)
+    @NotNull
     private String password;
 
     @Builder.Default
     @Enumerated
-    @Column(nullable = false)
+    @NotNull
     private UserType type = UserType.normal;
 
     @Builder.Default
-    @Column(nullable = false)
+    @NotNull
     private Boolean banned = false;
 }

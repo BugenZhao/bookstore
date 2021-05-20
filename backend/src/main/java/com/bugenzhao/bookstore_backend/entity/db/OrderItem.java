@@ -1,6 +1,7 @@
 package com.bugenzhao.bookstore_backend.entity.db;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,8 +20,10 @@ public class OrderItem {
     private Long id;
 
     @ManyToOne
+    @NotNull
     private Book book;
 
     @Builder.Default
+    @NotNull
     private Long quantity = 0l;
 }

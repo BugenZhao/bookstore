@@ -19,21 +19,29 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String isbn;
 
+    @NotNull
     private String name;
 
+    @NotNull
     private String type;
 
+    @NotNull
     private String author;
 
+    @NotNull
     @DecimalMin(value = "0.00")
     private BigDecimal price;
 
+    @NotNull
     private String description;
 
+    @NotNull
     @Min(value = 0)
     private Integer inventory;
 
+    @NotNull
     private String image;
 }

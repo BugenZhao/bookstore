@@ -3,6 +3,7 @@ package com.bugenzhao.bookstore_backend.entity.db;
 import java.util.Date;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -20,6 +21,7 @@ public class CartItem {
     private Long id;
 
     @ManyToOne
+    @NotNull
     private Book book;
 
     @CreationTimestamp

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import lombok.*;
 
@@ -19,9 +20,11 @@ public class Cart {
     private Long id;
 
     @OneToOne
+    @NotNull
     private User user;
 
     @Builder.Default
     @OneToMany(cascade = CascadeType.ALL)
+    @NotNull
     private Set<CartItem> items = new HashSet<>();
 }

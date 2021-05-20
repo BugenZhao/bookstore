@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -26,17 +27,22 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
+    @NotNull
     private User user;
 
     @CreationTimestamp
     private Date createdAt;
 
+    @NotNull
     private String consignee;
 
+    @NotNull
     private OrderStatus status;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @NotNull
     private Set<OrderItem> items;
 
+    @NotNull
     private BigDecimal totalPrice;
 }
