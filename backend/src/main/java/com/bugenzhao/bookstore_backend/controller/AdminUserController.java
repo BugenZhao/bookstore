@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import com.bugenzhao.bookstore_backend.entity.db.User;
 import com.bugenzhao.bookstore_backend.service.AdminUserService;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +31,8 @@ public class AdminUserController {
     }
 
     @PatchMapping("/{userId}")
-    public void patchUser(@PathVariable long userId, @RequestBody User patch) {
-        userService.patchById(userId, patch);
+    public ResponseEntity<Void> patchUser(@PathVariable long userId, @RequestBody User patch) {
+        var ok = userService.patchById(userId, patch);
+        return ok ? ResponseEntity.ok(null) : ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
     }
 }

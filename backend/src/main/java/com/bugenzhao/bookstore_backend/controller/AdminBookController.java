@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import com.bugenzhao.bookstore_backend.entity.db.Book;
 import com.bugenzhao.bookstore_backend.service.AdminBookService;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +26,8 @@ public class AdminBookController {
     }
 
     @PatchMapping("/{bookId}")
-    public void patchUser(@PathVariable long bookId, @RequestBody Book patch) {
-        bookService.patchById(bookId, patch);
+    public ResponseEntity<Void> patchUser(@PathVariable long bookId, @RequestBody Book patch) {
+        var ok = bookService.patchById(bookId, patch);
+        return ok ? ResponseEntity.ok(null) : ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
     }
 }

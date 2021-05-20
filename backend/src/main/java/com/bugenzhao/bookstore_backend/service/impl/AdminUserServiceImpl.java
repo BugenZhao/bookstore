@@ -2,6 +2,8 @@ package com.bugenzhao.bookstore_backend.service.impl;
 
 import java.util.List;
 
+import javax.validation.ConstraintViolationException;
+
 import com.bugenzhao.bookstore_backend.entity.db.User;
 import com.bugenzhao.bookstore_backend.repository.AdminUserRepository;
 import com.bugenzhao.bookstore_backend.service.AdminUserService;
@@ -25,9 +27,15 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public void patchById(long userId, User patch) {
+    public boolean patchById(long userId, User patch) {
         var user = userRepo.findById(userId).get();
         BzBeanUtils.copyNonNullProperties(patch, user, "id", "password");
-        userRepo.save(user);
+        try {
+            userRepo.save(user);
+            return true;
+        } catch (ConstraintViolationException e) {
+            // FIXME: failed to catch
+            return false;
+        }
     }
 }

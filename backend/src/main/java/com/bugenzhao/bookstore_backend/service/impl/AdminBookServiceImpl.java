@@ -1,5 +1,7 @@
 package com.bugenzhao.bookstore_backend.service.impl;
 
+import javax.validation.ConstraintViolationException;
+
 import com.bugenzhao.bookstore_backend.entity.db.Book;
 import com.bugenzhao.bookstore_backend.repository.AdminBookRepository;
 import com.bugenzhao.bookstore_backend.service.AdminBookService;
@@ -18,9 +20,15 @@ public class AdminBookServiceImpl implements AdminBookService {
     }
 
     @Override
-    public void patchById(long bookId, Book patch) {
+    public boolean patchById(long bookId, Book patch) {
         var book = bookRepo.findById(bookId).get();
         BzBeanUtils.copyNonNullProperties(patch, book, "id");
-        bookRepo.save(book);
+        try {
+            bookRepo.save(book);
+            return true;
+        } catch (ConstraintViolationException e) {
+            // FIXME: failed to catch
+            return false;
+        }
     }
 }
