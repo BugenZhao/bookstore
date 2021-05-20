@@ -3,6 +3,8 @@ package com.bugenzhao.bookstore_backend.entity.db;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.*;
 
 @Data
@@ -28,6 +30,7 @@ public class User {
 
     @Size(min = 4)
     @NotNull
+    @JsonIgnore
     private String password;
 
     @Builder.Default
