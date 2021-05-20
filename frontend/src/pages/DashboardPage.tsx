@@ -3,6 +3,7 @@ import { Main } from "./common/Main";
 import { Body } from "./common/Body";
 import { BookManagementView } from "../views/BookManagementView";
 import { UserManagementView } from "../views/UserManagementView";
+import { OrderManagementView } from "../views/OrderManagementView";
 import { Tab, Tabs } from "react-bootstrap";
 import { useState } from "react";
 
@@ -18,7 +19,7 @@ export function DashboardPage() {
 }
 
 function DashboardMain() {
-  const [key, setKey] = useState<string | undefined>("books");
+  const [key, setKey] = useState<string>("books");
 
   return (
     <div>
@@ -28,7 +29,7 @@ function DashboardMain() {
       <div className="py-4">
         <Tabs
           activeKey={key}
-          onSelect={(k) => setKey(k ?? undefined)}
+          onSelect={(k) => setKey(k ?? "books")}
           className="mb-3"
         >
           <Tab eventKey="books" title="Books">
@@ -36,6 +37,9 @@ function DashboardMain() {
           </Tab>
           <Tab eventKey="users" title="Users">
             <UserManagementView />
+          </Tab>
+          <Tab eventKey="orders" title="Orders">
+            <OrderManagementView />
           </Tab>
         </Tabs>
       </div>

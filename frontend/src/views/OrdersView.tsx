@@ -18,16 +18,18 @@ import {
 } from "@devexpress/dx-react-grid-bootstrap4";
 import { DisplayCol } from "../views/ManagementView";
 import { PropsWithChildren } from "react";
+import { User } from "../services/admin";
 
 export function OrdersView({
   orders,
-  showUsername = false,
+  showUser = false,
 }: PropsWithChildren<{
   orders: Order[];
-  showUsername?: boolean;
+  showUser?: boolean;
 }>) {
   type Items = Order["items"];
   type Row = Order;
+
   const cols: DisplayCol<Row>[] = [
     { name: "id", title: "Order ID" },
     { name: "createdAt", title: "Created At" },
@@ -36,6 +38,10 @@ export function OrdersView({
     { name: "consignee", title: "Consignee" },
     { name: "status", title: "Status" },
   ];
+
+  if (showUser) {
+    cols.splice(1, 0, { name: "user", title: "User" });
+  }
 
   const OrderItemFormatter = ({ value }: { value: Items }) => {
     const items = value.map(({ book, quantity }) => (
@@ -49,6 +55,10 @@ export function OrdersView({
     return <>{items}</>;
   };
 
+  const UserFormatter = ({ value }: { value: User }) => {
+    return <>{`${value.username} (${value.id})`}</>;
+  };
+
   return (
     <div className="card">
       <Grid rows={orders} columns={cols} getRowId={(row) => row.id}>
@@ -60,6 +70,7 @@ export function OrdersView({
           formatterComponent={OrderItemFormatter}
           for={["items"]}
         />
+        <DataTypeProvider formatterComponent={UserFormatter} for={["user"]} />
         <Table />
         <TableHeaderRow />
         <Toolbar />

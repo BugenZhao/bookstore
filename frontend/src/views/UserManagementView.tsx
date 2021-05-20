@@ -1,12 +1,12 @@
 import _ from "lodash";
 import { ErrorModal } from "../components/ErrorModal";
 import { useState } from "react";
-import { patchUser, useUsers } from "../services/admin";
+import { patchUser, useAllUsers } from "../services/admin";
 import { UserType } from "../services/auth";
 import { DisplayCol, ManagementView } from "./ManagementView";
 
 export function UserManagementView() {
-  const { users, revalidate } = useUsers();
+  const { users, revalidate } = useAllUsers();
 
   const rows = _.values(users).map((user) => {
     return {

@@ -1,4 +1,5 @@
 import { useFetch } from ".";
+import { User } from "./admin";
 import { Book } from "./book";
 
 export enum OrderStatus {
@@ -10,6 +11,7 @@ export enum OrderStatus {
 
 export type Order = {
   id: string;
+  user?: User;
   createdAt: string;
   consignee: string;
   status: OrderStatus;

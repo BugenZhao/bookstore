@@ -1,6 +1,7 @@
 import { delete_, patch, put, useFetch } from ".";
 import { UserType } from "./auth";
 import { Book } from "./book";
+import { Order } from "./order";
 
 export type User = {
   id: string;
@@ -10,7 +11,7 @@ export type User = {
   banned: boolean;
 };
 
-export function useUsers() {
+export function useAllUsers() {
   const r = useFetch<Record<string, User>>("/admin/users/");
   return {
     users: r.error ? undefined : r.data,
@@ -32,4 +33,12 @@ export function putBook(data: Partial<Book>) {
 
 export function deleteBook(id: string) {
   return delete_(`/admin/books/${id}`);
+}
+
+export function useAllOrders() {
+  const r = useFetch<Order[]>("/admin/orders/");
+  return {
+    orders: (r.error ? undefined : r.data) ?? [],
+    ...r,
+  };
 }
