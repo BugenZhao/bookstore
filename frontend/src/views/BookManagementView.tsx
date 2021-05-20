@@ -5,9 +5,10 @@ import "@devexpress/dx-react-grid-bootstrap4/dist/dx-react-grid-bootstrap4.css";
 import { DisplayCol, ManagementView } from "./ManagementView";
 import titleize from "titleize";
 import { Book, useBooks } from "../services/book";
+import { patchBook } from "../services/admin";
 
 export function BookManagementView() {
-  const { books } = useBooks();
+  const { books, revalidate } = useBooks();
   const rows = _.values(books);
 
   type Row = Book;
@@ -32,7 +33,7 @@ export function BookManagementView() {
       showEditCommand
       rows={rows}
       cols={cols}
-      onCommitChanges={({ added, changed, deleted }) => {
+      onCommitChanges={async ({ added, changed, deleted }) => {
         if (added) {
           // [row]
           // setBOOKS(
@@ -46,16 +47,12 @@ export function BookManagementView() {
         }
 
         if (changed) {
-          // {id: row}
-          // setBOOKS(
-          //   produce(BOOKS, (bs) => {
-          //     _(changed)
-          //       .toPairs()
-          //       .forEach(([id, rowChanged]) => {
-          //         bs[id] = { ...bs[id], ...rowChanged };
-          //       });
-          //   })
-          // );
+          const promises = _(changed)
+            .entries()
+            .filter(([_id, patch]) => !!patch)
+            .map(([id, patch]) => patchBook(id, patch!))
+            .value();
+          await Promise.all(promises);
         }
 
         if (deleted) {
@@ -72,6 +69,7 @@ export function BookManagementView() {
           // );
           // clearCart();
         }
+        await revalidate();
       }}
     />
   );
