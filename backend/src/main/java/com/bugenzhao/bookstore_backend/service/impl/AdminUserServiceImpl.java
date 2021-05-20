@@ -27,7 +27,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Override
     public void patchById(long userId, User patch) {
         var user = userRepo.findById(userId).get();
-        BzBeanUtils.copyNonNullProperties(patch, user);
+        BzBeanUtils.copyNonNullProperties(patch, user, "id", "password");
         userRepo.save(user);
     }
 }
