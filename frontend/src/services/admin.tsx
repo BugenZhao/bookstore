@@ -1,8 +1,8 @@
-import { useFetch } from ".";
+import { patch, useFetch } from ".";
 import { UserType } from "./auth";
 
 export type User = {
-  id: number;
+  id: string;
   username: string;
   email: string;
   type: UserType;
@@ -10,9 +10,14 @@ export type User = {
 };
 
 export function useUsers() {
-  const r = useFetch<Record<number, User>>("/admin/users/");
+  const r = useFetch<Record<string, User>>("/admin/users/", {
+  });
   return {
     users: r.error ? undefined : r.data,
     ...r,
   };
+}
+
+export function patchUser(id: string, data: Partial<User>) {
+  return patch(`/admin/users/${id}`, JSON.stringify(data));
 }

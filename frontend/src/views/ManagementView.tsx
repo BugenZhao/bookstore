@@ -18,21 +18,50 @@ import {
   SearchPanel,
   Toolbar,
 } from "@devexpress/dx-react-grid-bootstrap4";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useRef } from "react";
 import { Form } from "react-bootstrap";
 
-export function ManagementView<T>({
+export type Col<R> = keyof R & string;
+export type DisplayCol<R> = {
+  name: Col<R>;
+  title: string;
+};
+export type Patch<R> = Partial<Record<Col<R>, any>>;
+
+export function ManagementView<R>({
   rows,
   cols,
   onCommitChanges,
   booleanCols,
+  disableEditingCols = ["id"],
+  showAddCommand = false,
+  showEditCommand = false,
+  showDeleteCommand = false,
   children,
 }: PropsWithChildren<{
-  rows: T[];
-  cols: { name: string; title: string }[];
-  onCommitChanges: ({ added, changed, deleted }: ChangeSet) => void;
+  rows: R[];
+  cols: DisplayCol<R>[];
+  onCommitChanges: ({
+    added,
+    changed,
+    deleted,
+  }: {
+    added?: ChangeSet["added"];
+    changed?: Record<string, Patch<R> | undefined>;
+    deleted?: ChangeSet["deleted"];
+  }) => void;
   booleanCols?: string[];
+  disableEditingCols?: string[];
+  showAddCommand?: boolean;
+  showEditCommand?: boolean;
+  showDeleteCommand?: boolean;
 }>) {
+  const editingStateColumnExtensions = useRef(
+    disableEditingCols.map((col) => {
+      return { columnName: col, editingEnabled: false };
+    })
+  );
+
   return (
     <div className="card">
       <Grid rows={rows} columns={cols} getRowId={(row) => row.id}>
@@ -42,11 +71,18 @@ export function ManagementView<T>({
         <IntegratedPaging />
         {booleanCols ? <BooleanTypeProvider for={booleanCols} /> : null}
         {children}
-        <EditingState onCommitChanges={onCommitChanges} />
+        <EditingState
+          onCommitChanges={onCommitChanges}
+          columnExtensions={editingStateColumnExtensions.current}
+        />
         <Table />
         <TableHeaderRow />
         <TableEditRow />
-        <TableEditColumn showAddCommand showEditCommand showDeleteCommand />
+        <TableEditColumn
+          showAddCommand={showAddCommand}
+          showEditCommand={showEditCommand}
+          showDeleteCommand={showDeleteCommand}
+        />
         <Toolbar />
         <SearchPanel />
         <PagingPanel />
@@ -56,7 +92,7 @@ export function ManagementView<T>({
 }
 
 const BooleanFormatter = ({ value }: { value: boolean }) => (
-  <Form.Check type="checkbox" defaultChecked={value} disabled />
+  <Form.Check type="checkbox" checked={value} disabled />
 );
 
 const BooleanEditor = ({
