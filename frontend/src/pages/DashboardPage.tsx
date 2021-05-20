@@ -5,7 +5,9 @@ import { BookManagementView } from "../views/BookManagementView";
 import { UserManagementView } from "../views/UserManagementView";
 import { OrderManagementView } from "../views/OrderManagementView";
 import { Tab, Tabs } from "react-bootstrap";
-import { useState } from "react";
+import { useRouteMatch } from "react-router";
+import { DashboardPageParams } from "../routes";
+import { useHistory } from "react-router-dom";
 
 export function DashboardPage() {
   return (
@@ -19,7 +21,8 @@ export function DashboardPage() {
 }
 
 function DashboardMain() {
-  const [key, setKey] = useState<string>("books");
+  const tab = useRouteMatch<DashboardPageParams>().params.tab ?? "books";
+  const history = useHistory();
 
   return (
     <div>
@@ -28,8 +31,11 @@ function DashboardMain() {
       </div>
       <div className="py-4">
         <Tabs
-          activeKey={key}
-          onSelect={(k) => setKey(k ?? "books")}
+          activeKey={tab}
+          onSelect={(k) => {
+            const tab = k ?? "books";
+            history.replace(`/dashboard/${tab}`);
+          }}
           className="mb-3"
         >
           <Tab eventKey="books" title="Books">

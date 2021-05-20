@@ -131,7 +131,12 @@ function DashboardButton({ active }: { active: string }) {
           Book Store
         </Button>
       ) : (
-        <Button as={Link} to="/dashboard" variant="primary" className="w-100">
+        <Button
+          as={Link}
+          to="/dashboard/books"
+          variant="primary"
+          className="w-100"
+        >
           Dashboard
         </Button>
       )}
