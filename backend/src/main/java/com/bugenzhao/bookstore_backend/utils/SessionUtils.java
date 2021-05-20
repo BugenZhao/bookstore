@@ -1,24 +1,22 @@
 package com.bugenzhao.bookstore_backend.utils;
 
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 
 import com.bugenzhao.bookstore_backend.entity.AuthedUser;
 
 public class SessionUtils {
     public static boolean checkAuth(HttpServletRequest request) {
-        var session = request.getSession(false);
-        if (session == null) {
-            return false;
-        }
-        return (AuthedUser) session.getAttribute(Constants.AUTHED_USER.name()) != null;
+        return getAuth(request).isPresent();
     }
 
-    public static AuthedUser getAuth(HttpServletRequest request) {
+    public static Optional<AuthedUser> getAuth(HttpServletRequest request) {
         var session = request.getSession(false);
         if (session == null) {
-            return null;
+            return Optional.empty();
         }
-        return (AuthedUser) session.getAttribute(Constants.AUTHED_USER.name());
+        return Optional.ofNullable((AuthedUser) session.getAttribute(Constants.AUTHED_USER.name()));
     }
 
     public static void setAuth(HttpServletRequest request, AuthedUser user) {

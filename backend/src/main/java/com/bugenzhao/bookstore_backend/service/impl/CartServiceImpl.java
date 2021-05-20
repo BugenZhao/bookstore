@@ -39,7 +39,7 @@ public class CartServiceImpl implements CartService {
         this.cartRepo = cartRepository;
         this.userRepo = userRepo;
         this.bookRepo = bookRepo;
-        this.auth = SessionUtils.getAuth(request);
+        this.auth = SessionUtils.getAuth(request).get();
     }
 
     @Override

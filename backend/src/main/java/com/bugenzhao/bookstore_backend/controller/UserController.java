@@ -27,7 +27,7 @@ public class UserController {
 
     @GetMapping("/check")
     public AuthedUser check(HttpServletRequest request) throws Exception {
-        var authedUser = SessionUtils.getAuth(request);
+        var authedUser = SessionUtils.getAuth(request).get();
         return authedUser;
     }
 

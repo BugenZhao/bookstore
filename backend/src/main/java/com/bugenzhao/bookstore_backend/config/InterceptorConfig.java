@@ -2,6 +2,7 @@ package com.bugenzhao.bookstore_backend.config;
 
 import java.util.List;
 
+import com.bugenzhao.bookstore_backend.interceptor.AdminInterceptor;
 import com.bugenzhao.bookstore_backend.interceptor.AuthInterceptor;
 
 import org.springframework.context.annotation.Configuration;
@@ -14,5 +15,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AuthInterceptor()).addPathPatterns("/**")
                 .excludePathPatterns(List.of("/users/login", "/users/register"));
+        registry.addInterceptor(new AdminInterceptor()).addPathPatterns("/admin/**");
     }
 }

@@ -36,7 +36,7 @@ public class OrderServiceImpl implements OrderService {
         this.cartService = cartService;
         this.userRepo = userRepo;
         this.orderRepo = orderRepository;
-        this.auth = SessionUtils.getAuth(request);
+        this.auth = SessionUtils.getAuth(request).get();
     }
 
     @Override

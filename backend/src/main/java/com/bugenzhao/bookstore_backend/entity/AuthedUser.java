@@ -20,4 +20,8 @@ public class AuthedUser {
         this.username = user.getUsername();
         this.userType = user.getType();
     }
+
+    public boolean isAdmin() {
+        return userType == UserType.admin;
+    }
 }

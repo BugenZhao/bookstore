@@ -7,14 +7,14 @@ import com.bugenzhao.bookstore_backend.utils.SessionUtils;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 
-public class AuthInterceptor implements HandlerInterceptor {
+public class AdminInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        var authed = SessionUtils.checkAuth(request);
-        if (!authed) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        var isAdmin = SessionUtils.getAuth(request).map((au) -> au.isAdmin()).orElse(false);
+        if (!isAdmin) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         }
-        return authed;
+        return isAdmin;
     }
 }
