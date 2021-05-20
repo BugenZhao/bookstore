@@ -5,6 +5,6 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 public class LoginInfo {
-    private String username;
+    private String username; // username or email
     private String password;
 }

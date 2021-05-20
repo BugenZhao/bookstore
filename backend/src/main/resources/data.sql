@@ -332,9 +332,39 @@ VALUES
     );
 
 INSERT INTO
-`users`(`username`, `password`, `type`, `banned`)
+`users`(
+    `username`,
+    `email`,
+    `password`,
+    `type`,
+    `banned`
+)
 VALUES
-    ('thunderboy', 'reins1409', '0', false),
-    ('admin', 'admin', '0', false),
-    ('guest', 'guest', '1', false),
-('badguy', 'badguy', '1', true);
+(
+    'thunderboy',
+    'thunderboy@book.store',
+    'reins1409',
+    '0',
+    false
+),
+(
+    'admin',
+    'admin@book.store',
+    'admin',
+    '0',
+    false
+),
+(
+    'guest',
+    'guest@book.store',
+    'guest',
+    '1',
+    false
+),
+(
+    'badguy',
+    'badguy@book.store',
+    'badguy',
+    '1',
+    true
+);

@@ -6,5 +6,6 @@ import lombok.*;
 @AllArgsConstructor
 public class RegisterInfo {
     private String username;
+    private String email;
     private String password;
 }
