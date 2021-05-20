@@ -5,7 +5,7 @@ import "@devexpress/dx-react-grid-bootstrap4/dist/dx-react-grid-bootstrap4.css";
 import { DisplayCol, ManagementView } from "./ManagementView";
 import titleize from "titleize";
 import { Book, useBooks } from "../services/book";
-import { patchBook, putBook } from "../services/admin";
+import { deleteBook, patchBook, putBook } from "../services/admin";
 
 export function BookManagementView() {
   const { books, revalidate } = useBooks();
@@ -51,18 +51,10 @@ export function BookManagementView() {
         }
 
         if (deleted) {
-          // [rowIdx]
-          // if (_.size(BOOKS) <= deleted.length) {
-          //   return;
-          // }
-          // setBOOKS(
-          //   produce(BOOKS, (bs) => {
-          //     _(deleted).forEach((id) => {
-          //       delete bs[id];
-          //     });
-          //   })
-          // );
-          // clearCart();
+          const promises = _(deleted)
+            .map((id) => deleteBook(id.toString()))
+            .value();
+          await Promise.all(promises);
         }
         await revalidate();
       }}
