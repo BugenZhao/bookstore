@@ -1,4 +1,4 @@
-import { patch, useFetch } from ".";
+import { patch, put, useFetch } from ".";
 import { UserType } from "./auth";
 import { Book } from "./book";
 
@@ -24,4 +24,8 @@ export function patchUser(id: string, data: Partial<User>) {
 
 export function patchBook(id: string, data: Partial<Book>) {
   return patch(`/admin/books/${id}`, JSON.stringify(data));
+}
+
+export function putBook(data: Partial<Book>) {
+  return put(`/admin/books/`, JSON.stringify(data));
 }

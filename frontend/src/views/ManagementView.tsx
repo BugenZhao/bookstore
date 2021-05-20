@@ -46,7 +46,7 @@ export function ManagementView<R>({
     changed,
     deleted,
   }: {
-    added?: ChangeSet["added"];
+    added?: readonly Patch<R>[];
     changed?: Record<string, Patch<R> | undefined>;
     deleted?: ChangeSet["deleted"];
   }) => void;

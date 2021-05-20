@@ -5,7 +5,7 @@ import "@devexpress/dx-react-grid-bootstrap4/dist/dx-react-grid-bootstrap4.css";
 import { DisplayCol, ManagementView } from "./ManagementView";
 import titleize from "titleize";
 import { Book, useBooks } from "../services/book";
-import { patchBook } from "../services/admin";
+import { patchBook, putBook } from "../services/admin";
 
 export function BookManagementView() {
   const { books, revalidate } = useBooks();
@@ -35,15 +35,10 @@ export function BookManagementView() {
       cols={cols}
       onCommitChanges={async ({ added, changed, deleted }) => {
         if (added) {
-          // [row]
-          // setBOOKS(
-          //   produce(BOOKS, (bs) => {
-          //     _(added).forEach((rowAdded) => {
-          //       const newId = _(BOOKS).keys().max() ?? 0 + 1;
-          //       bs[newId] = { ...rowAdded, id: newId };
-          //     });
-          //   })
-          // );
+          const promises = _(added)
+            .map((item) => putBook(item))
+            .value();
+          await Promise.all(promises);
         }
 
         if (changed) {
