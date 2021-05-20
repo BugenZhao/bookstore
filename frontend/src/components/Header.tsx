@@ -15,7 +15,7 @@ import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import { SearchPageParams } from "../routes";
 import { useStore } from "../services/StoreContext";
 import _ from "lodash";
-import { postLogout, useUser } from "../services/auth";
+import { postLogout, useAuth } from "../services/auth";
 import { useCart } from "../services/cart";
 
 export function Header({
@@ -24,7 +24,7 @@ export function Header({
   active: "home" | "detail" | "search" | "cart" | "orders" | "dashboard";
 }) {
   const { cartCount } = useCart();
-  const isAdmin = useUser().isAdmin ?? false;
+  const isAdmin = useAuth().isAdmin ?? false;
   const keyword = useRouteMatch<SearchPageParams>().params.keyword ?? "";
 
   return (
@@ -73,7 +73,7 @@ export function Header({
 function NavUserItem() {
   const { setSignedOut } = useStore();
   const history = useHistory();
-  const { data: user, revalidate } = useUser();
+  const { data: user, revalidate } = useAuth();
 
   return (
     <OverlayTrigger

@@ -1,28 +1,32 @@
 import _ from "lodash";
-import { UserType, useUsers } from "../services/auth";
+import { useUsers } from "../services/admin";
+import { UserType } from "../services/auth";
 import { ManagementView } from "./ManagementView";
 
 export function UserManagementView() {
   const { users } = useUsers();
   const rows = _.values(users).map((user) => {
     return {
-      id: user.user_id,
-      admin: user.user_type === UserType.admin,
+      admin: user.type === UserType.admin,
       ...user,
     };
   });
   const cols = [
-    { name: "user_id", title: "User ID" },
+    { name: "id", title: "User ID" },
     { name: "username", title: "Username" },
-    { name: "admin", title: "Admin" },
+    { name: "email", title: "Email" },
+    { name: "admin", title: "Is admin" },
+    { name: "banned", title: "Is banned" },
   ];
 
   return (
     <ManagementView
       rows={rows}
       cols={cols}
-      booleanCols={["admin"]}
-      onCommitChanges={() => {}}
+      booleanCols={["admin", "banned"]}
+      onCommitChanges={(change) => {
+        console.log(change);
+      }}
     ></ManagementView>
   );
 }

@@ -5,7 +5,7 @@ import { LoginRegView } from "../views/LoginRegView";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { postRegister, RegisterData } from "../services/auth";
-import { useUser } from "../services/auth";
+import { useAuth } from "../services/auth";
 
 export type RegisterFormData = RegisterData & {
   confirmPassword: string;
@@ -13,7 +13,7 @@ export type RegisterFormData = RegisterData & {
 
 export function RegisterPage() {
   const { setSignedOut } = useStore();
-  const { revalidate } = useUser();
+  const { revalidate } = useAuth();
   const history = useHistory();
   const [processing, setProcessing] = useState(false);
   const [wrong, setWrong] = useState(false);

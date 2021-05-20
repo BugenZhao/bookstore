@@ -4,14 +4,14 @@ import { useStore } from "../services/StoreContext";
 import { Alert, Form, OverlayTrigger } from "react-bootstrap";
 import { LoginRegView } from "../views/LoginRegView";
 import { useForm } from "react-hook-form";
-import { useUser } from "../services/auth";
+import { useAuth } from "../services/auth";
 import { LoginData, postLogin } from "../services/auth";
 
 type LoginFormData = LoginData;
 
 export function LoginPage() {
   const { signedOut, setSignedOut } = useStore();
-  const { revalidate } = useUser();
+  const { revalidate } = useAuth();
   const history = useHistory();
   const [banned, setBanned] = useState(false);
   const [processing, setProcessing] = useState(false);

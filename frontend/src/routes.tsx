@@ -16,10 +16,10 @@ import {
   RegisterPage,
   OrdersPage,
 } from "./pages";
-import { useUser } from "./services/auth";
+import { useAuth } from "./services/auth";
 
 function SignedInRoute(props: PropsWithChildren<RouteProps>) {
-  const { error } = useUser();
+  const { error } = useAuth();
   if (error) {
     return <Redirect to="/login" />;
   } else {
@@ -28,11 +28,11 @@ function SignedInRoute(props: PropsWithChildren<RouteProps>) {
 }
 
 function AdminRoute(props: PropsWithChildren<RouteProps>) {
-  const isAdmin = useUser().isAdmin ?? true;
-  if (isAdmin) {
-    return <Route {...props}>{props.children}</Route>;
-  } else {
+  const { isAdmin, error } = useAuth();
+  if (error || isAdmin === false) {
     return <Redirect to="/home" />;
+  } else {
+    return <Route {...props}>{props.children}</Route>;
   }
 }
 
