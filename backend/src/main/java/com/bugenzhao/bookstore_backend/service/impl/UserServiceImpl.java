@@ -7,6 +7,7 @@ import javax.validation.ConstraintViolationException;
 import com.bugenzhao.bookstore_backend.entity.LoginInfo;
 import com.bugenzhao.bookstore_backend.entity.RegisterInfo;
 import com.bugenzhao.bookstore_backend.entity.db.User;
+import com.bugenzhao.bookstore_backend.entity.db.UserType;
 import com.bugenzhao.bookstore_backend.repository.UserRepository;
 import com.bugenzhao.bookstore_backend.service.UserService;
 
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserService {
             return Optional.empty();
         } else {
             var userToSave = User.builder().username(info.getUsername()).email(info.getEmail())
-                    .password(info.getPassword()).build();
+                    .password(info.getPassword()).type(UserType.normal).banned(false).build();
             try {
                 var user = repo.save(userToSave);
                 return Optional.of(user);

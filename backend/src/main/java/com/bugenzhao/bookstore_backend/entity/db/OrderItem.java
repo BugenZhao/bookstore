@@ -23,7 +23,6 @@ public class OrderItem {
     @NotNull
     private Book book;
 
-    @Builder.Default
     @NotNull
-    private Long quantity = 0l;
+    private Long quantity;
 }

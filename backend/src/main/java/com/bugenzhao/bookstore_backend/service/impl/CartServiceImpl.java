@@ -1,6 +1,7 @@
 package com.bugenzhao.bookstore_backend.service.impl;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -72,7 +73,7 @@ public class CartServiceImpl implements CartService {
         var user = userRepo.getOne(auth.getUserId());
 
         var cart = cartRepo.findByUser_Id(auth.getUserId()).orElseGet(() -> {
-            var newCart = Cart.builder().user(user).build();
+            var newCart = Cart.builder().user(user).items(new HashSet<>()).build();
             return cartRepo.save(newCart);
         });
 

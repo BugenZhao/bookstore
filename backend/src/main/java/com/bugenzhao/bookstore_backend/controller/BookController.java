@@ -29,7 +29,7 @@ public class BookController {
     }
 
     @GetMapping("/{bookId}")
-    public ResponseEntity<Book> getBook(@PathVariable int bookId) throws Exception {
+    public ResponseEntity<Book> getBook(@PathVariable long bookId) throws Exception {
         return bookService.findById(bookId).map((book) -> ResponseEntity.ok(book))
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
     }

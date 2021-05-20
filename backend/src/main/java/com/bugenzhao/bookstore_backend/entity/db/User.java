@@ -33,12 +33,10 @@ public class User {
     @JsonIgnore
     private String password;
 
-    @Builder.Default
     @Enumerated
     @NotNull
-    private UserType type = UserType.normal;
+    private UserType type;
 
-    @Builder.Default
     @NotNull
-    private Boolean banned = false;
+    private Boolean banned;
 }

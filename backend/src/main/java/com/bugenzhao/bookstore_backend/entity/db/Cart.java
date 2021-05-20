@@ -1,6 +1,5 @@
 package com.bugenzhao.bookstore_backend.entity.db;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -23,8 +22,7 @@ public class Cart {
     @NotNull
     private User user;
 
-    @Builder.Default
     @OneToMany(cascade = CascadeType.ALL)
     @NotNull
-    private Set<CartItem> items = new HashSet<>();
+    private Set<CartItem> items;
 }
