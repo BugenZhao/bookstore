@@ -21,8 +21,8 @@ export function UserManagementView() {
     { name: "id", title: "User ID" },
     { name: "username", title: "Username" },
     { name: "email", title: "Email" },
-    { name: "admin", title: "Is admin" },
-    { name: "banned", title: "Is banned" },
+    { name: "admin", title: "Is Admin" },
+    { name: "banned", title: "Is Banned" },
   ];
 
   const [errorShow, setErrorShow] = useState(false);

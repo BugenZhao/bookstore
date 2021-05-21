@@ -6,6 +6,8 @@ import {
   IntegratedPaging,
   SearchState,
   IntegratedFiltering,
+  SortingState,
+  IntegratedSorting,
   DataTypeProvider,
 } from "@devexpress/dx-react-grid";
 import {
@@ -15,10 +17,11 @@ import {
   PagingPanel,
   SearchPanel,
   Toolbar,
+  TableColumnResizing,
 } from "@devexpress/dx-react-grid-bootstrap4";
 import { DisplayCol } from "../views/ManagementView";
 import { PropsWithChildren } from "react";
-import { User } from "../services/admin";
+import { GridSortLabel } from "../components/GridSortLabel";
 
 export function OrdersView({
   orders,
@@ -27,21 +30,38 @@ export function OrdersView({
   orders: Order[];
   showUser?: boolean;
 }>) {
+  const rows = orders.map((o) => {
+    return {
+      userShow: `${o.user?.username} [${o.user?.id}]`,
+      ...o,
+    };
+  });
+
   type Items = Order["items"];
-  type Row = Order;
+  type Row = typeof rows[number];
 
   const cols: DisplayCol<Row>[] = [
     { name: "id", title: "Order ID" },
     { name: "createdAt", title: "Created At" },
     { name: "items", title: "Items" },
-    { name: "totalPrice", title: "Total Price" },
+    { name: "totalPrice", title: "Total" },
     { name: "consignee", title: "Consignee" },
     { name: "status", title: "Status" },
   ];
 
   if (showUser) {
-    cols.splice(1, 0, { name: "user", title: "User" });
+    cols.splice(1, 0, { name: "userShow", title: "User" });
   }
+
+  const widths = [
+    { columnName: "id", width: 120 },
+    { columnName: "userShow", width: 150 },
+    { columnName: "createdAt", width: 280 },
+    { columnName: "items", width: 350 },
+    { columnName: "totalPrice", width: 100 },
+    { columnName: "consignee", width: 150 },
+    { columnName: "status", width: 100 },
+  ];
 
   const OrderItemFormatter = ({ value }: { value: Items }) => {
     const items = value.map(({ book, quantity }) => (
@@ -55,24 +75,27 @@ export function OrdersView({
     return <>{items}</>;
   };
 
-  const UserFormatter = ({ value }: { value: User }) => {
-    return <>{`${value.username} (${value.id})`}</>;
-  };
-
   return (
     <div className="card">
-      <Grid rows={orders} columns={cols} getRowId={(row) => row.id}>
+      <Grid rows={rows} columns={cols} getRowId={(row) => row.id}>
         <SearchState />
         <IntegratedFiltering />
         <PagingState defaultCurrentPage={0} pageSize={20} />
         <IntegratedPaging />
+        <SortingState
+          defaultSorting={[{ columnName: "id", direction: "asc" }]}
+        />
+        <IntegratedSorting />
         <DataTypeProvider
           formatterComponent={OrderItemFormatter}
           for={["items"]}
         />
-        <DataTypeProvider formatterComponent={UserFormatter} for={["user"]} />
         <Table />
-        <TableHeaderRow />
+        <TableColumnResizing defaultColumnWidths={widths} />
+        <TableHeaderRow
+          showSortingControls
+          sortLabelComponent={GridSortLabel}
+        />
         <Toolbar />
         <SearchPanel />
         <PagingPanel />

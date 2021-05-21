@@ -5,6 +5,8 @@ import {
   ChangeSet,
   SearchState,
   IntegratedFiltering,
+  SortingState,
+  IntegratedSorting,
   DataTypeProvider,
   DataTypeProviderProps,
 } from "@devexpress/dx-react-grid";
@@ -20,6 +22,7 @@ import {
 } from "@devexpress/dx-react-grid-bootstrap4";
 import { PropsWithChildren, useRef } from "react";
 import { Form } from "react-bootstrap";
+import { GridSortLabel } from "../components/GridSortLabel";
 
 export type Col<R> = keyof R & string;
 export type DisplayCol<R> = {
@@ -37,7 +40,6 @@ export function ManagementView<R>({
   showAddCommand = false,
   showEditCommand = false,
   showDeleteCommand = false,
-  children,
 }: PropsWithChildren<{
   rows: R[];
   cols: DisplayCol<R>[];
@@ -67,16 +69,22 @@ export function ManagementView<R>({
       <Grid rows={rows} columns={cols} getRowId={(row) => row.id}>
         <SearchState />
         <IntegratedFiltering />
-        <PagingState defaultCurrentPage={0} pageSize={20} />
+        <PagingState defaultCurrentPage={0} pageSize={50} />
         <IntegratedPaging />
-        {booleanCols ? <BooleanTypeProvider for={booleanCols} /> : null}
-        {children}
+        <SortingState
+          defaultSorting={[{ columnName: "id", direction: "asc" }]}
+        />
+        <IntegratedSorting />
+        <BooleanTypeProvider for={booleanCols ?? []} />
         <EditingState
           onCommitChanges={onCommitChanges}
           columnExtensions={editingStateColumnExtensions.current}
         />
         <Table />
-        <TableHeaderRow />
+        <TableHeaderRow
+          showSortingControls
+          sortLabelComponent={GridSortLabel}
+        />
         <TableEditRow />
         <TableEditColumn
           showAddCommand={showAddCommand}
