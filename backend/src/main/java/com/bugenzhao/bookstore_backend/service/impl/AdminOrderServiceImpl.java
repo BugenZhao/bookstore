@@ -34,9 +34,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 
     @Override
     public List<BookWithCount> statSalesBetween(Date from, Date to) {
-        var orders = orderRepo.findAll().stream()
-                .filter(o -> o.getCreatedAt().compareTo(from) >= 0 && o.getCreatedAt().compareTo(to) <= 0)
-                .collect(Collectors.toList());
+        var orders = orderRepo.findByCreatedAtBetween(from, to);
         var sales = orders.stream().flatMap(o -> o.getItems().stream())
                 .collect(Collectors.groupingBy(i -> i.getBook(), Collectors.summingLong(i -> i.getQuantity())))
                 .entrySet().stream().map(e -> new BookWithCount(e.getKey(), e.getValue())).collect(Collectors.toList());
@@ -46,9 +44,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     }
 
     public List<UserWithSpending> statUserSpendingsBetween(Date from, Date to) {
-        var orders = orderRepo.findAll().stream()
-                .filter(o -> o.getCreatedAt().compareTo(from) >= 0 && o.getCreatedAt().compareTo(to) <= 0)
-                .collect(Collectors.toList());
+        var orders = orderRepo.findByCreatedAtBetween(from, to);
         var spendings = orders.stream()
                 .collect(Collectors.groupingBy(o -> o.getUser(),
                         Collectors.reducing(BigDecimal.ZERO, o -> o.getTotalPrice(), BigDecimal::add)))
