@@ -10,4 +10,6 @@ public interface CartRepository extends Repository<Cart, Long> {
     Optional<Cart> findByUser_Id(long userId);
 
     Cart save(Cart newCart);
+
+    void deleteByUser_Id(long userId);
 }

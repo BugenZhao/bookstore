@@ -44,7 +44,7 @@ public class Order {
 
     @OneToMany(cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn
+    @JoinColumn(name = "order_id")
     @NotNull
     private Set<OrderItem> items;
 

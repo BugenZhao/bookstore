@@ -63,10 +63,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void empty() {
-        var cart = getOrCreateCart();
-
-        cart.getItems().clear();
-        cartRepo.save(cart);
+        cartRepo.deleteByUser_Id(auth.getUserId());
     }
 
     private Cart getOrCreateCart() {

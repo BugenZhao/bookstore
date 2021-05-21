@@ -27,7 +27,7 @@ public class Cart {
 
     @OneToMany(cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn
+    @JoinColumn(name = "cart_id")
     @NotNull
     private Set<CartItem> items;
 }
