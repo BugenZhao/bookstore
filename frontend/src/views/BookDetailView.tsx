@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { ButtonGroup, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Book } from "../services/book";
@@ -28,7 +29,13 @@ export function BookDetailView({ book }: { book: Book }) {
             <dd className="col-sm-9">{book.type}</dd>
 
             <dt className="col-sm-3">Stock</dt>
-            <dd className="col-sm-9">{book.inventory}+</dd>
+            <dd
+              className={classNames("col-sm-9", {
+                "text-danger": book.inventory === 0,
+              })}
+            >
+              {book.inventory}
+            </dd>
 
             <dt className="col-sm-3">Price</dt>
             <dd className="col-sm-9 text-danger fw-bold">¥{book.price}</dd>
@@ -44,6 +51,7 @@ export function BookDetailView({ book }: { book: Book }) {
             <Button
               variant="outline-danger"
               className="w-100"
+              disabled={book.inventory === 0}
               onClick={async () => {
                 await putCart(book.id.toString());
                 await revalidate();

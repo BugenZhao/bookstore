@@ -24,7 +24,7 @@ export function BookCard({
             ¥{book.price}
           </Card.Subtitle>
           <Card.Subtitle className="text-muted" as="small">
-            {book.inventory}+
+            {book.inventory}
           </Card.Subtitle>
         </div>
       </Card.Body>
