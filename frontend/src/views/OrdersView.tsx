@@ -4,24 +4,26 @@ import { Order } from "../services/order";
 import {
   PagingState,
   IntegratedPaging,
-  SearchState,
   IntegratedFiltering,
   SortingState,
   IntegratedSorting,
   DataTypeProvider,
+  FilteringState,
+  GridColumnExtension,
 } from "@devexpress/dx-react-grid";
 import {
   Grid,
   Table,
   TableHeaderRow,
   PagingPanel,
-  SearchPanel,
-  Toolbar,
   TableColumnResizing,
+  TableFilterRow,
 } from "@devexpress/dx-react-grid-bootstrap4";
 import { DisplayCol } from "../views/ManagementView";
 import { PropsWithChildren } from "react";
 import { GridSortLabel } from "../components/GridSortLabel";
+import moment from "moment";
+import { DatetimeFormatter } from "../components/formatters";
 
 export function OrdersView({
   orders,
@@ -75,11 +77,38 @@ export function OrdersView({
     return <>{items}</>;
   };
 
+  const filtering: GridColumnExtension[] = [
+    {
+      columnName: "createdAt",
+      predicate: (value: string, filter) => {
+        if (!filter.value) return true;
+        const dates = filter.value.split(/,|~/).map((s) => s.trim());
+        const curr = moment(value);
+        if (dates.length === 1) {
+          return curr.isSameOrAfter(dates[0]);
+        } else {
+          return curr.isSameOrAfter(dates[0]) && curr.isBefore(dates[1]);
+        }
+      },
+    },
+    {
+      columnName: "items",
+      predicate: (value: Items, filter) => {
+        if (!filter.value) return true;
+        const found =
+          value
+            .map((v) => v.book.name)
+            .filter((n) => n.indexOf(filter.value!) >= 0).length > 0;
+        return found;
+      },
+    },
+  ];
+
   return (
     <div className="card">
       <Grid rows={rows} columns={cols} getRowId={(row) => row.id}>
-        <SearchState />
-        <IntegratedFiltering />
+        <FilteringState />
+        <IntegratedFiltering columnExtensions={filtering} />
         <PagingState defaultCurrentPage={0} pageSize={20} />
         <IntegratedPaging />
         <SortingState
@@ -90,14 +119,17 @@ export function OrdersView({
           formatterComponent={OrderItemFormatter}
           for={["items"]}
         />
+        <DataTypeProvider
+          formatterComponent={DatetimeFormatter}
+          for={["createdAt"]}
+        />
         <Table />
         <TableColumnResizing defaultColumnWidths={widths} />
         <TableHeaderRow
           showSortingControls
           sortLabelComponent={GridSortLabel}
         />
-        <Toolbar />
-        <SearchPanel />
+        <TableFilterRow />
         <PagingPanel />
       </Grid>
     </div>
