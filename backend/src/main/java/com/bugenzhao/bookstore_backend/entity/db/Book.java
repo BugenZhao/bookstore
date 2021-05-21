@@ -40,7 +40,7 @@ public class Book {
 
     @NotNull
     @Min(value = 0)
-    private Integer inventory;
+    private Long inventory;
 
     @NotNull
     private String image;

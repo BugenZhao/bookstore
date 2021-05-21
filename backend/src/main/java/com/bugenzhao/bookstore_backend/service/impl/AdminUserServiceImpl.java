@@ -9,13 +9,17 @@ import com.bugenzhao.bookstore_backend.repository.AdminUserRepository;
 import com.bugenzhao.bookstore_backend.service.AdminUserService;
 import com.bugenzhao.bookstore_backend.utils.BzBeanUtils;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 @Service
 @Transactional
 public class AdminUserServiceImpl implements AdminUserService {
-    AdminUserRepository userRepo;
+    final Logger logger = LogManager.getLogger();
+    final AdminUserRepository userRepo;
 
     public AdminUserServiceImpl(AdminUserRepository userRepo) {
         this.userRepo = userRepo;
@@ -31,10 +35,11 @@ public class AdminUserServiceImpl implements AdminUserService {
         var user = userRepo.findById(userId).get();
         BzBeanUtils.copyNonNullProperties(patch, user, "id", "password");
         try {
-            userRepo.save(user);
+            userRepo.saveAndFlush(user);
             return true;
         } catch (ConstraintViolationException e) {
-            // FIXME: failed to catch
+            logger.info("invalid patch " + patch + ": " + e);
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return false;
         }
     }

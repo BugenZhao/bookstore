@@ -52,7 +52,7 @@ public class CartController {
         if (ok) {
             return ResponseEntity.ok(null);
         } else {
-            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(null);
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
         }
     }
 }

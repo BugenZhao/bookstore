@@ -13,4 +13,6 @@ public interface BookRepository extends Repository<Book, Long> {
     List<Book> findAll();
 
     Book getOne(long bookId);
+
+    Book saveAndFlush(Book book);
 }

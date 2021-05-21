@@ -18,8 +18,8 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 @Service
 @Transactional
 public class AdminBookServiceImpl implements AdminBookService {
-    Logger logger = LogManager.getLogger();
-    AdminBookRepository bookRepo;
+    final Logger logger = LogManager.getLogger();
+    final AdminBookRepository bookRepo;
 
     public AdminBookServiceImpl(AdminBookRepository bookRepo) {
         this.bookRepo = bookRepo;
@@ -30,10 +30,11 @@ public class AdminBookServiceImpl implements AdminBookService {
         var book = bookRepo.findById(bookId).get();
         BzBeanUtils.copyNonNullProperties(patch, book, "id");
         try {
-            bookRepo.save(book);
+            bookRepo.saveAndFlush(book);
             return true;
         } catch (ConstraintViolationException e) {
-            // FIXME: failed to catch
+            logger.info("invalid patch " + patch + ": " + e);
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return false;
         }
     }
