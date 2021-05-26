@@ -4,24 +4,21 @@ import { Moment } from "moment";
 import { useState } from "react";
 import { useHistory } from "react-router";
 import { FromToPicker } from "../components/FromToPicker";
-import { useOrdersSummary } from "../services/order";
+import { useSales } from "../services/admin";
 import { defaultFrom, defaultTo } from "../utils";
 
-export function OrdersSummaryView() {
+export function SalesView() {
   const [from, setFrom] = useState<Moment>(defaultFrom());
   const [to, setTo] = useState<Moment>(defaultTo());
-  const { summary } = useOrdersSummary(from, to);
+  const { sales } = useSales(from, to);
   const history = useHistory();
 
-  const books = summary?.books ?? [];
-  const totalCount = _(books)
-    .map(({ count }) => count)
-    .sum();
-  const totalPrice = summary?.total ?? 0;
+  const books = sales?.map(({ book }) => book) ?? [];
+  const counts = sales?.map(({ count }) => count) ?? [];
 
   const option = {
     title: {
-      text: `${totalCount} books, ¥${totalPrice} in total`,
+      text: `Sales Summary`,
     },
     tooltip: {
       trigger: "axis",
@@ -40,12 +37,12 @@ export function OrdersSummaryView() {
     },
     yAxis: {
       type: "category",
-      data: books.map(({ book }) => book.name).reverse(),
+      data: books.map((b) => b.name).reverse(),
     },
     series: [
       {
         type: "bar",
-        data: books.map(({ count }) => count).reverse(),
+        data: counts.reverse(),
       },
     ],
   };
@@ -66,7 +63,7 @@ export function OrdersSummaryView() {
         onEvents={{
           click: (e: any) => {
             const name = e.name as string;
-            const book = books.find(({ book }) => book.name === name)?.book;
+            const book = books.find((book) => book.name === name);
             if (book) {
               history.push(`/detail/${book.id}`);
             }

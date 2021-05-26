@@ -4,24 +4,22 @@ import { Moment } from "moment";
 import { useState } from "react";
 import { useHistory } from "react-router";
 import { FromToPicker } from "../components/FromToPicker";
+import { useUserSpendings } from "../services/admin";
 import { useOrdersSummary } from "../services/order";
 import { defaultFrom, defaultTo } from "../utils";
 
-export function OrdersSummaryView() {
+export function UserSpendingsView() {
   const [from, setFrom] = useState<Moment>(defaultFrom());
   const [to, setTo] = useState<Moment>(defaultTo());
-  const { summary } = useOrdersSummary(from, to);
+  const { userSpendings } = useUserSpendings(from, to);
   const history = useHistory();
 
-  const books = summary?.books ?? [];
-  const totalCount = _(books)
-    .map(({ count }) => count)
-    .sum();
-  const totalPrice = summary?.total ?? 0;
+  const users = userSpendings?.map((us) => us.user) ?? [];
+  const spendings = userSpendings?.map((us) => us.spending) ?? [];
 
   const option = {
     title: {
-      text: `${totalCount} books, ¥${totalPrice} in total`,
+      text: `User Spendings Summary`,
     },
     tooltip: {
       trigger: "axis",
@@ -40,14 +38,15 @@ export function OrdersSummaryView() {
     },
     yAxis: {
       type: "category",
-      data: books.map(({ book }) => book.name).reverse(),
+      data: users.map((u) => `${u.username} [${u.id}]`).reverse(),
     },
     series: [
       {
         type: "bar",
-        data: books.map(({ count }) => count).reverse(),
+        data: spendings.reverse(),
       },
     ],
+    responsive: true,
   };
 
   return (
@@ -60,18 +59,9 @@ export function OrdersSummaryView() {
       />
       <ECharts
         style={{
-          height: books.length * 60 + 80,
+          height: users.length * 60 + 80,
         }}
         option={option}
-        onEvents={{
-          click: (e: any) => {
-            const name = e.name as string;
-            const book = books.find(({ book }) => book.name === name)?.book;
-            if (book) {
-              history.push(`/detail/${book.id}`);
-            }
-          },
-        }}
       />
     </>
   );

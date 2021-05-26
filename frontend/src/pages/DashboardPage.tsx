@@ -8,6 +8,8 @@ import { Tab, Tabs } from "react-bootstrap";
 import { useRouteMatch } from "react-router";
 import { DashboardPageParams } from "../routes";
 import { useHistory } from "react-router-dom";
+import { SalesView } from "../views/SalesView";
+import { UserSpendingsView } from "../views/UserSpendingsView";
 
 export function DashboardPage() {
   return (
@@ -43,6 +45,12 @@ function DashboardMain() {
         </Tab>
         <Tab eventKey="orders" title="Orders">
           <OrderManagementView />
+        </Tab>
+        <Tab eventKey="sales" title="Sales">
+          <SalesView />
+        </Tab>
+        <Tab eventKey="spendings" title="User Spendings">
+          <UserSpendingsView />
         </Tab>
       </Tabs>
     </div>

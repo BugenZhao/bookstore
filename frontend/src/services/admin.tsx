@@ -1,4 +1,6 @@
+import { Moment } from "moment";
 import { delete_, patch, put, useFetch } from ".";
+import { encodeParams } from "../utils";
 import { UserType } from "./auth";
 import { Book } from "./book";
 import { Order } from "./order";
@@ -39,6 +41,47 @@ export function useAllOrders() {
   const r = useFetch<Order[]>("/admin/orders/");
   return {
     orders: (r.error ? undefined : r.data) ?? [],
+    ...r,
+  };
+}
+
+export type Sales = {
+  book: Book;
+  count: number;
+}[];
+
+export function useSales(from: Moment | undefined, to: Moment | undefined) {
+  const r = useFetch<Sales>(
+    "/admin/stat/sales?" +
+      encodeParams({
+        from: from?.toISOString(),
+        to: to?.toISOString(),
+      })
+  );
+  return {
+    sales: r.error ? undefined : r.data,
+    ...r,
+  };
+}
+
+export type UserSpendings = {
+  user: User;
+  spending: number;
+}[];
+
+export function useUserSpendings(
+  from: Moment | undefined,
+  to: Moment | undefined
+) {
+  const r = useFetch<UserSpendings>(
+    "/admin/stat/spendings?" +
+      encodeParams({
+        from: from?.toISOString(),
+        to: to?.toISOString(),
+      })
+  );
+  return {
+    userSpendings: r.error ? undefined : r.data,
     ...r,
   };
 }
