@@ -26,29 +26,25 @@ function DashboardMain() {
 
   return (
     <div>
-      <div className="d-flex justify-content-between">
-        <span className="h1">Dashboard</span>
-      </div>
-      <div className="py-4">
-        <Tabs
-          activeKey={tab}
-          onSelect={(k) => {
-            const tab = k ?? "books";
-            history.replace(`/dashboard/${tab}`);
-          }}
-          className="mb-3"
-        >
-          <Tab eventKey="books" title="Books">
-            <BookManagementView />
-          </Tab>
-          <Tab eventKey="users" title="Users">
-            <UserManagementView />
-          </Tab>
-          <Tab eventKey="orders" title="Orders">
-            <OrderManagementView />
-          </Tab>
-        </Tabs>
-      </div>
+      <div className="h1 mb-4">Dashboard</div>
+      <Tabs
+        activeKey={tab}
+        onSelect={(k) => {
+          const tab = k ?? "books";
+          history.replace(`/dashboard/${tab}`);
+        }}
+        className="mb-3"
+      >
+        <Tab eventKey="books" title="Books">
+          <BookManagementView />
+        </Tab>
+        <Tab eventKey="users" title="Users">
+          <UserManagementView />
+        </Tab>
+        <Tab eventKey="orders" title="Orders">
+          <OrderManagementView />
+        </Tab>
+      </Tabs>
     </div>
   );
 }

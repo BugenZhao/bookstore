@@ -49,7 +49,7 @@ export function BSRoutes() {
         <SignedInRoute path="/detail/:id" component={DetailPage} />
         <SignedInRoute path="/home" component={HomePage} />
         <SignedInRoute path="/search/:keyword?" component={SearchPage} />
-        <SignedInRoute path="/orders" component={OrdersPage} />
+        <SignedInRoute path="/orders/:tab?" component={OrdersPage} />
         <AdminRoute path="/dashboard/:tab?" component={DashboardPage} />
       </Switch>
     </Router>
@@ -65,5 +65,9 @@ export type SearchPageParams = {
 };
 
 export type DashboardPageParams = {
+  tab?: string;
+};
+
+export type OrdersPageParams = {
   tab?: string;
 };

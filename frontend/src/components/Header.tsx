@@ -133,7 +133,7 @@ function DashboardButton({ active }: { active: string }) {
       ) : (
         <Button
           as={Link}
-          to="/dashboard/books"
+          to="/dashboard"
           variant="primary"
           className="w-100"
         >
