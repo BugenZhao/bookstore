@@ -48,6 +48,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
                         Collectors.reducing(BigDecimal.ZERO, o -> o.getTotalPrice(), BigDecimal::add)))
                 .entrySet().stream().map(e -> new UserWithSpending(e.getKey(), e.getValue()))
                 .collect(Collectors.toList());
+        spendings.sort((l, r) -> -l.getSpending().compareTo(r.getSpending()));
 
         return spendings;
     }
