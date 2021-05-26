@@ -1,10 +1,12 @@
-import { PropsWithChildren } from "react";
-import { Table, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { Header } from "../components/Header";
-import { Order, useOrders } from "../services/order";
+import { useOrders } from "../services/order";
 import { Body } from "./common/Body";
 import { Main } from "./common/Main";
+import { OrdersView } from "../views/OrdersView";
+import { Tab, Tabs } from "react-bootstrap";
+import { OrdersPageParams } from "../routes";
+import { useHistory, useRouteMatch } from "react-router-dom";
+import { OrdersSummaryView } from "../views/OrdersSummaryView";
 
 export function OrdersPage() {
   return (
@@ -17,55 +19,33 @@ export function OrdersPage() {
   );
 }
 
-export function OrderItem({
-  order,
-}: PropsWithChildren<{
-  order: Order;
-}>) {
-  const cartItems = order.cart.books.map((b) => (
-    <Row key={b.book.id}>
-      <Link to={`/detail/${b.book.id}`} className="d-flex nav-link">
-        <span className="me-auto">{b.book.name}</span>
-        <span className="text-muted">x{b.count}</span>
-      </Link>
-    </Row>
-  ));
-
-  return (
-    <tr>
-      <td className="align-middle">{order.id}</td>
-      <td className="align-middle">{order.datetime}</td>
-      <td className="align-middle w-25">{cartItems}</td>
-      <td className="align-middle">¥{order.cart.total.toFixed(2)}</td>
-      <td className="align-middle">{order.consignee}</td>
-      <td className="align-middle">{order.status}</td>
-    </tr>
-  );
-}
-
-export function OrdersMain() {
-  const { orders } = useOrders();
-
-  const orderItems = orders.map((order) => (
-    <OrderItem order={order} key={order.id} />
-  ));
+function OrdersMain() {
+  const tab = useRouteMatch<OrdersPageParams>().params.tab ?? "all";
+  const history = useHistory();
 
   return (
     <>
       <div className="h1 mb-4">My Orders</div>
-      <Table responsive>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Datetime</th>
-            <th>Items</th>
-            <th>Total Price</th>
-            <th>Consignee</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>{orderItems}</tbody>
-      </Table>
+      <Tabs
+        activeKey={tab}
+        onSelect={(k) => {
+          const tab = k ?? "books";
+          history.replace(`/orders/${tab}`);
+        }}
+        className="mb-3"
+      >
+        <Tab eventKey="all" title="All Orders">
+          <AllOrdersView />
+        </Tab>
+        <Tab eventKey="summary" title="Summary">
+          <OrdersSummaryView />
+        </Tab>
+      </Tabs>
     </>
   );
+}
+
+function AllOrdersView() {
+  const { orders } = useOrders();
+  return <OrdersView orders={orders} />;
 }

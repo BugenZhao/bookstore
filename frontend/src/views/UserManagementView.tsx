@@ -1,28 +1,79 @@
 import _ from "lodash";
-import { UserType, useUsers } from "../services/auth";
-import { ManagementView } from "./ManagementView";
+import { ErrorModal } from "../components/ErrorModal";
+import { useState } from "react";
+import { patchUser, useAllUsers } from "../services/admin";
+import { UserType } from "../services/auth";
+import { DisplayCol, ManagementView } from "./ManagementView";
 
 export function UserManagementView() {
-  const { users } = useUsers();
+  const { users, revalidate } = useAllUsers();
+
   const rows = _.values(users).map((user) => {
     return {
-      id: user.user_id,
-      admin: user.user_type === UserType.admin,
+      admin: user.type === UserType.admin,
       ...user,
     };
   });
-  const cols = [
-    { name: "user_id", title: "User ID" },
+
+  type Row = typeof rows[number];
+
+  const cols: DisplayCol<Row>[] = [
+    { name: "id", title: "User ID" },
     { name: "username", title: "Username" },
-    { name: "admin", title: "Admin" },
+    { name: "email", title: "Email" },
+    { name: "admin", title: "Is Admin" },
+    { name: "banned", title: "Is Banned" },
   ];
 
+  const [errorShow, setErrorShow] = useState(false);
+  const [errorResponse, setErrorResponse] = useState<Response>();
+
   return (
-    <ManagementView
-      rows={rows}
-      cols={cols}
-      booleanCols={["admin"]}
-      onCommitChanges={() => {}}
-    ></ManagementView>
+    <>
+      <ErrorModal modalShow={errorShow} setModalShow={setErrorShow}>
+        {errorResponse ? (
+          <>
+            <h5>{`Error occurred while processing "${errorResponse.url}":`}</h5>
+            <p>{`${errorResponse.status} ${errorResponse.statusText}`}</p>
+          </>
+        ) : null}
+      </ErrorModal>
+      <ManagementView
+        showEditCommand
+        rows={rows}
+        cols={cols}
+        booleanCols={["admin", "banned"]}
+        onCommitChanges={async ({ changed }) => {
+          let allPromises: Promise<Response>[] = [];
+
+          if (changed) {
+            const promises = _(changed)
+              .entries()
+              .filter(([_id, patch]) => !!patch)
+              .map(([id, patch]) => {
+                const data = {
+                  type:
+                    patch!.admin !== undefined
+                      ? (patch!.admin as boolean)
+                        ? UserType.admin
+                        : UserType.normal
+                      : undefined,
+                  ...patch,
+                };
+                return patchUser(id, data);
+              })
+              .value();
+            allPromises.push(...promises);
+          }
+
+          const responses = await Promise.all(allPromises);
+          const failedOne = responses.find((r) => !r.ok);
+          setErrorResponse(failedOne);
+          setErrorShow(!!failedOne);
+
+          await revalidate();
+        }}
+      />
+    </>
   );
 }

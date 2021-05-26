@@ -1,11 +1,12 @@
 package com.bugenzhao.bookstore_backend.entity;
 
-public class BookWithCount {
-    public Book book;
-    public int count;
+import com.bugenzhao.bookstore_backend.entity.db.Book;
 
-    public BookWithCount(Book book, int count) {
-        this.book = book;
-        this.count = count;
-    }
+import lombok.*;
+
+@Data
+@AllArgsConstructor
+public class BookWithCount {
+    private Book book;
+    private Long count;
 }

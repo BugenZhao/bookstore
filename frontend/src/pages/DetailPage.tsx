@@ -64,7 +64,7 @@ function BreadCrumb({ name }: { name?: string }) {
       <ol className="breadcrumb h6">
         <li className="breadcrumb-item">
           <Link to="#" className="" onClick={() => history.goBack()}>
-            Books
+            ⬅ Go Back
           </Link>
         </li>
         {name ? (

@@ -15,6 +15,7 @@ export function postLogout() {
 
 export type RegisterData = {
   username: string;
+  email: string;
   password: string;
 };
 
@@ -23,8 +24,8 @@ export function postRegister(data: RegisterData) {
 }
 
 export enum UserType {
-  admin = 0,
-  normal = 1,
+  admin = "admin",
+  normal = "normal",
 }
 
 export type AuthedUser = {
@@ -33,20 +34,12 @@ export type AuthedUser = {
   user_type: UserType;
 };
 
-export function useUser() {
+export function useAuth() {
   const r = useFetch<AuthedUser>("/users/check");
   const isAdmin =
     r.data && !r.error ? r.data.user_type === UserType.admin : undefined;
   return {
     isAdmin,
-    ...r,
-  };
-}
-
-export function useUsers() {
-  const r = useFetch<Record<number, AuthedUser>>("/users/");
-  return {
-    users: r.error ? undefined : r.data,
     ...r,
   };
 }

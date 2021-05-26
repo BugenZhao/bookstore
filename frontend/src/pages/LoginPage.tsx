@@ -4,14 +4,14 @@ import { useStore } from "../services/StoreContext";
 import { Alert, Form, OverlayTrigger } from "react-bootstrap";
 import { LoginRegView } from "../views/LoginRegView";
 import { useForm } from "react-hook-form";
-import { useUser } from "../services/auth";
+import { useAuth } from "../services/auth";
 import { LoginData, postLogin } from "../services/auth";
 
 type LoginFormData = LoginData;
 
 export function LoginPage() {
   const { signedOut, setSignedOut } = useStore();
-  const { revalidate } = useUser();
+  const { revalidate } = useAuth();
   const history = useHistory();
   const [banned, setBanned] = useState(false);
   const [processing, setProcessing] = useState(false);
@@ -28,7 +28,7 @@ export function LoginPage() {
     const timeout = setTimeout(() => {
       setSignedOut(false);
       setBanned(false);
-    }, 3000);
+    }, 5000);
 
     return () => {
       clearTimeout(timeout);
@@ -47,20 +47,18 @@ export function LoginPage() {
       <LoginRegView
         isSignIn
         onSubmit={handleSubmit(async (data) => {
-          if (data.username.toLowerCase() === "banned") {
-            // TODO: real ban
+          setProcessing(true);
+          setWrong(false);
+          const res = await postLogin(data);
+          await revalidate();
+          setProcessing(false);
+          if (res.ok) {
+            setSignedOut(false);
+            history.push("/home");
+          } else if (res.status === 403) {
             setBanned(true);
           } else {
-            setProcessing(true);
-            const res = await postLogin(data);
-            await revalidate();
-            setProcessing(false);
-            if (res.ok) {
-              setSignedOut(false);
-              history.push("/home");
-            } else {
-              setWrong(true);
-            }
+            setWrong(true);
           }
         })}
         isProcessing={processing}

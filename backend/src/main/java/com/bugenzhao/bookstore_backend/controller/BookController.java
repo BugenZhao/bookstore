@@ -1,6 +1,6 @@
 package com.bugenzhao.bookstore_backend.controller;
 
-import com.bugenzhao.bookstore_backend.entity.Book;
+import com.bugenzhao.bookstore_backend.entity.db.Book;
 import com.bugenzhao.bookstore_backend.service.BookService;
 
 import org.springframework.http.HttpStatus;
@@ -24,12 +24,12 @@ public class BookController {
     }
 
     @GetMapping("/")
-    public Map<Integer, Book> getAllBooks() throws Exception {
-        return bookService.findAll().stream().collect(Collectors.toMap((b) -> b.id, Function.identity()));
+    public Map<Long, Book> getAllBooks() throws Exception {
+        return bookService.findAll().stream().collect(Collectors.toMap(Book::getId, Function.identity()));
     }
 
     @GetMapping("/{bookId}")
-    public ResponseEntity<Book> getBook(@PathVariable int bookId) throws Exception {
+    public ResponseEntity<Book> getBook(@PathVariable long bookId) throws Exception {
         return bookService.findById(bookId).map((book) -> ResponseEntity.ok(book))
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
     }

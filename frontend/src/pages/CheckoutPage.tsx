@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 
 function CheckoutMain() {
   const { cartCount, revalidate } = useCart();
-  const [modalShow, setModalShow] = useState(false);
+  const [modalShow, setModalShow] = useState<"no" | "success" | "failed">("no");
   const [processing, setProcessing] = useState(false);
 
   const noBook = cartCount === 0;
@@ -20,17 +20,26 @@ function CheckoutMain() {
   return (
     <div>
       <Modal
-        show={modalShow}
+        show={modalShow !== "no"}
         onHide={() => {
-          setModalShow(false);
+          setModalShow("no");
           setProcessing(false);
         }}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Checkout Success</Modal.Title>
+          <Modal.Title>
+            {modalShow === "success" ? "Checkout Success" : "Checkout Failed"}
+          </Modal.Title>
         </Modal.Header>
+
         <Modal.Body>
-          Go to <Link to="/orders">My Orders</Link> to check the order.
+          {modalShow === "success" ? (
+            <>
+              Go to <Link to="/orders">My Orders</Link> to check the order.
+            </>
+          ) : (
+            "There is not enough stock of some books in your cart."
+          )}
         </Modal.Body>
       </Modal>
       <div className="row">
@@ -61,7 +70,9 @@ function CheckoutMain() {
                   const result = await checkout();
                   await revalidate();
                   if (result.ok) {
-                    setModalShow(true);
+                    setModalShow("success");
+                  } else {
+                    setModalShow("failed");
                   }
                   setProcessing(false);
                 }}

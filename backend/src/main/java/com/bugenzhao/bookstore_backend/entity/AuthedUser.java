@@ -1,19 +1,27 @@
 package com.bugenzhao.bookstore_backend.entity;
 
+import com.bugenzhao.bookstore_backend.entity.db.User;
+import com.bugenzhao.bookstore_backend.entity.db.UserType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.*;
+
+@Data
+@AllArgsConstructor
 public class AuthedUser {
     @JsonProperty("user_id")
-    public int userId;
-
-    public String username;
-
+    private Long userId;
+    private String username;
     @JsonProperty("user_type")
-    public int userType;
+    private UserType userType;
 
-    public AuthedUser(int userId, String username, int userType) {
-        this.userId = userId;
-        this.username = username;
-        this.userType = userType;
+    public AuthedUser(User user) {
+        this.userId = user.getId();
+        this.username = user.getUsername();
+        this.userType = user.getType();
+    }
+
+    public boolean isAdmin() {
+        return userType == UserType.admin;
     }
 }

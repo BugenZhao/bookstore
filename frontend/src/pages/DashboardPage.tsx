@@ -3,8 +3,13 @@ import { Main } from "./common/Main";
 import { Body } from "./common/Body";
 import { BookManagementView } from "../views/BookManagementView";
 import { UserManagementView } from "../views/UserManagementView";
-import { Button, Tab, Tabs } from "react-bootstrap";
-import { useState } from "react";
+import { OrderManagementView } from "../views/OrderManagementView";
+import { Tab, Tabs } from "react-bootstrap";
+import { useRouteMatch } from "react-router";
+import { DashboardPageParams } from "../routes";
+import { useHistory } from "react-router-dom";
+import { SalesView } from "../views/SalesView";
+import { UserSpendingsView } from "../views/UserSpendingsView";
 
 export function DashboardPage() {
   return (
@@ -17,54 +22,37 @@ export function DashboardPage() {
   );
 }
 
-function ResetBooksButton() {
-  const [rep, setRep] = useState(false);
-
-  return (
-    <Button
-      size="lg"
-      variant="outline-danger"
-      className="align-self-center"
-      onClick={() => {
-        if (rep) {
-          // setBOOKS(ALL_BOOKS);
-        }
-        setRep(!rep);
-      }}
-    >
-      {rep ? "Click again to reset" : "Reset all books"}
-    </Button>
-  );
-}
-
 function DashboardMain() {
-  const [key, setKey] = useState<string | undefined>("books");
+  const tab = useRouteMatch<DashboardPageParams>().params.tab ?? "books";
+  const history = useHistory();
 
   return (
     <div>
-      <div className="d-flex justify-content-between">
-        <span className="h1">Dashboard</span>
-        {
-          key === "books" ? <ResetBooksButton /> : null
-          // <h4 className="align-self-center">
-          //   <Badge bg="info">Demo</Badge>
-          // </h4>
-        }
-      </div>
-      <div className="py-4">
-        <Tabs
-          activeKey={key}
-          onSelect={(k) => setKey(k ?? undefined)}
-          className="mb-3"
-        >
-          <Tab eventKey="books" title="Books">
-            <BookManagementView />
-          </Tab>
-          <Tab eventKey="users" title="Users">
-            <UserManagementView />
-          </Tab>
-        </Tabs>
-      </div>
+      <div className="h1 mb-4">Dashboard</div>
+      <Tabs
+        activeKey={tab}
+        onSelect={(k) => {
+          const tab = k ?? "books";
+          history.replace(`/dashboard/${tab}`);
+        }}
+        className="mb-3"
+      >
+        <Tab eventKey="books" title="Books">
+          <BookManagementView />
+        </Tab>
+        <Tab eventKey="users" title="Users">
+          <UserManagementView />
+        </Tab>
+        <Tab eventKey="orders" title="Orders">
+          <OrderManagementView />
+        </Tab>
+        <Tab eventKey="sales" title="Sales">
+          <SalesView />
+        </Tab>
+        <Tab eventKey="spendings" title="User Spendings">
+          <UserSpendingsView />
+        </Tab>
+      </Tabs>
     </div>
   );
 }

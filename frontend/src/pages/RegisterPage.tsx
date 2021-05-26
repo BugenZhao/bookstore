@@ -5,7 +5,7 @@ import { LoginRegView } from "../views/LoginRegView";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { postRegister, RegisterData } from "../services/auth";
-import { useUser } from "../services/auth";
+import { useAuth } from "../services/auth";
 
 export type RegisterFormData = RegisterData & {
   confirmPassword: string;
@@ -13,7 +13,7 @@ export type RegisterFormData = RegisterData & {
 
 export function RegisterPage() {
   const { setSignedOut } = useStore();
-  const { revalidate } = useUser();
+  const { revalidate } = useAuth();
   const history = useHistory();
   const [processing, setProcessing] = useState(false);
   const [wrong, setWrong] = useState(false);
@@ -35,6 +35,7 @@ export function RegisterPage() {
           setProcessing(true);
           const res = await postRegister({
             username: data.username,
+            email: data.email,
             password: data.password,
           });
           await revalidate();
@@ -58,6 +59,23 @@ export function RegisterPage() {
         ></Form.Control>
         <Form.Control
           className="input-mid"
+          placeholder="Email"
+          autoComplete="email"
+          required
+          isInvalid={!!errors.email}
+          {...register("email", {
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: "Please provide a valid email address.",
+            },
+          })}
+        ></Form.Control>
+        <Form.Control.Feedback type="invalid">
+          {errors.email?.message}
+        </Form.Control.Feedback>
+
+        <Form.Control
+          className="input-mid"
           placeholder="Password"
           type="password"
           autoComplete="new-password"
@@ -70,6 +88,9 @@ export function RegisterPage() {
             },
           })}
         ></Form.Control>
+        <Form.Control.Feedback type="invalid">
+          {errors.password?.message}
+        </Form.Control.Feedback>
 
         <Form.Control
           className="input-last"
@@ -83,10 +104,6 @@ export function RegisterPage() {
               value === passwordValue || "The passwords do not match.",
           })}
         ></Form.Control>
-
-        <Form.Control.Feedback type="invalid">
-          {errors.password?.message}
-        </Form.Control.Feedback>
         <Form.Control.Feedback type="invalid">
           {errors.confirmPassword?.message}
         </Form.Control.Feedback>

@@ -16,10 +16,10 @@ import {
   RegisterPage,
   OrdersPage,
 } from "./pages";
-import { useUser } from "./services/auth";
+import { useAuth } from "./services/auth";
 
 function SignedInRoute(props: PropsWithChildren<RouteProps>) {
-  const { error } = useUser();
+  const { error } = useAuth();
   if (error) {
     return <Redirect to="/login" />;
   } else {
@@ -28,11 +28,11 @@ function SignedInRoute(props: PropsWithChildren<RouteProps>) {
 }
 
 function AdminRoute(props: PropsWithChildren<RouteProps>) {
-  const isAdmin = useUser().isAdmin ?? true;
-  if (isAdmin) {
-    return <Route {...props}>{props.children}</Route>;
-  } else {
+  const { isAdmin, error } = useAuth();
+  if (error || isAdmin === false) {
     return <Redirect to="/home" />;
+  } else {
+    return <Route {...props}>{props.children}</Route>;
   }
 }
 
@@ -49,8 +49,8 @@ export function BSRoutes() {
         <SignedInRoute path="/detail/:id" component={DetailPage} />
         <SignedInRoute path="/home" component={HomePage} />
         <SignedInRoute path="/search/:keyword?" component={SearchPage} />
-        <SignedInRoute path="/orders" component={OrdersPage} />
-        <AdminRoute path="/dashboard" component={DashboardPage} />
+        <SignedInRoute path="/orders/:tab?" component={OrdersPage} />
+        <AdminRoute path="/dashboard/:tab?" component={DashboardPage} />
       </Switch>
     </Router>
   );
@@ -62,4 +62,12 @@ export type DetailPageParams = {
 
 export type SearchPageParams = {
   keyword?: string;
+};
+
+export type DashboardPageParams = {
+  tab?: string;
+};
+
+export type OrdersPageParams = {
+  tab?: string;
 };

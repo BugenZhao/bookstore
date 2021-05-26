@@ -5,6 +5,8 @@ import {
   ChangeSet,
   SearchState,
   IntegratedFiltering,
+  SortingState,
+  IntegratedSorting,
   DataTypeProvider,
   DataTypeProviderProps,
 } from "@devexpress/dx-react-grid";
@@ -18,35 +20,77 @@ import {
   SearchPanel,
   Toolbar,
 } from "@devexpress/dx-react-grid-bootstrap4";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useRef } from "react";
 import { Form } from "react-bootstrap";
+import { GridSortLabel } from "../components/GridSortLabel";
 
-export function ManagementView<T>({
+export type Col<R> = keyof R & string;
+export type DisplayCol<R> = {
+  name: Col<R>;
+  title: string;
+};
+export type Patch<R> = Partial<Record<Col<R>, any>>;
+
+export function ManagementView<R>({
   rows,
   cols,
   onCommitChanges,
   booleanCols,
-  children,
+  disableEditingCols = ["id"],
+  showAddCommand = false,
+  showEditCommand = false,
+  showDeleteCommand = false,
 }: PropsWithChildren<{
-  rows: T[];
-  cols: { name: string; title: string }[];
-  onCommitChanges: ({ added, changed, deleted }: ChangeSet) => void;
+  rows: R[];
+  cols: DisplayCol<R>[];
+  onCommitChanges: ({
+    added,
+    changed,
+    deleted,
+  }: {
+    added?: readonly Patch<R>[];
+    changed?: Record<string, Patch<R> | undefined>;
+    deleted?: ChangeSet["deleted"];
+  }) => void;
   booleanCols?: string[];
+  disableEditingCols?: string[];
+  showAddCommand?: boolean;
+  showEditCommand?: boolean;
+  showDeleteCommand?: boolean;
 }>) {
+  const editingStateColumnExtensions = useRef(
+    disableEditingCols.map((col) => {
+      return { columnName: col, editingEnabled: false };
+    })
+  );
+
   return (
     <div className="card">
       <Grid rows={rows} columns={cols} getRowId={(row) => row.id}>
         <SearchState />
         <IntegratedFiltering />
-        <PagingState defaultCurrentPage={0} pageSize={20} />
+        <PagingState defaultCurrentPage={0} pageSize={50} />
         <IntegratedPaging />
-        {booleanCols ? <BooleanTypeProvider for={booleanCols} /> : null}
-        {children}
-        <EditingState onCommitChanges={onCommitChanges} />
+        <SortingState
+          defaultSorting={[{ columnName: "id", direction: "asc" }]}
+        />
+        <IntegratedSorting />
+        <BooleanTypeProvider for={booleanCols ?? []} />
+        <EditingState
+          onCommitChanges={onCommitChanges}
+          columnExtensions={editingStateColumnExtensions.current}
+        />
         <Table />
-        <TableHeaderRow />
+        <TableHeaderRow
+          showSortingControls
+          sortLabelComponent={GridSortLabel}
+        />
         <TableEditRow />
-        <TableEditColumn showAddCommand showEditCommand showDeleteCommand />
+        <TableEditColumn
+          showAddCommand={showAddCommand}
+          showEditCommand={showEditCommand}
+          showDeleteCommand={showDeleteCommand}
+        />
         <Toolbar />
         <SearchPanel />
         <PagingPanel />
@@ -56,7 +100,7 @@ export function ManagementView<T>({
 }
 
 const BooleanFormatter = ({ value }: { value: boolean }) => (
-  <Form.Check type="checkbox" defaultChecked={value} disabled />
+  <Form.Check type="checkbox" checked={value} disabled />
 );
 
 const BooleanEditor = ({

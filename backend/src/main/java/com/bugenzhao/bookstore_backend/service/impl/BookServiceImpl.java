@@ -3,30 +3,29 @@ package com.bugenzhao.bookstore_backend.service.impl;
 import java.util.List;
 import java.util.Optional;
 
-import com.bugenzhao.bookstore_backend.entity.Book;
-import com.bugenzhao.bookstore_backend.entity.rowmapper.BookRowMapper;
+import com.bugenzhao.bookstore_backend.entity.db.Book;
+import com.bugenzhao.bookstore_backend.repository.BookRepository;
 import com.bugenzhao.bookstore_backend.service.BookService;
 
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class BookServiceImpl implements BookService {
-    JdbcTemplate jdbcTemplate;
+    BookRepository bookRepo;
 
-    public BookServiceImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public BookServiceImpl(BookRepository repo) {
+        this.bookRepo = repo;
     }
 
     @Override
-    public Optional<Book> findById(int bookId) {
-        var result = jdbcTemplate.query("select * from books where id = ?", new BookRowMapper(), bookId);
-        return result.stream().findFirst();
+    public Optional<Book> findById(long bookId) {
+        return bookRepo.findById(bookId);
     }
 
     @Override
     public List<Book> findAll() {
-        var result = jdbcTemplate.query("select * from books", new BookRowMapper());
-        return result;
+        return bookRepo.findAll();
     }
 }

@@ -1,10 +1,6 @@
 package com.bugenzhao.bookstore_backend.controller;
 
-import java.util.stream.Collectors;
-
-import com.bugenzhao.bookstore_backend.entity.BookWithCount;
-import com.bugenzhao.bookstore_backend.entity.Cart;
-import com.bugenzhao.bookstore_backend.service.BookService;
+import com.bugenzhao.bookstore_backend.entity.CartResponse;
 import com.bugenzhao.bookstore_backend.service.CartService;
 import com.bugenzhao.bookstore_backend.service.OrderService;
 
@@ -21,26 +17,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/cart/")
 public class CartController {
-    final BookService bookService;
     final CartService cartService;
     final OrderService orderService;
 
-    public CartController(BookService bookService, CartService cartService, OrderService orderService) {
-        this.bookService = bookService;
+    public CartController(CartService cartService, OrderService orderService) {
         this.cartService = cartService;
         this.orderService = orderService;
     }
 
     @GetMapping("/")
-    public Cart getCart() {
+    public CartResponse getCart() {
         var cart = cartService.get();
-        var books = cart.entrySet().stream()
-                .map((e) -> new BookWithCount(bookService.findById(e.getKey()).get(), e.getValue()))
-                .filter((b) -> b.book != null).collect(Collectors.toList());
-        var total = books.stream().map((b) -> b.book.price * b.count).reduce(0.0, Double::sum);
-        var discount = Double.min(total * 0.3, 100.0);
-
-        return new Cart(books, discount, total - discount);
+        return cart;
     }
 
     @PutMapping("/{bookId}")
@@ -60,13 +48,11 @@ public class CartController {
 
     @PostMapping("/checkout")
     public ResponseEntity<Void> checkout() {
-        var cart = getCart();
-        var ok = orderService.newOrder(cart);
+        var ok = orderService.checkout();
         if (ok) {
-            emptyCart();
             return ResponseEntity.ok(null);
         } else {
-            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(null);
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
         }
     }
 }
