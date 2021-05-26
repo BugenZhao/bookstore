@@ -8,4 +8,3 @@ BugenZhao <bugenzhao@sjtu.edu.cn>
 
 == Backend
 - _Spring_ is difficult! 😭
-- See link:https://github.com/BugenZhao/bookstore-rocket[BugenZhao/bookstore-rocket] to get a much simpler one.
