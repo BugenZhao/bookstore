@@ -10,6 +10,7 @@ import com.bugenzhao.bookstore_backend.entity.UserWithSpending;
 import com.bugenzhao.bookstore_backend.entity.db.Order;
 import com.bugenzhao.bookstore_backend.repository.AdminOrderRepository;
 import com.bugenzhao.bookstore_backend.service.AdminOrderService;
+import com.bugenzhao.bookstore_backend.utils.OrderUtils;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -35,10 +36,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     @Override
     public List<BookWithCount> statSalesBetween(Date from, Date to) {
         var orders = orderRepo.findByCreatedAtBetween(from, to);
-        var sales = orders.stream().flatMap(o -> o.getItems().stream())
-                .collect(Collectors.groupingBy(i -> i.getBook(), Collectors.summingLong(i -> i.getQuantity())))
-                .entrySet().stream().map(e -> new BookWithCount(e.getKey(), e.getValue())).collect(Collectors.toList());
-        sales.sort((l, r) -> -l.getCount().compareTo(r.getCount()));
+        var sales = OrderUtils.ordersToSales(orders);
 
         return sales;
     }

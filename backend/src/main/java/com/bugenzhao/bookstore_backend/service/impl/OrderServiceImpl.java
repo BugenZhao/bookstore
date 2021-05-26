@@ -1,5 +1,7 @@
 package com.bugenzhao.bookstore_backend.service.impl;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 
 import com.bugenzhao.bookstore_backend.entity.AuthedUser;
+import com.bugenzhao.bookstore_backend.entity.OrdersSummary;
 import com.bugenzhao.bookstore_backend.entity.db.Order;
 import com.bugenzhao.bookstore_backend.entity.db.OrderItem;
 import com.bugenzhao.bookstore_backend.entity.db.OrderStatus;
@@ -15,6 +18,7 @@ import com.bugenzhao.bookstore_backend.repository.OrderRepository;
 import com.bugenzhao.bookstore_backend.repository.UserRepository;
 import com.bugenzhao.bookstore_backend.service.CartService;
 import com.bugenzhao.bookstore_backend.service.OrderService;
+import com.bugenzhao.bookstore_backend.utils.OrderUtils;
 import com.bugenzhao.bookstore_backend.utils.SessionUtils;
 
 import org.apache.logging.log4j.LogManager;
@@ -84,5 +88,15 @@ public class OrderServiceImpl implements OrderService {
 
         orderRepo.save(order);
         return true;
+    }
+
+    @Override
+    public OrdersSummary statOrdersBetween(Date from, Date to) {
+        var orders = orderRepo.findByUser_IdAndCreatedAtBetween(auth.getUserId(), from, to);
+        var sales = OrderUtils.ordersToSales(orders);
+        var total = sales.stream().map(b -> b.getBook().getPrice().multiply(BigDecimal.valueOf(b.getCount())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return new OrdersSummary(sales, total);
     }
 }
