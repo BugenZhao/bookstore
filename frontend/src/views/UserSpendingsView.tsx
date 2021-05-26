@@ -2,17 +2,14 @@ import ECharts from "echarts-for-react";
 import _ from "lodash";
 import { Moment } from "moment";
 import { useState } from "react";
-import { useHistory } from "react-router";
 import { FromToPicker } from "../components/FromToPicker";
 import { useUserSpendings } from "../services/admin";
-import { useOrdersSummary } from "../services/order";
 import { defaultFrom, defaultTo } from "../utils";
 
 export function UserSpendingsView() {
   const [from, setFrom] = useState<Moment>(defaultFrom());
   const [to, setTo] = useState<Moment>(defaultTo());
   const { userSpendings } = useUserSpendings(from, to);
-  const history = useHistory();
 
   const users = userSpendings?.map((us) => us.user) ?? [];
   const spendings = userSpendings?.map((us) => us.spending) ?? [];
