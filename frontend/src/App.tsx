@@ -1,5 +1,4 @@
 import { BSRoutes } from "./routes";
-
 import { StoreProvider } from "./services/StoreContext";
 
 function App() {
