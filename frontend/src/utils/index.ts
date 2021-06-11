@@ -1,4 +1,4 @@
-import moment, { duration } from "moment";
+import moment from "moment";
 
 export function encodeParams(p: Record<string, any>) {
   return Object.entries(p)
@@ -6,5 +6,5 @@ export function encodeParams(p: Record<string, any>) {
     .join("&");
 }
 
-export const defaultFrom = () => moment().subtract(duration(7, "days"));
+export const defaultFrom = () => moment().subtract(moment.duration(7, "days"));
 export const defaultTo = () => moment();
