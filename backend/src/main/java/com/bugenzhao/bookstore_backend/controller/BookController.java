@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/books/")
 public class BookController {
-    BookService bookService;
+    final BookService bookService;
 
     public BookController(BookService bookService) {
         this.bookService = bookService;

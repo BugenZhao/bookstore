@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/admin/stat/")
 public class AdminStatController {
-    AdminOrderService orderService;
+    final AdminOrderService orderService;
 
     public AdminStatController(AdminOrderService orderService) {
         this.orderService = orderService;

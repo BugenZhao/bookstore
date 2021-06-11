@@ -28,7 +28,6 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.springframework.validation.Validator;
 import org.springframework.web.context.WebApplicationContext;
 
 @Service
@@ -41,16 +40,14 @@ public class OrderServiceImpl implements OrderService {
     final UserDao userDao;
     final OrderDao orderDao;
     final BookDao bookDao;
-    final Validator validator;
     final AuthedUser auth;
 
     public OrderServiceImpl(CartService cartService, UserDao userDao, OrderDao orderDao, BookDao bookDao,
-            Validator validator, HttpServletRequest request) {
+            HttpServletRequest request) {
         this.cartService = cartService;
         this.userDao = userDao;
         this.orderDao = orderDao;
         this.bookDao = bookDao;
-        this.validator = validator;
         this.auth = SessionUtils.getAuth(request).get();
     }
 

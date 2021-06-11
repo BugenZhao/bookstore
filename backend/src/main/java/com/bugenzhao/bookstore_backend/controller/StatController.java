@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/stat/")
 public class StatController {
-    OrderService orderService;
+    final OrderService orderService;
 
     public StatController(OrderService orderService) {
         this.orderService = orderService;

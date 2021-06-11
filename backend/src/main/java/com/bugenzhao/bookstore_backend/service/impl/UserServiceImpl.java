@@ -20,8 +20,9 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
-    Logger logger = LogManager.getLogger();
-    UserDao userDao;
+    final Logger logger = LogManager.getLogger();
+
+    final UserDao userDao;
 
     public UserServiceImpl(UserDao userDao) {
         this.userDao = userDao;

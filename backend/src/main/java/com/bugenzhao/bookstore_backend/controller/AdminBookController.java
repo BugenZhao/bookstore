@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/admin/books/")
 public class AdminBookController {
-    AdminBookService bookService;
+    final AdminBookService bookService;
 
     public AdminBookController(AdminBookService bookService) {
         this.bookService = bookService;

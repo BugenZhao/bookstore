@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/users/")
 public class UserController {
-    UserService userService;
+    final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;

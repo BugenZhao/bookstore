@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class BookServiceImpl implements BookService {
-    BookDao bookDao;
+    final BookDao bookDao;
 
     public BookServiceImpl(BookDao bookDao) {
         this.bookDao = bookDao;
