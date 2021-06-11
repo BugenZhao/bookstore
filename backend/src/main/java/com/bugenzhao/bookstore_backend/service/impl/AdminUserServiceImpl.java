@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.validation.ConstraintViolationException;
 
+import com.bugenzhao.bookstore_backend.dao.AdminUserDao;
 import com.bugenzhao.bookstore_backend.entity.db.User;
-import com.bugenzhao.bookstore_backend.repository.AdminUserRepository;
 import com.bugenzhao.bookstore_backend.service.AdminUserService;
 import com.bugenzhao.bookstore_backend.utils.BzBeanUtils;
 
@@ -19,23 +19,23 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 @Transactional
 public class AdminUserServiceImpl implements AdminUserService {
     final Logger logger = LogManager.getLogger();
-    final AdminUserRepository userRepo;
+    final AdminUserDao userDao;
 
-    public AdminUserServiceImpl(AdminUserRepository userRepo) {
-        this.userRepo = userRepo;
+    public AdminUserServiceImpl(AdminUserDao userDao) {
+        this.userDao = userDao;
     }
 
     @Override
     public List<User> findAll() {
-        return userRepo.findAll();
+        return userDao.findAll();
     }
 
     @Override
     public boolean patchById(long userId, User patch) {
-        var user = userRepo.findById(userId).get();
+        var user = userDao.findById(userId).get();
         BzBeanUtils.copyNonNullProperties(patch, user, "id", "password");
         try {
-            userRepo.saveAndFlush(user);
+            userDao.saveAndFlush(user);
             return true;
         } catch (ConstraintViolationException e) {
             logger.info("invalid patch " + patch + ": " + e);

@@ -5,10 +5,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.bugenzhao.bookstore_backend.dao.AdminOrderDao;
 import com.bugenzhao.bookstore_backend.entity.BookWithCount;
 import com.bugenzhao.bookstore_backend.entity.UserWithSpending;
 import com.bugenzhao.bookstore_backend.entity.db.Order;
-import com.bugenzhao.bookstore_backend.repository.AdminOrderRepository;
 import com.bugenzhao.bookstore_backend.service.AdminOrderService;
 import com.bugenzhao.bookstore_backend.utils.OrderUtils;
 
@@ -22,27 +22,28 @@ import org.springframework.web.context.WebApplicationContext;
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Transactional
 public class AdminOrderServiceImpl implements AdminOrderService {
-    final AdminOrderRepository orderRepo;
+    final AdminOrderDao orderDao;
 
-    public AdminOrderServiceImpl(AdminOrderRepository orderRepo) {
-        this.orderRepo = orderRepo;
+    public AdminOrderServiceImpl(AdminOrderDao orderDao) {
+        this.orderDao = orderDao;
     }
 
     @Override
     public List<Order> findAll() {
-        return orderRepo.findAll();
+        return orderDao.findAll();
     }
 
     @Override
     public List<BookWithCount> statSalesBetween(Date from, Date to) {
-        var orders = orderRepo.findByCreatedAtBetween(from, to);
+        var orders = orderDao.findByCreatedAtBetween(from, to);
         var sales = OrderUtils.ordersToSales(orders);
 
         return sales;
     }
 
+    @Override
     public List<UserWithSpending> statUserSpendingsBetween(Date from, Date to) {
-        var orders = orderRepo.findByCreatedAtBetween(from, to);
+        var orders = orderDao.findByCreatedAtBetween(from, to);
         var spendings = orders.stream()
                 .collect(Collectors.groupingBy(o -> o.getUser(),
                         Collectors.reducing(BigDecimal.ZERO, o -> o.getTotalPrice(), BigDecimal::add)))

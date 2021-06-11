@@ -8,14 +8,14 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.bugenzhao.bookstore_backend.dao.BookDao;
+import com.bugenzhao.bookstore_backend.dao.CartDao;
+import com.bugenzhao.bookstore_backend.dao.UserDao;
 import com.bugenzhao.bookstore_backend.entity.AuthedUser;
 import com.bugenzhao.bookstore_backend.entity.BookWithCount;
 import com.bugenzhao.bookstore_backend.entity.CartResponse;
 import com.bugenzhao.bookstore_backend.entity.db.Cart;
 import com.bugenzhao.bookstore_backend.entity.db.CartItem;
-import com.bugenzhao.bookstore_backend.repository.BookRepository;
-import com.bugenzhao.bookstore_backend.repository.CartRepository;
-import com.bugenzhao.bookstore_backend.repository.UserRepository;
 import com.bugenzhao.bookstore_backend.service.CartService;
 import com.bugenzhao.bookstore_backend.utils.SessionUtils;
 
@@ -29,28 +29,27 @@ import org.springframework.web.context.WebApplicationContext;
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Transactional
 public class CartServiceImpl implements CartService {
-    final CartRepository cartRepo;
-    final UserRepository userRepo;
-    final BookRepository bookRepo;
+    final CartDao cartDao;
+    final UserDao userDao;
+    final BookDao bookDao;
 
     final AuthedUser auth;
 
-    public CartServiceImpl(CartRepository cartRepository, UserRepository userRepo, BookRepository bookRepo,
-            HttpServletRequest request) {
-        this.cartRepo = cartRepository;
-        this.userRepo = userRepo;
-        this.bookRepo = bookRepo;
+    public CartServiceImpl(CartDao cartDao, UserDao userDao, BookDao bookDao, HttpServletRequest request) {
+        this.cartDao = cartDao;
+        this.userDao = userDao;
+        this.bookDao = bookDao;
         this.auth = SessionUtils.getAuth(request).get();
     }
 
     @Override
     public void addABook(long bookId) {
         var cart = getOrCreateCart();
-        var book = bookRepo.getOne(bookId);
+        var book = bookDao.getOne(bookId);
         var newItem = CartItem.builder().book(book).build();
 
         cart.getItems().add(newItem);
-        cartRepo.save(cart);
+        cartDao.save(cart);
     }
 
     @Override
@@ -58,20 +57,20 @@ public class CartServiceImpl implements CartService {
         var cart = getOrCreateCart();
 
         cart.getItems().removeIf((item) -> item.getBook().getId() == bookId);
-        cartRepo.save(cart);
+        cartDao.save(cart);
     }
 
     @Override
     public void empty() {
-        cartRepo.deleteByUser_Id(auth.getUserId());
+        cartDao.deleteByUser_Id(auth.getUserId());
     }
 
     private Cart getOrCreateCart() {
-        var user = userRepo.getOne(auth.getUserId());
+        var user = userDao.getOne(auth.getUserId());
 
-        var cart = cartRepo.findByUser_Id(auth.getUserId()).orElseGet(() -> {
+        var cart = cartDao.findByUser_Id(auth.getUserId()).orElseGet(() -> {
             var newCart = Cart.builder().user(user).items(new HashSet<>()).build();
-            return cartRepo.save(newCart);
+            return cartDao.save(newCart);
         });
 
         return cart;

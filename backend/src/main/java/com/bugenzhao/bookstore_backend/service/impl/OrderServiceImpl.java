@@ -8,14 +8,14 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 
+import com.bugenzhao.bookstore_backend.dao.BookDao;
+import com.bugenzhao.bookstore_backend.dao.OrderDao;
+import com.bugenzhao.bookstore_backend.dao.UserDao;
 import com.bugenzhao.bookstore_backend.entity.AuthedUser;
 import com.bugenzhao.bookstore_backend.entity.OrdersSummary;
 import com.bugenzhao.bookstore_backend.entity.db.Order;
 import com.bugenzhao.bookstore_backend.entity.db.OrderItem;
 import com.bugenzhao.bookstore_backend.entity.db.OrderStatus;
-import com.bugenzhao.bookstore_backend.repository.BookRepository;
-import com.bugenzhao.bookstore_backend.repository.OrderRepository;
-import com.bugenzhao.bookstore_backend.repository.UserRepository;
 import com.bugenzhao.bookstore_backend.service.CartService;
 import com.bugenzhao.bookstore_backend.service.OrderService;
 import com.bugenzhao.bookstore_backend.utils.OrderUtils;
@@ -38,25 +38,25 @@ public class OrderServiceImpl implements OrderService {
     final Logger logger = LogManager.getLogger();
 
     final CartService cartService;
-    final UserRepository userRepo;
-    final OrderRepository orderRepo;
-    final BookRepository bookRepo;
+    final UserDao userDao;
+    final OrderDao orderDao;
+    final BookDao bookDao;
     final Validator validator;
     final AuthedUser auth;
 
-    public OrderServiceImpl(CartService cartService, UserRepository userRepo, OrderRepository orderRepo,
-            BookRepository bookRepo, Validator validator, HttpServletRequest request) {
+    public OrderServiceImpl(CartService cartService, UserDao userDao, OrderDao orderDao, BookDao bookDao,
+            Validator validator, HttpServletRequest request) {
         this.cartService = cartService;
-        this.userRepo = userRepo;
-        this.orderRepo = orderRepo;
-        this.bookRepo = bookRepo;
+        this.userDao = userDao;
+        this.orderDao = orderDao;
+        this.bookDao = bookDao;
         this.validator = validator;
         this.auth = SessionUtils.getAuth(request).get();
     }
 
     @Override
     public List<Order> findAll() {
-        return orderRepo.findByUser_Id(auth.getUserId());
+        return orderDao.findByUser_Id(auth.getUserId());
     }
 
     @Override
@@ -74,7 +74,7 @@ public class OrderServiceImpl implements OrderService {
             var book = orderItem.getBook();
             book.setInventory(book.getInventory() - orderItem.getQuantity());
             try {
-                bookRepo.saveAndFlush(book);
+                bookDao.saveAndFlush(book);
             } catch (ConstraintViolationException e) {
                 logger.info("no enough inventory for " + orderItem + ": " + e);
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -82,17 +82,17 @@ public class OrderServiceImpl implements OrderService {
             }
         }
 
-        var user = userRepo.getOne(auth.getUserId());
+        var user = userDao.getOne(auth.getUserId());
         var order = Order.builder().user(user).consignee(user.getUsername()).status(OrderStatus.submitted)
                 .items(orderItems).totalPrice(cart.getTotal()).build();
 
-        orderRepo.save(order);
+        orderDao.save(order);
         return true;
     }
 
     @Override
     public OrdersSummary statOrdersBetween(Date from, Date to) {
-        var orders = orderRepo.findByUser_IdAndCreatedAtBetween(auth.getUserId(), from, to);
+        var orders = orderDao.findByUser_IdAndCreatedAtBetween(auth.getUserId(), from, to);
         var sales = OrderUtils.ordersToSales(orders);
         var total = sales.stream().map(b -> b.getBook().getPrice().multiply(BigDecimal.valueOf(b.getCount())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
