@@ -23,7 +23,7 @@ public class AdminBookController {
     }
 
     @PatchMapping("/{bookId}")
-    public ResponseEntity<Void> patchUser(@PathVariable long bookId, @RequestBody Book patch) {
+    public ResponseEntity<Void> patchBook(@PathVariable long bookId, @RequestBody Book patch) {
         var ok = bookService.patchById(bookId, patch);
         return ok ? ResponseEntity.ok(null) : ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
     }
