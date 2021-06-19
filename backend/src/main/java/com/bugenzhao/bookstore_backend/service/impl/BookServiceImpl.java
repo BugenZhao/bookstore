@@ -1,12 +1,13 @@
 package com.bugenzhao.bookstore_backend.service.impl;
 
-import java.util.List;
 import java.util.Optional;
 
 import com.bugenzhao.bookstore_backend.entity.db.Book;
 import com.bugenzhao.bookstore_backend.dao.BookDao;
 import com.bugenzhao.bookstore_backend.service.BookService;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findAll() {
-        return bookDao.findAll();
+    public Page<Book> findAll(Pageable pageable) {
+        return bookDao.findAll(pageable);
     }
 }

@@ -1,14 +1,16 @@
 package com.bugenzhao.bookstore_backend.dao;
 
-import java.util.List;
 import java.util.Optional;
 
 import com.bugenzhao.bookstore_backend.entity.db.Book;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 public interface BookDao {
     Optional<Book> findById(long bookId);
 
-    List<Book> findAll();
+    Page<Book> findAll(Pageable pageable);
 
     Book getOne(long bookId);
 
