@@ -3,6 +3,7 @@ package com.bugenzhao.bookstore_backend.entity.db;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import com.bugenzhao.bookstore_backend.entity.validation.ValidUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
@@ -14,6 +15,7 @@ import lombok.*;
 
 @Entity
 @Table(name = "users")
+@ValidUser
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,4 +41,8 @@ public class User {
 
     @NotNull
     private Boolean banned;
+
+    public boolean isAdmin() {
+        return type == UserType.admin;
+    }
 }
