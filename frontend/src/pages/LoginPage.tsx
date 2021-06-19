@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useStore } from "../services/StoreContext";
+import { AuthStatus, useStore } from "../services/StoreContext";
 import { Alert, Form, OverlayTrigger } from "react-bootstrap";
 import { LoginRegView } from "../views/LoginRegView";
 import { useForm } from "react-hook-form";
@@ -10,10 +10,13 @@ import { LoginData, postLogin } from "../services/auth";
 type LoginFormData = LoginData;
 
 export function LoginPage() {
-  const { signedOut, setSignedOut } = useStore();
-  const { revalidate } = useAuth();
+  const { authStatus, setAuthStatus } = useStore();
+  const { revalidate: revalidateAuth } = useAuth();
   const history = useHistory();
-  const [banned, setBanned] = useState(false);
+
+  const [signedOutShow, setSignedOutShow] = useState(false);
+  const [expiredShow, setExpiredShow] = useState(false);
+  const [bannedShow, setBannedShow] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [wrong, setWrong] = useState(false);
 
@@ -25,24 +28,31 @@ export function LoginPage() {
   });
 
   useEffect(() => {
+    setSignedOutShow(authStatus === AuthStatus.LoggedOut);
+    setBannedShow(authStatus === AuthStatus.Banned);
+    setExpiredShow(authStatus === AuthStatus.Expired);
+
     const timeout = setTimeout(() => {
-      setSignedOut(false);
-      setBanned(false);
+      setBannedShow(false);
+      setSignedOutShow(false);
+      setExpiredShow(false);
     }, 5000);
 
     return () => {
       clearTimeout(timeout);
-      setSignedOut(false);
     };
-  }, [setSignedOut, banned]);
+  }, [authStatus]);
 
   return (
     <>
-      <Alert show={signedOut} variant="primary" className="text-center h5">
+      <Alert show={signedOutShow} variant="primary" className="text-center h5">
         You have signed out.
       </Alert>
-      <Alert show={banned} variant="danger" className="text-center h5">
+      <Alert show={bannedShow} variant="danger" className="text-center h5">
         Your account has been banned by administrators.
+      </Alert>
+      <Alert show={expiredShow} variant="danger" className="text-center h5">
+        Your session has expired. Please sign in again.
       </Alert>
       <LoginRegView
         isSignIn
@@ -50,14 +60,15 @@ export function LoginPage() {
           setProcessing(true);
           setWrong(false);
           const res = await postLogin(data);
-          await revalidate();
+          await revalidateAuth();
           setProcessing(false);
           if (res.ok) {
-            setSignedOut(false);
+            setAuthStatus(AuthStatus.LoggedIn);
             history.push("/home");
           } else if (res.status === 403) {
-            setBanned(true);
+            setAuthStatus(AuthStatus.Banned);
           } else {
+            setAuthStatus(AuthStatus.NotLoggedIn);
             setWrong(true);
           }
         })}

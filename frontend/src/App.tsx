@@ -1,10 +1,10 @@
-import { BSRoutes } from "./routes";
+import { Routes } from "./routes";
 import { StoreProvider } from "./services/StoreContext";
 
 function App() {
   return (
     <StoreProvider>
-      <BSRoutes />
+      <Routes />
     </StoreProvider>
   );
 }

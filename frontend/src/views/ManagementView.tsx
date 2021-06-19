@@ -77,7 +77,6 @@ export function ManagementView<R extends { id: any }>({
     size: pageSize,
   });
 
-  console.log(rows[0]);
   return (
     <div className="card">
       <Grid rows={rows} columns={cols} getRowId={(row: R) => row.id}>

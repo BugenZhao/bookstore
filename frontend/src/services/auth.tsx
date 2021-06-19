@@ -35,7 +35,7 @@ export type AuthedUser = {
 };
 
 export function useAuth() {
-  const r = useFetch<AuthedUser>("/users/check");
+  const r = useFetch<AuthedUser>("/users/check", { refreshInterval: 10000 });
   const isAdmin =
     r.data && !r.error ? r.data.user_type === UserType.admin : undefined;
   return {

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { PropsWithChildren } from "react";
 import {
   Route,
@@ -17,9 +18,18 @@ import {
   OrdersPage,
 } from "./pages";
 import { useAuth } from "./services/auth";
+import { AuthStatus, useStore } from "./services/StoreContext";
 
 function SignedInRoute(props: PropsWithChildren<RouteProps>) {
   const { error } = useAuth();
+  const { authStatus, setAuthStatus } = useStore();
+
+  useEffect(() => {
+    if (authStatus === AuthStatus.LoggedIn && error) {
+      setAuthStatus(AuthStatus.Expired);
+    }
+  });
+
   if (error) {
     return <Redirect to="/login" />;
   } else {
@@ -36,7 +46,7 @@ function AdminRoute(props: PropsWithChildren<RouteProps>) {
   }
 }
 
-export function BSRoutes() {
+export function Routes() {
   return (
     <Router>
       <Switch>

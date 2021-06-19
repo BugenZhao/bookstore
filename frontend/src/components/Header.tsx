@@ -12,8 +12,8 @@ import {
   Badge,
 } from "react-bootstrap";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
-import { SearchPageParams } from "../routes";
-import { useStore } from "../services/StoreContext";
+import { HomeOrSearchPageParams } from "../routes";
+import { AuthStatus, useStore } from "../services/StoreContext";
 import _ from "lodash";
 import { postLogout, useAuth } from "../services/auth";
 import { useCart } from "../services/cart";
@@ -25,7 +25,7 @@ export function Header({
 }) {
   const { cartCount } = useCart();
   const isAdmin = useAuth().isAdmin ?? false;
-  const keyword = useRouteMatch<SearchPageParams>().params.keyword ?? "";
+  const keyword = useRouteMatch<HomeOrSearchPageParams>().params.keyword ?? "";
 
   return (
     <Navbar bg="white" expand="lg" className="shadow-sm fixed-top">
@@ -71,7 +71,7 @@ export function Header({
 }
 
 function NavUserItem() {
-  const { setSignedOut } = useStore();
+  const { setAuthStatus } = useStore();
   const history = useHistory();
   const { data: user, revalidate } = useAuth();
 
@@ -84,7 +84,7 @@ function NavUserItem() {
         onClick={async () => {
           await postLogout();
           await revalidate();
-          setSignedOut(true);
+          setAuthStatus(AuthStatus.LoggedOut);
           history.push("/login");
         }}
       >
@@ -131,12 +131,7 @@ function DashboardButton({ active }: { active: string }) {
           Book Store
         </Button>
       ) : (
-        <Button
-          as={Link}
-          to="/dashboard"
-          variant="primary"
-          className="w-100"
-        >
+        <Button as={Link} to="/dashboard" variant="primary" className="w-100">
           Dashboard
         </Button>
       )}

@@ -1,9 +1,22 @@
-import { createContext, PropsWithChildren, useContext, useState } from "react";
+import {
+  createContext,
+  PropsWithChildren,
+  useContext,
+} from "react";
 import _ from "lodash";
+import { useState } from "react";
+
+export enum AuthStatus {
+  NotLoggedIn,
+  LoggedIn,
+  LoggedOut,
+  Expired,
+  Banned,
+}
 
 type StoreContextType = {
-  signedOut: boolean;
-  setSignedOut: (s: boolean) => void;
+  authStatus: AuthStatus;
+  setAuthStatus: (a: AuthStatus) => void;
 };
 export const StoreContext = createContext<StoreContextType>(undefined!);
 export function useStore() {
@@ -11,13 +24,13 @@ export function useStore() {
 }
 
 export function StoreProvider(props: PropsWithChildren<{}>) {
-  const [signedOut, setSignedOut] = useState(false);
+  const [authStatus, setAuthStatus] = useState(AuthStatus.NotLoggedIn);
 
   return (
     <StoreContext.Provider
       value={{
-        signedOut,
-        setSignedOut,
+        authStatus,
+        setAuthStatus,
       }}
     >
       {props.children}

@@ -1,5 +1,5 @@
 import { useHistory } from "react-router-dom";
-import { useStore } from "../services/StoreContext";
+import { AuthStatus, useStore } from "../services/StoreContext";
 import { Form } from "react-bootstrap";
 import { LoginRegView } from "../views/LoginRegView";
 import { useForm } from "react-hook-form";
@@ -12,7 +12,7 @@ export type RegisterFormData = RegisterData & {
 };
 
 export function RegisterPage() {
-  const { setSignedOut } = useStore();
+  const { setAuthStatus } = useStore();
   const { revalidate } = useAuth();
   const history = useHistory();
   const [processing, setProcessing] = useState(false);
@@ -41,7 +41,7 @@ export function RegisterPage() {
           await revalidate();
           setProcessing(false);
           if (res.ok) {
-            setSignedOut(false);
+            setAuthStatus(AuthStatus.LoggedIn);
             history.push("/home");
           } else {
             setWrong(true);
