@@ -1,5 +1,5 @@
 import { Moment } from "moment";
-import { PagingRequest, PagingResponse, useFetch } from ".";
+import { PageRequest, PageResponse, useFetch } from ".";
 import { encodeParams } from "../utils";
 import { User } from "./admin";
 import { Book } from "./book";
@@ -24,8 +24,8 @@ export type Order = {
   totalPrice: number;
 };
 
-export function useMyOrders(pageReq: PagingRequest) {
-  const r = useFetch<PagingResponse<Order>>(
+export function useMyOrders(pageReq: PageRequest) {
+  const r = useFetch<PageResponse<Order>>(
     "/orders/?" + encodeParams(pageReq)
   );
   return {

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { patchUser, useAllUsers, User } from "../services/admin";
 import { UserType } from "../services/auth";
 import { DisplayCol, ManagementView } from "./ManagementView";
-import { PagingRequest } from "../services";
+import { PageRequest } from "../services";
 
 export function UserManagementView() {
   type Row = User & {
@@ -34,7 +34,7 @@ export function UserManagementView() {
       </ErrorModal>
       <ManagementView
         showEditCommand
-        useData={(pageReq: PagingRequest) => {
+        useData={(pageReq: PageRequest) => {
           const { users, total, revalidate } = useAllUsers(pageReq);
           const rows: Row[] = (users ?? []).map((user) => {
             {

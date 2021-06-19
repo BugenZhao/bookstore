@@ -1,6 +1,6 @@
 package com.bugenzhao.bookstore_backend.controller;
 
-import com.bugenzhao.bookstore_backend.entity.PagingResponse;
+import com.bugenzhao.bookstore_backend.entity.PageResponse;
 import com.bugenzhao.bookstore_backend.entity.db.Book;
 import com.bugenzhao.bookstore_backend.service.BookService;
 
@@ -23,10 +23,10 @@ public class BookController {
     }
 
     @GetMapping("/")
-    public PagingResponse<Book> getAllBooks(@RequestParam(defaultValue = "0") int page,
+    public PageResponse<Book> getAllBooks(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "100") int size) {
         var books = bookService.findAll(PageRequest.of(page, size));
-        return new PagingResponse<>(books.getContent(), books.getTotalElements());
+        return new PageResponse<>(books.getContent(), books.getTotalElements());
     }
 
     @GetMapping("/id/{bookId}")
@@ -36,9 +36,9 @@ public class BookController {
     }
 
     @GetMapping("/search/{keyword}")
-    public PagingResponse<Book> getBook(@PathVariable String keyword, @RequestParam(defaultValue = "0") int page,
+    public PageResponse<Book> getBook(@PathVariable String keyword, @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "100") int size) {
         var books = bookService.search(keyword, PageRequest.of(page, size));
-        return new PagingResponse<>(books.getContent(), books.getTotalElements());
+        return new PageResponse<>(books.getContent(), books.getTotalElements());
     }
 }

@@ -46,12 +46,12 @@ export function patch(path: string, body?: BodyInit | null) {
   return fetch(url, { method: "PATCH", body: body, headers: headers });
 }
 
-export type PagingRequest = {
+export type PageRequest = {
   page: number;
   size: number;
 };
 
-export type PagingResponse<T> = {
+export type PageResponse<T> = {
   data: T[];
   total: number;
 };

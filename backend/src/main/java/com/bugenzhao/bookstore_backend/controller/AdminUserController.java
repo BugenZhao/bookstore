@@ -1,6 +1,6 @@
 package com.bugenzhao.bookstore_backend.controller;
 
-import com.bugenzhao.bookstore_backend.entity.PagingResponse;
+import com.bugenzhao.bookstore_backend.entity.PageResponse;
 import com.bugenzhao.bookstore_backend.entity.db.User;
 import com.bugenzhao.bookstore_backend.service.AdminUserService;
 import com.bugenzhao.bookstore_backend.utils.SessionUtils;
@@ -26,10 +26,10 @@ public class AdminUserController {
     }
 
     @GetMapping("/")
-    public PagingResponse<User> getAllUsers(@RequestParam(defaultValue = "0") int page,
+    public PageResponse<User> getAllUsers(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "100") int size) {
         var users = userService.findAll(PageRequest.of(page, size));
-        return new PagingResponse<>(users.getContent(), users.getTotalElements());
+        return new PageResponse<>(users.getContent(), users.getTotalElements());
     }
 
     @PatchMapping("/{userId}")

@@ -1,8 +1,8 @@
 import { Moment } from "moment";
 import {
   delete_,
-  PagingRequest,
-  PagingResponse,
+  PageRequest,
+  PageResponse,
   patch,
   put,
   useFetch,
@@ -20,8 +20,8 @@ export type User = {
   banned: boolean;
 };
 
-export function useAllUsers(pageReq: PagingRequest) {
-  const r = useFetch<PagingResponse<User>>(
+export function useAllUsers(pageReq: PageRequest) {
+  const r = useFetch<PageResponse<User>>(
     "/admin/users/?" + encodeParams(pageReq)
   );
   return {
@@ -47,8 +47,8 @@ export function deleteBook(id: string) {
   return delete_(`/admin/books/${id}`);
 }
 
-export function useAllOrders(pageReq: PagingRequest) {
-  const r = useFetch<PagingResponse<Order>>(
+export function useAllOrders(pageReq: PageRequest) {
+  const r = useFetch<PageResponse<Order>>(
     "/admin/orders/?" + encodeParams(pageReq)
   );
   return {

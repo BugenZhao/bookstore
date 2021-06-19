@@ -6,7 +6,7 @@ import lombok.*;
 
 @Data
 @AllArgsConstructor
-public class PagingResponse<T> {
+public class PageResponse<T> {
     private List<T> data;
     private Long total;
 }

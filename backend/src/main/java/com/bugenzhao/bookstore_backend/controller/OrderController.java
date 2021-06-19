@@ -1,6 +1,6 @@
 package com.bugenzhao.bookstore_backend.controller;
 
-import com.bugenzhao.bookstore_backend.entity.PagingResponse;
+import com.bugenzhao.bookstore_backend.entity.PageResponse;
 import com.bugenzhao.bookstore_backend.entity.db.Order;
 import com.bugenzhao.bookstore_backend.service.OrderService;
 import com.bugenzhao.bookstore_backend.utils.JsonViews;
@@ -23,9 +23,9 @@ public class OrderController {
 
     @JsonView(JsonViews.User.class)
     @GetMapping("/")
-    public PagingResponse<Order> getAllBooks(@RequestParam(defaultValue = "0") int page,
+    public PageResponse<Order> getAllBooks(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "100") int size) {
         var orders = orderService.findAll(PageRequest.of(page, size));
-        return new PagingResponse<>(orders.getContent(), orders.getTotalElements());
+        return new PageResponse<>(orders.getContent(), orders.getTotalElements());
     }
 }
