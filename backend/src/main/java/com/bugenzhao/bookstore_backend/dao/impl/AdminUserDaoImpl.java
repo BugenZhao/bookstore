@@ -1,12 +1,13 @@
 package com.bugenzhao.bookstore_backend.dao.impl;
 
-import java.util.List;
 import java.util.Optional;
 
 import com.bugenzhao.bookstore_backend.dao.AdminUserDao;
 import com.bugenzhao.bookstore_backend.entity.db.User;
 import com.bugenzhao.bookstore_backend.repository.AdminUserRepository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -18,8 +19,8 @@ public class AdminUserDaoImpl implements AdminUserDao {
     }
 
     @Override
-    public List<User> findAll() {
-        return repo.findAll();
+    public Page<User> findAll(Pageable pageable) {
+        return repo.findAll(pageable);
     }
 
     @Override

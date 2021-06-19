@@ -1,7 +1,5 @@
 package com.bugenzhao.bookstore_backend.service.impl;
 
-import java.util.List;
-
 import javax.validation.ConstraintViolationException;
 
 import com.bugenzhao.bookstore_backend.dao.AdminUserDao;
@@ -11,6 +9,8 @@ import com.bugenzhao.bookstore_backend.utils.BzBeanUtils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -26,8 +26,8 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public List<User> findAll() {
-        return userDao.findAll();
+    public Page<User> findAll(Pageable pageable) {
+        return userDao.findAll(pageable);
     }
 
     @Override

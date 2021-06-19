@@ -1,5 +1,12 @@
 import { Moment } from "moment";
-import { delete_, patch, put, useFetch } from ".";
+import {
+  delete_,
+  PagingRequest,
+  PagingResponse,
+  patch,
+  put,
+  useFetch,
+} from ".";
 import { encodeParams } from "../utils";
 import { UserType } from "./auth";
 import { Book } from "./book";
@@ -13,10 +20,13 @@ export type User = {
   banned: boolean;
 };
 
-export function useAllUsers() {
-  const r = useFetch<Record<string, User>>("/admin/users/");
+export function useAllUsers(pageReq: PagingRequest) {
+  const r = useFetch<PagingResponse<User>>(
+    "/admin/users/?" + encodeParams(pageReq)
+  );
   return {
-    users: r.error ? undefined : r.data,
+    users: r.error ? undefined : r.data?.data,
+    total: r.error ? undefined : r.data?.total,
     ...r,
   };
 }
@@ -37,10 +47,13 @@ export function deleteBook(id: string) {
   return delete_(`/admin/books/${id}`);
 }
 
-export function useAllOrders() {
-  const r = useFetch<Order[]>("/admin/orders/");
+export function useAllOrders(pageReq: PagingRequest) {
+  const r = useFetch<PagingResponse<Order>>(
+    "/admin/orders/?" + encodeParams(pageReq)
+  );
   return {
-    orders: (r.error ? undefined : r.data) ?? [],
+    orders: r.error ? undefined : r.data?.data,
+    total: r.error ? undefined : r.data?.total,
     ...r,
   };
 }

@@ -7,6 +7,8 @@ import com.bugenzhao.bookstore_backend.dao.AdminOrderDao;
 import com.bugenzhao.bookstore_backend.entity.db.Order;
 import com.bugenzhao.bookstore_backend.repository.AdminOrderRepository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -18,8 +20,8 @@ public class AdminOrderDaoImpl implements AdminOrderDao {
     }
 
     @Override
-    public List<Order> findAll() {
-        return repo.findAll();
+    public Page<Order> findAll(Pageable pageable) {
+        return repo.findAll(pageable);
     }
 
     @Override

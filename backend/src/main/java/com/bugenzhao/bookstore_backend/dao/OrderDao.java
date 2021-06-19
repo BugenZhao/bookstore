@@ -5,8 +5,11 @@ import java.util.List;
 
 import com.bugenzhao.bookstore_backend.entity.db.Order;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 public interface OrderDao {
-    List<Order> findByUser_Id(long userId);
+    Page<Order> findByUser_Id(long userId, Pageable pageable);
 
     List<Order> findByUser_IdAndCreatedAtBetween(long userId, Date from, Date to);
 

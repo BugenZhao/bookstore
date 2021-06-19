@@ -2,7 +2,6 @@ package com.bugenzhao.bookstore_backend.service.impl;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +24,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -52,8 +53,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> findAll() {
-        return orderDao.findByUser_Id(auth.getUserId());
+    public Page<Order> findAll(Pageable pageable) {
+        return orderDao.findByUser_Id(auth.getUserId(), pageable);
     }
 
     @Override

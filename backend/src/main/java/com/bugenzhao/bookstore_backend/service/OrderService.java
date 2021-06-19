@@ -1,13 +1,15 @@
 package com.bugenzhao.bookstore_backend.service;
 
 import java.util.Date;
-import java.util.List;
 
 import com.bugenzhao.bookstore_backend.entity.OrdersSummary;
 import com.bugenzhao.bookstore_backend.entity.db.Order;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 public interface OrderService {
-    List<Order> findAll();
+    Page<Order> findAll(Pageable pageable);
 
     boolean checkout();
 

@@ -23,6 +23,7 @@ import {
 import { PropsWithChildren, useRef, useState } from "react";
 import { Form } from "react-bootstrap";
 import { GridSortLabel } from "../components/GridSortLabel";
+import { PagingRequest } from "../services";
 
 export type Col<R> = keyof R & string;
 export type DisplayCol<R> = {
@@ -42,8 +43,7 @@ export function ManagementView<R extends { id: any }>({
   showDeleteCommand = false,
 }: PropsWithChildren<{
   useData: (
-    page: number,
-    size: number
+    pageReq: PagingRequest
   ) => {
     rows: R[];
     total: number;
@@ -72,7 +72,10 @@ export function ManagementView<R extends { id: any }>({
   );
   const [currentPage, setCurrentPage] = useState(0);
   const pageSize = 20;
-  const { rows, total, revalidate } = useData(currentPage, pageSize);
+  const { rows, total, revalidate } = useData({
+    page: currentPage,
+    size: pageSize,
+  });
 
   console.log(rows[0]);
   return (

@@ -1,15 +1,15 @@
 import { Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { Order } from "../services/order";
+import { Order, useMyOrders } from "../services/order";
 import {
   PagingState,
-  IntegratedPaging,
   IntegratedFiltering,
   SortingState,
   IntegratedSorting,
   DataTypeProvider,
   FilteringState,
   GridColumnExtension,
+  CustomPaging,
 } from "@devexpress/dx-react-grid";
 import {
   Grid,
@@ -20,19 +20,25 @@ import {
   TableFilterRow,
 } from "@devexpress/dx-react-grid-bootstrap4";
 import { DisplayCol } from "../views/ManagementView";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useState } from "react";
 import { GridSortLabel } from "../components/GridSortLabel";
 import moment from "moment";
 import { DatetimeFormatter } from "../components/formatters";
 
 export function OrdersView({
-  orders,
+  useOrders,
   showUser = false,
 }: PropsWithChildren<{
-  orders: Order[];
+  useOrders: typeof useMyOrders;
   showUser?: boolean;
 }>) {
-  const rows = orders.map((o) => {
+  const [currentPage, setCurrentPage] = useState(0);
+  const pageSize = 20;
+  const { orders, total } = useOrders({
+    page: currentPage,
+    size: pageSize,
+  });
+  const rows = (orders ?? []).map((o) => {
     return {
       userShow: `${o.user?.username} [${o.user?.id}]`,
       ...o,
@@ -109,8 +115,12 @@ export function OrdersView({
       <Grid rows={rows} columns={cols} getRowId={(row) => row.id}>
         <FilteringState />
         <IntegratedFiltering columnExtensions={filtering} />
-        <PagingState defaultCurrentPage={0} pageSize={20} />
-        <IntegratedPaging />
+        <PagingState
+          currentPage={currentPage}
+          onCurrentPageChange={setCurrentPage}
+          pageSize={pageSize}
+        />
+        <CustomPaging totalCount={total} />
         <SortingState
           defaultSorting={[{ columnName: "id", direction: "asc" }]}
         />

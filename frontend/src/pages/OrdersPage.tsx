@@ -1,5 +1,5 @@
 import { Header } from "../components/Header";
-import { useOrders } from "../services/order";
+import { useMyOrders } from "../services/order";
 import { Body } from "./common/Body";
 import { Main } from "./common/Main";
 import { OrdersView } from "../views/OrdersView";
@@ -46,6 +46,5 @@ function OrdersMain() {
 }
 
 function AllOrdersView() {
-  const { orders } = useOrders();
-  return <OrdersView orders={orders} />;
+  return <OrdersView useOrders={useMyOrders} />;
 }

@@ -7,8 +7,11 @@ import com.bugenzhao.bookstore_backend.entity.BookWithCount;
 import com.bugenzhao.bookstore_backend.entity.UserWithSpending;
 import com.bugenzhao.bookstore_backend.entity.db.Order;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 public interface AdminOrderService {
-    List<Order> findAll();
+    Page<Order> findAll(Pageable pageable);
 
     List<BookWithCount> statSalesBetween(Date from, Date to);
 

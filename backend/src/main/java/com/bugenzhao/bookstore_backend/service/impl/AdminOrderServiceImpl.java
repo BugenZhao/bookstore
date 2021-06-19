@@ -14,6 +14,8 @@ import com.bugenzhao.bookstore_backend.utils.OrderUtils;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
@@ -29,8 +31,8 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     }
 
     @Override
-    public List<Order> findAll() {
-        return orderDao.findAll();
+    public Page<Order> findAll(Pageable pageable) {
+        return orderDao.findAll(pageable);
     }
 
     @Override

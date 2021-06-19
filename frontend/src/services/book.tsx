@@ -1,4 +1,4 @@
-import { PagingResponse, useFetch } from ".";
+import { PagingRequest, PagingResponse, useFetch } from ".";
 import { encodeParams } from "../utils";
 
 export type Book = {
@@ -21,14 +21,8 @@ export function useBook(id: string) {
   };
 }
 
-export function useAllBooks(page: number, size: number) {
-  const r = useFetch<PagingResponse<Book>>(
-    "/books/?" +
-      encodeParams({
-        page,
-        size,
-      })
-  );
+export function useAllBooks(pageReq: PagingRequest) {
+  const r = useFetch<PagingResponse<Book>>("/books/?" + encodeParams(pageReq));
   return {
     books: r.error ? undefined : r.data?.data,
     total: r.error ? undefined : r.data?.total,
@@ -36,13 +30,9 @@ export function useAllBooks(page: number, size: number) {
   };
 }
 
-export function useSearchBooks(keyword: string, page: number, size: number) {
+export function useSearchBooks(keyword: string, pageReq: PagingRequest) {
   const r = useFetch<PagingResponse<Book>>(
-    `/books/search/${keyword}?` +
-      encodeParams({
-        page,
-        size,
-      })
+    `/books/search/${keyword}?` + encodeParams(pageReq)
   );
   return {
     books: r.error ? undefined : r.data?.data,

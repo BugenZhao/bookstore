@@ -1,21 +1,15 @@
 import _ from "lodash";
 import { ErrorModal } from "../components/ErrorModal";
 import { useState } from "react";
-import { patchUser, useAllUsers } from "../services/admin";
+import { patchUser, useAllUsers, User } from "../services/admin";
 import { UserType } from "../services/auth";
 import { DisplayCol, ManagementView } from "./ManagementView";
+import { PagingRequest } from "../services";
 
 export function UserManagementView() {
-  const { users, revalidate } = useAllUsers();
-
-  const rows = _.values(users).map((user) => {
-    return {
-      admin: user.type === UserType.admin,
-      ...user,
-    };
-  });
-
-  type Row = typeof rows[number];
+  type Row = User & {
+    admin: boolean;
+  };
 
   const cols: DisplayCol<Row>[] = [
     { name: "id", title: "User ID" },
@@ -40,7 +34,19 @@ export function UserManagementView() {
       </ErrorModal>
       <ManagementView
         showEditCommand
-        rows={rows}
+        useData={(pageReq: PagingRequest) => {
+          const { users, total, revalidate } = useAllUsers(pageReq);
+          const rows: Row[] = (users ?? []).map((user) => {
+            {
+              return { admin: user.type === UserType.admin, ...user };
+            }
+          });
+          return {
+            rows,
+            total: total ?? 0,
+            revalidate,
+          };
+        }}
         cols={cols}
         booleanCols={["admin", "banned"]}
         onCommitChanges={async ({ changed }) => {
@@ -70,8 +76,6 @@ export function UserManagementView() {
           const failedOne = responses.find((r) => !r.ok);
           setErrorResponse(failedOne);
           setErrorShow(!!failedOne);
-
-          await revalidate();
         }}
       />
     </>

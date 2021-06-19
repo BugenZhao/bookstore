@@ -3,6 +3,7 @@ import _ from "lodash";
 import { useState } from "react";
 import titleize from "titleize";
 import { ErrorModal } from "../components/ErrorModal";
+import { PagingRequest } from "../services";
 import { deleteBook, patchBook, putBook } from "../services/admin";
 import { Book, useAllBooks } from "../services/book";
 import { useCart } from "../services/cart";
@@ -43,8 +44,8 @@ export function BookManagementView() {
         showAddCommand
         showDeleteCommand
         showEditCommand
-        useData={(page, size) => {
-          const { books, total, revalidate } = useAllBooks(page, size);
+        useData={(pageReq: PagingRequest) => {
+          const { books, total, revalidate } = useAllBooks(pageReq);
           return {
             rows: books ?? [],
             total: total ?? 0,

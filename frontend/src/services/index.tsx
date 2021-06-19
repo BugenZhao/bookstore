@@ -46,6 +46,11 @@ export function patch(path: string, body?: BodyInit | null) {
   return fetch(url, { method: "PATCH", body: body, headers: headers });
 }
 
+export type PagingRequest = {
+  page: number;
+  size: number;
+};
+
 export type PagingResponse<T> = {
   data: T[];
   total: number;

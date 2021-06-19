@@ -85,7 +85,7 @@ function Books({
 }>) {
   const { setTotal } = useContext(GalleryContext);
   const { page } = useParams();
-  const { books, total } = useBooks(page - 1, PER_PAGE);
+  const { books, total } = useBooks({ page: page - 1, size: PER_PAGE });
 
   useEffect(() => setTotal(total ?? 0)); // todo: backend search
 
@@ -134,11 +134,13 @@ export function BooksView({
       case "search":
         return {
           pathBase: `/search/${keyword}`,
-          useBooks: (page: number, size: number) =>
-            useSearchBooks(keyword ?? "", page, size),
+          useBooks: _.curry(useSearchBooks)(keyword ?? ""),
         };
       case "home":
-        return { pathBase: `/${type}`, useBooks: useAllBooks };
+        return {
+          pathBase: `/${type}`,
+          useBooks: useAllBooks,
+        };
     }
   })();
 

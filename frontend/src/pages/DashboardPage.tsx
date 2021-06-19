@@ -40,9 +40,9 @@ function DashboardMain() {
         <Tab eventKey="books" title="Books">
           <BookManagementView />
         </Tab>
-        {/* <Tab eventKey="users" title="Users">
+        <Tab eventKey="users" title="Users">
           <UserManagementView />
-        </Tab> */}
+        </Tab>
         <Tab eventKey="orders" title="Orders">
           <OrderManagementView />
         </Tab>

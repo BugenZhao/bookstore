@@ -7,6 +7,8 @@ import com.bugenzhao.bookstore_backend.dao.OrderDao;
 import com.bugenzhao.bookstore_backend.entity.db.Order;
 import com.bugenzhao.bookstore_backend.repository.OrderRepository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -18,8 +20,8 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Order> findByUser_Id(long userId) {
-        return repo.findByUser_Id(userId);
+    public Page<Order> findByUser_Id(long userId, Pageable pageable) {
+        return repo.findByUser_Id(userId, pageable);
     }
 
     @Override

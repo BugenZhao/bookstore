@@ -1,5 +1,5 @@
 import { Moment } from "moment";
-import { useFetch } from ".";
+import { PagingRequest, PagingResponse, useFetch } from ".";
 import { encodeParams } from "../utils";
 import { User } from "./admin";
 import { Book } from "./book";
@@ -24,10 +24,13 @@ export type Order = {
   totalPrice: number;
 };
 
-export function useOrders() {
-  const r = useFetch<Order[]>("/orders/");
+export function useMyOrders(pageReq: PagingRequest) {
+  const r = useFetch<PagingResponse<Order>>(
+    "/orders/?" + encodeParams(pageReq)
+  );
   return {
-    orders: (r.error ? undefined : r.data) ?? [],
+    orders: r.error ? undefined : r.data?.data,
+    total: r.error ? undefined : r.data?.total,
     ...r,
   };
 }

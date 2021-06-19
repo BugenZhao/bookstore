@@ -1,12 +1,10 @@
 package com.bugenzhao.bookstore_backend.controller;
 
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
+import com.bugenzhao.bookstore_backend.entity.PagingResponse;
 import com.bugenzhao.bookstore_backend.entity.db.User;
 import com.bugenzhao.bookstore_backend.service.AdminUserService;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,8 +25,10 @@ public class AdminUserController {
     }
 
     @GetMapping("/")
-    public Map<Long, User> getAllUsers() throws Exception {
-        return userService.findAll().stream().collect(Collectors.toMap(User::getId, Function.identity()));
+    public PagingResponse<User> getAllUsers(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "100") int size) {
+        var users = userService.findAll(PageRequest.of(page, size));
+        return new PagingResponse<>(users.getContent(), users.getTotalElements());
     }
 
     @PatchMapping("/{userId}")
