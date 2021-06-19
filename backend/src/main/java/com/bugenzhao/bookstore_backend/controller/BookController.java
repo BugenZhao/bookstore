@@ -24,14 +24,21 @@ public class BookController {
 
     @GetMapping("/")
     public PagingResponse<Book> getAllBooks(@RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "100") int size) throws Exception {
+            @RequestParam(defaultValue = "100") int size) {
         var books = bookService.findAll(PageRequest.of(page, size));
         return new PagingResponse<>(books.getContent(), books.getTotalElements());
     }
 
-    @GetMapping("/{bookId}")
-    public ResponseEntity<Book> getBook(@PathVariable long bookId) throws Exception {
+    @GetMapping("/id/{bookId}")
+    public ResponseEntity<Book> getBook(@PathVariable long bookId) {
         return bookService.findById(bookId).map((book) -> ResponseEntity.ok(book))
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+    }
+
+    @GetMapping("/search/{keyword}")
+    public PagingResponse<Book> getBook(@PathVariable String keyword, @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "100") int size) {
+        var books = bookService.search(keyword, PageRequest.of(page, size));
+        return new PagingResponse<>(books.getContent(), books.getTotalElements());
     }
 }

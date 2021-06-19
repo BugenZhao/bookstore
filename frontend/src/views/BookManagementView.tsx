@@ -4,7 +4,7 @@ import { useState } from "react";
 import titleize from "titleize";
 import { ErrorModal } from "../components/ErrorModal";
 import { deleteBook, patchBook, putBook } from "../services/admin";
-import { Book, useBooks } from "../services/book";
+import { Book, useAllBooks } from "../services/book";
 import { useCart } from "../services/cart";
 import { DisplayCol, ManagementView } from "./ManagementView";
 
@@ -44,7 +44,7 @@ export function BookManagementView() {
         showDeleteCommand
         showEditCommand
         useData={(page, size) => {
-          const { books, total, revalidate } = useBooks(page, size);
+          const { books, total, revalidate } = useAllBooks(page, size);
           return {
             rows: books ?? [],
             total: total ?? 0,

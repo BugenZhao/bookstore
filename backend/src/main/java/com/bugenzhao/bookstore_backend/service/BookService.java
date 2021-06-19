@@ -11,4 +11,6 @@ public interface BookService {
     Optional<Book> findById(long bookId);
 
     Page<Book> findAll(Pageable pageable);
+
+    Page<Book> search(String keyword, Pageable pageable);
 }

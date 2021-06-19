@@ -12,6 +12,8 @@ public interface BookDao {
 
     Page<Book> findAll(Pageable pageable);
 
+    Page<Book> search(String keyword, Pageable pageable);
+
     Book getOne(long bookId);
 
     Book saveAndFlush(Book book);

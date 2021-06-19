@@ -29,4 +29,9 @@ public class BookServiceImpl implements BookService {
     public Page<Book> findAll(Pageable pageable) {
         return bookDao.findAll(pageable);
     }
+
+    @Override
+    public Page<Book> search(String keyword, Pageable pageable) {
+        return bookDao.search(keyword, pageable);
+    }
 }

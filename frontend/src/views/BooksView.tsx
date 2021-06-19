@@ -11,7 +11,7 @@ import { BookCard } from "../components/BookCard";
 import { HomeOrSearchPageParams } from "../routes";
 import { Fade } from "react-awesome-reveal";
 import { Row, Spinner } from "react-bootstrap";
-import { useBooks } from "../services/book";
+import { useAllBooks, useSearchBooks } from "../services/book";
 import classNames from "classnames";
 
 const PER_PAGE = 12;
@@ -78,17 +78,15 @@ function Pagination() {
   );
 }
 
-function Books() {
+function Books({
+  useBooks,
+}: PropsWithChildren<{
+  useBooks: typeof useAllBooks;
+}>) {
   const { setTotal } = useContext(GalleryContext);
-  const { page, keyword } = useParams();
+  const { page } = useParams();
   const { books, total } = useBooks(page - 1, PER_PAGE);
 
-  const allBooksIter = _(books ?? []).filter((book) =>
-    _(book)
-      .values()
-      .join()
-      .includes(keyword ?? "")
-  );
   useEffect(() => setTotal(total ?? 0)); // todo: backend search
 
   if (!books) {
@@ -99,13 +97,11 @@ function Books() {
     );
   }
 
-  const booksThisPage = allBooksIter
-    .map((book) => (
-      <div key={`book${book.id}`} className="col">
-        <BookCard book={book} withLink />
-      </div>
-    ))
-    .value();
+  const booksThisPage = (books ?? []).map((book) => (
+    <div key={`book${book.id}`} className="col">
+      <BookCard book={book} withLink />
+    </div>
+  ));
 
   return (
     <div
@@ -133,19 +129,23 @@ export function BooksView({
   const [total, setTotal] = useState(0);
   const { keyword } = useParams();
 
-  const pathBase = (() => {
+  const { pathBase, useBooks } = (() => {
     switch (type) {
       case "search":
-        return `/search/${keyword}`;
-      default:
-        return `/${type}`;
+        return {
+          pathBase: `/search/${keyword}`,
+          useBooks: (page: number, size: number) =>
+            useSearchBooks(keyword ?? "", page, size),
+        };
+      case "home":
+        return { pathBase: `/${type}`, useBooks: useAllBooks };
     }
   })();
 
   return (
     <GalleryContext.Provider value={{ total, setTotal, pathBase }}>
       <div>
-        <Books />
+        <Books useBooks={useBooks} />
         <Pagination />
       </div>
     </GalleryContext.Provider>

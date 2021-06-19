@@ -13,19 +13,32 @@ export type Book = {
   image: string;
 };
 
-export type BookDict = Record<string, Book>;
-
 export function useBook(id: string) {
-  const r = useFetch<Book>(`/books/${id}`);
+  const r = useFetch<Book>(`/books/id/${id}`);
   return {
     book: r.error ? undefined : r.data,
     ...r,
   };
 }
 
-export function useBooks(page: number, size: number) {
+export function useAllBooks(page: number, size: number) {
   const r = useFetch<PagingResponse<Book>>(
     "/books/?" +
+      encodeParams({
+        page,
+        size,
+      })
+  );
+  return {
+    books: r.error ? undefined : r.data?.data,
+    total: r.error ? undefined : r.data?.total,
+    ...r,
+  };
+}
+
+export function useSearchBooks(keyword: string, page: number, size: number) {
+  const r = useFetch<PagingResponse<Book>>(
+    `/books/search/${keyword}?` +
       encodeParams({
         page,
         size,
