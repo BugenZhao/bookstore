@@ -11,7 +11,9 @@ import lombok.*;
 public class AuthedUser {
     @JsonProperty("user_id")
     private Long userId;
+
     private String username;
+
     @JsonProperty("user_type")
     private UserType userType;
 

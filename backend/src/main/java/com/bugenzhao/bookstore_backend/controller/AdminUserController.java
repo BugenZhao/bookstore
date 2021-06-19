@@ -3,6 +3,7 @@ package com.bugenzhao.bookstore_backend.controller;
 import com.bugenzhao.bookstore_backend.entity.PagingResponse;
 import com.bugenzhao.bookstore_backend.entity.db.User;
 import com.bugenzhao.bookstore_backend.service.AdminUserService;
+import com.bugenzhao.bookstore_backend.utils.SessionUtils;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,11 @@ public class AdminUserController {
     @PatchMapping("/{userId}")
     public ResponseEntity<Void> patchUser(@PathVariable long userId, @RequestBody User patch) {
         var ok = userService.patchById(userId, patch);
-        return ok ? ResponseEntity.ok(null) : ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+        if (ok) {
+            SessionUtils.invalidateAuthForUser(userId);
+            return ResponseEntity.ok(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+        }
     }
 }
