@@ -1,4 +1,3 @@
-
 import useSWR, { SWRConfiguration } from "swr";
 import { API_BASE } from "../config";
 
@@ -46,3 +45,8 @@ export function patch(path: string, body?: BodyInit | null) {
   const url = API_BASE + path;
   return fetch(url, { method: "PATCH", body: body, headers: headers });
 }
+
+export type PagingResponse<T> = {
+  data: T[];
+  total: number;
+};

@@ -9,9 +9,7 @@ import { useCart } from "../services/cart";
 import { DisplayCol, ManagementView } from "./ManagementView";
 
 export function BookManagementView() {
-  const { books, revalidate } = useBooks();
   const revalidateCart = useCart().revalidate;
-  const rows = _.values(books);
 
   type Row = Book;
   const cols: DisplayCol<Row>[] = ([
@@ -45,7 +43,14 @@ export function BookManagementView() {
         showAddCommand
         showDeleteCommand
         showEditCommand
-        rows={rows}
+        useData={(page, size) => {
+          const { books, total, revalidate } = useBooks(page, size);
+          return {
+            rows: books ?? [],
+            total: total ?? 0,
+            revalidate,
+          };
+        }}
         cols={cols}
         onCommitChanges={async ({ added, changed, deleted }) => {
           let allPromises: Promise<Response>[] = [];
@@ -78,7 +83,7 @@ export function BookManagementView() {
           setErrorResponse(failedOne);
           setErrorShow(!!failedOne);
 
-          await Promise.all([revalidate(), revalidateCart()]);
+          await revalidateCart();
         }}
       />
     </>

@@ -1,7 +1,6 @@
 import {
   EditingState,
   PagingState,
-  IntegratedPaging,
   ChangeSet,
   SearchState,
   IntegratedFiltering,
@@ -9,6 +8,7 @@ import {
   IntegratedSorting,
   DataTypeProvider,
   DataTypeProviderProps,
+  CustomPaging,
 } from "@devexpress/dx-react-grid";
 import {
   Grid,
@@ -20,7 +20,7 @@ import {
   SearchPanel,
   Toolbar,
 } from "@devexpress/dx-react-grid-bootstrap4";
-import { PropsWithChildren, useRef } from "react";
+import { PropsWithChildren, useRef, useState } from "react";
 import { Form } from "react-bootstrap";
 import { GridSortLabel } from "../components/GridSortLabel";
 
@@ -31,8 +31,8 @@ export type DisplayCol<R> = {
 };
 export type Patch<R> = Partial<Record<Col<R>, any>>;
 
-export function ManagementView<R>({
-  rows,
+export function ManagementView<R extends { id: any }>({
+  useData,
   cols,
   onCommitChanges,
   booleanCols,
@@ -41,7 +41,14 @@ export function ManagementView<R>({
   showEditCommand = false,
   showDeleteCommand = false,
 }: PropsWithChildren<{
-  rows: R[];
+  useData: (
+    page: number,
+    size: number
+  ) => {
+    rows: R[];
+    total: number;
+    revalidate: () => Promise<boolean>;
+  };
   cols: DisplayCol<R>[];
   onCommitChanges: ({
     added,
@@ -51,7 +58,7 @@ export function ManagementView<R>({
     added?: readonly Patch<R>[];
     changed?: Record<string, Patch<R> | undefined>;
     deleted?: ChangeSet["deleted"];
-  }) => void;
+  }) => Promise<void>;
   booleanCols?: string[];
   disableEditingCols?: string[];
   showAddCommand?: boolean;
@@ -63,21 +70,32 @@ export function ManagementView<R>({
       return { columnName: col, editingEnabled: false };
     })
   );
+  const [currentPage, setCurrentPage] = useState(0);
+  const pageSize = 20;
+  const { rows, total, revalidate } = useData(currentPage, pageSize);
 
+  console.log(rows[0]);
   return (
     <div className="card">
-      <Grid rows={rows} columns={cols} getRowId={(row) => row.id}>
+      <Grid rows={rows} columns={cols} getRowId={(row: R) => row.id}>
         <SearchState />
         <IntegratedFiltering />
-        <PagingState defaultCurrentPage={0} pageSize={50} />
-        <IntegratedPaging />
+        <PagingState
+          currentPage={currentPage}
+          onCurrentPageChange={setCurrentPage}
+          pageSize={pageSize}
+        />
+        <CustomPaging totalCount={total} />
         <SortingState
           defaultSorting={[{ columnName: "id", direction: "asc" }]}
         />
         <IntegratedSorting />
         <BooleanTypeProvider for={booleanCols ?? []} />
         <EditingState
-          onCommitChanges={onCommitChanges}
+          onCommitChanges={async (changeSet) => {
+            await onCommitChanges(changeSet);
+            await revalidate();
+          }}
           columnExtensions={editingStateColumnExtensions.current}
         />
         <Table />

@@ -1,4 +1,5 @@
-import { useFetch } from ".";
+import { PagingResponse, useFetch } from ".";
+import { encodeParams } from "../utils";
 
 export type Book = {
   id: number;
@@ -22,10 +23,17 @@ export function useBook(id: string) {
   };
 }
 
-export function useBooks() {
-  const r = useFetch<BookDict>(`/books/`);
+export function useBooks(page: number, size: number) {
+  const r = useFetch<PagingResponse<Book>>(
+    "/books/?" +
+      encodeParams({
+        page,
+        size,
+      })
+  );
   return {
-    books: r.error ? undefined : r.data,
+    books: r.error ? undefined : r.data?.data,
+    total: r.error ? undefined : r.data?.total,
     ...r,
   };
 }

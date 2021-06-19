@@ -47,8 +47,8 @@ export function BSRoutes() {
         <Route path="/register" component={RegisterPage} />
         <SignedInRoute path="/checkout" component={CheckoutPage} />
         <SignedInRoute path="/detail/:id" component={DetailPage} />
-        <SignedInRoute path="/home" component={HomePage} />
-        <SignedInRoute path="/search/:keyword?" component={SearchPage} />
+        <SignedInRoute path="/home/:page?" component={HomePage} />
+        <SignedInRoute path="/search/:keyword/:page?" component={SearchPage} />
         <SignedInRoute path="/orders/:tab?" component={OrdersPage} />
         <AdminRoute path="/dashboard/:tab?" component={DashboardPage} />
       </Switch>
@@ -60,7 +60,8 @@ export type DetailPageParams = {
   id: string;
 };
 
-export type SearchPageParams = {
+export type HomeOrSearchPageParams = {
+  page?: string;
   keyword?: string;
 };
 

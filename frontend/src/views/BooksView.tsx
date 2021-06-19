@@ -1,22 +1,46 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { useRouteMatch } from "react-router-dom";
+import {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { useHistory, useRouteMatch } from "react-router-dom";
 import _ from "lodash";
 import { BookCard } from "../components/BookCard";
-import { SearchPageParams } from "../routes";
+import { HomeOrSearchPageParams } from "../routes";
 import { Fade } from "react-awesome-reveal";
 import { Row, Spinner } from "react-bootstrap";
 import { useBooks } from "../services/book";
+import classNames from "classnames";
 
 const PER_PAGE = 12;
 
+function useParams() {
+  const {
+    page: pageStr,
+    keyword,
+  } = useRouteMatch<HomeOrSearchPageParams>().params;
+  return {
+    page: parseInt(pageStr ?? "", 10) || 1,
+    keyword,
+  };
+}
+
 function Pagination() {
-  const { total, page, setPage } = useContext(GalleryContext);
+  const { total, pathBase } = useContext(GalleryContext);
+  const { page } = useParams();
+  const history = useHistory();
   const totalPage = Math.ceil(total / PER_PAGE);
+
+  const goToPage = (newPage: number) => {
+    history.push(pathBase + `/${newPage}`);
+  };
 
   const pages = _(_.range(1, totalPage + 1))
     .map((p) => (
       <li className={`page-item ${p === page ? "active" : ""}`} key={p}>
-        <button className="page-link" onClick={() => setPage(p)}>
+        <button className="page-link" onClick={() => goToPage(p)}>
           {p}
         </button>
       </li>
@@ -27,14 +51,24 @@ function Pagination() {
     <div className="py-5" id="footer">
       <nav>
         <ul className="pagination justify-content-center">
-          <li className={`page-item ${page === 1 ? "disabled" : ""}`}>
-            <button className="page-link" onClick={() => setPage(page - 1)}>
+          <li
+            className={classNames(
+              "page-item",
+              page === 1 ? "disabled" : undefined
+            )}
+          >
+            <button className="page-link" onClick={() => goToPage(page - 1)}>
               Previous
             </button>
           </li>
           {pages}
-          <li className={`page-item ${page === totalPage ? "disabled" : ""}`}>
-            <button className="page-link" onClick={() => setPage(page + 1)}>
+          <li
+            className={classNames(
+              "page-item",
+              page === totalPage ? "disabled" : undefined
+            )}
+          >
+            <button className="page-link" onClick={() => goToPage(page + 1)}>
               Next
             </button>
           </li>
@@ -45,16 +79,19 @@ function Pagination() {
 }
 
 function Books() {
-  const { setTotal, page } = useContext(GalleryContext);
-  const keyword = useRouteMatch<SearchPageParams>().params.keyword ?? "";
-  const { books: allBooks } = useBooks();
+  const { setTotal } = useContext(GalleryContext);
+  const { page, keyword } = useParams();
+  const { books, total } = useBooks(page - 1, PER_PAGE);
 
-  const allBooksIter = _(allBooks).filter((book) =>
-    _(book).values().join().includes(keyword)
+  const allBooksIter = _(books ?? []).filter((book) =>
+    _(book)
+      .values()
+      .join()
+      .includes(keyword ?? "")
   );
-  useEffect(() => setTotal(allBooksIter.size()));
+  useEffect(() => setTotal(total ?? 0)); // todo: backend search
 
-  if (!allBooks) {
+  if (!books) {
     return (
       <Row className="justify-content-center mt-5">
         <Spinner animation="border" variant="primary" />
@@ -68,8 +105,6 @@ function Books() {
         <BookCard book={book} withLink />
       </div>
     ))
-    .drop((page - 1) * PER_PAGE)
-    .take(PER_PAGE)
     .value();
 
   return (
@@ -87,18 +122,28 @@ function Books() {
 type GalleryContextType = {
   total: number;
   setTotal: (n: number) => void;
-  page: number;
-  setPage: (n: number) => void;
+  pathBase: string;
 };
 
 const GalleryContext = createContext<GalleryContextType>(null!);
 
-export function BooksView() {
+export function BooksView({
+  type,
+}: PropsWithChildren<{ type: "search" | "home" }>) {
   const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(1);
+  const { keyword } = useParams();
+
+  const pathBase = (() => {
+    switch (type) {
+      case "search":
+        return `/search/${keyword}`;
+      default:
+        return `/${type}`;
+    }
+  })();
 
   return (
-    <GalleryContext.Provider value={{ total, setTotal, page, setPage }}>
+    <GalleryContext.Provider value={{ total, setTotal, pathBase }}>
       <div>
         <Books />
         <Pagination />

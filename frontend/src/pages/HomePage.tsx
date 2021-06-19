@@ -19,7 +19,7 @@ function HomeMain() {
   return (
     <div>
       <CarouselView />
-      <BooksView />
+      <BooksView type="home" />
     </div>
   );
 }
